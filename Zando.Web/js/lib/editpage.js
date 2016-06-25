@@ -4,5 +4,6 @@
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/lib/editpage.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/lib/editpage.js.map

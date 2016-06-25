@@ -31,12 +31,16 @@ export class HomePage extends jx.Views.HomePage {
 
         this.root.load('/html/home.html', () => {
 
+            carts.display_cart();
+
             ReactDOM.render(<FeaturedProductItemList />, $('.featured-products')[0]);
 
             this.root.removeClass('hidden');
             
         });
     }
+
+
     
 }
 
@@ -76,8 +80,7 @@ class FeaturedProductItemList extends jx.Views.ReactView {
 
 
     componentDidMount() {
-
-        this.set_dimensions();
+               
 
         this.load_featured_items().then(() => {
             
@@ -86,18 +89,7 @@ class FeaturedProductItemList extends jx.Views.ReactView {
             }));
         });
     }
-
-
-    set_dimensions() {
-
-        $('.current-cart').attr('data-gotox', $('.current-cart').offset().left);
-        $('.current-cart').attr('data-gotoy', $('.current-cart').offset().top);
-
-        $('.current-cart').attr('data-width', $('.current-cart').width() / 2);
-        $('.current-cart').attr('data-height', $('.current-cart').height() / 2);
-        
-    }
-
+    
 
     componentDidUpdate() {
 
@@ -217,12 +209,7 @@ class FeaturedProductItem extends jx.Views.ReactView {
 
     add_to_cart() {
 
-        //this.root.find('.fa-shopping-cart').addClass('faa-burst animated fa-4x faa-fast');
-
-        //setTimeout(() => {
-        //    this.root.find('.fa-shopping-cart').removeClass('faa-burst animated fa-4x faa-fast');
-
-        //}, 800);
+        this.insert_new_cart();
     }
 
 
@@ -237,4 +224,121 @@ class FeaturedProductItem extends jx.Views.ReactView {
         return <img src={url} alt="featured-product-img"/>
         
     }
+
+
+    insert_new_cart() {
+
+        var _email = this.app.get_user()['email'];
+
+        if (!_email) {
+            toastr.error('no email');
+        }
+
+        this.fetch_account().then(acc => {
+
+            this.fetch_cart(acc).then(cart => {
+
+                if (!cart) {
+
+                    this.create_cart();
+
+                } else {
+
+                    this.add_product_to_cart(cart['id']);
+                }
+
+            });
+
+        });
+
+    }
+
+    add_product_to_cart(cart_id: any) {
+
+        var d = Q.defer();
+
+        schema.call({
+            fn: 'post',
+            params: ['/carts/{0}/items'.format(cart_id), {
+                product_id: this.props.product['id']
+            }]
+        }).then(prod => {
+
+            carts.update_cart(this.app.get_user()['email']);
+
+            d.resolve(prod);
+
+        }).fail(err => {
+
+            d.reject(err);
+        });
+
+        return d.promise;
+
+    }
+
+
+    create_cart() {
+
+        var d = Q.defer();
+
+        schema.call({
+            fn: 'post',
+            params: ['/carts', {
+
+                status: 'active',
+
+                account: {
+                    email: this.app.get_user()['email']
+                },
+
+                items: [
+                    { product_id: this.props.product['id'] }
+                ]
+            }]
+        }).then(cart => {
+
+            carts.update_cart(this.app.get_user()['email']);
+
+            d.resolve(cart);
+
+        }).fail(err => {
+
+            d.reject(err);
+        });
+
+        return d.promise;
+    }
+
+
+    fetch_account(): Q.Promise<any> {
+        return Q.resolve(this.app.get_account());
+    }
+
+
+    fetch_cart(account: any): Q.Promise<any> {
+
+        var d = Q.defer();
+
+        schema.call({
+            fn: 'get',
+            params: ['/carts', {
+                where: {
+                    account_id: account['id'],
+                    status: 'active'
+                }
+            }]
+        }).then(res => {
+
+            if (res.response.results.length > 0) {
+                d.resolve(res.response.results[0]);
+            } else {
+                d.resolve(null);
+            }
+        });
+
+        return d.promise;
+
+    }
+
 }

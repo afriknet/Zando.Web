@@ -5,6 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", 'react', 'react-dom', '../../lib/jx', 'react-bootstrap', '../../lib/controls'], function (require, exports, React, ReactDOM, jx, ReactB, controls_1) {
+    "use strict";
     var b = ReactB;
     var AccountAddressesPage = (function (_super) {
         __extends(AccountAddressesPage, _super);
@@ -15,7 +16,7 @@ define(["require", "exports", 'react', 'react-dom', '../../lib/jx', 'react-boots
         }
         AccountAddressesPage.prototype.render = function () {
             var that = this;
-            var html = React.createElement("div", {"className": "orderBox myAddress commentsForm"}, React.createElement("h4", {"style": { display: 'inline-block' }}, "My Address"), React.createElement("button", {"type": "button", "onClick": function () { that.add_address(); }, "className": "btn btn-primary pull-right"}, "Add new "), React.createElement("hr", null), React.createElement("div", {"className": "edit-placeholder"}), React.createElement("div", {"className": "table-responsive"}, React.createElement("table", {"className": "table"})));
+            var html = React.createElement("div", {className: "orderBox myAddress commentsForm"}, React.createElement("h4", {style: { display: 'inline-block' }}, "My Address"), React.createElement("button", {type: "button", onClick: function () { that.add_address(); }, className: "btn btn-primary pull-right"}, "Add new "), React.createElement("hr", null), React.createElement("div", {className: "edit-placeholder"}), React.createElement("div", {className: "table-responsive"}, React.createElement("table", {className: "table"})));
             return html;
         };
         AccountAddressesPage.prototype.componentDidMount = function () {
@@ -135,7 +136,7 @@ define(["require", "exports", 'react', 'react-dom', '../../lib/jx', 'react-boots
         AccountAddressesPage.prototype.resolve_country = function (cell, data) {
             $(cell).empty();
             var country = window['BFHCountriesList'][data.country];
-            var html = React.createElement("div", null, React.createElement("h5", {"className": "text-muted"}, React.createElement("span", null, country)));
+            var html = React.createElement("div", null, React.createElement("h5", {className: "text-muted"}, React.createElement("span", null, country)));
             ReactDOM.render(html, $(cell)[0]);
         };
         AccountAddressesPage.prototype.load_data = function () {
@@ -157,7 +158,7 @@ define(["require", "exports", 'react', 'react-dom', '../../lib/jx', 'react-boots
         };
         AccountAddressesPage.prototype.add_address = function () {
             ReactDOM.unmountComponentAtNode(this.root.find('.edit-placeholder')[0]);
-            ReactDOM.render(React.createElement(EditAddress, {"slidedown": !this.editform_opened, "owner": this}), this.root.find('.edit-placeholder')[0]);
+            ReactDOM.render(React.createElement(EditAddress, {slidedown: !this.editform_opened, owner: this}), this.root.find('.edit-placeholder')[0]);
         };
         AccountAddressesPage.prototype.edit_address = function (rowid) {
             var adr = _.find(this.data, function (d) {
@@ -165,7 +166,7 @@ define(["require", "exports", 'react', 'react-dom', '../../lib/jx', 'react-boots
             });
             //this.scrollToObj('body', 0, 1000);
             ReactDOM.unmountComponentAtNode(this.root.find('.edit-placeholder')[0]);
-            ReactDOM.render(React.createElement(EditAddress, {"adr": adr, "owner": this, "slidedown": !this.editform_opened}), this.root.find('.edit-placeholder')[0]);
+            ReactDOM.render(React.createElement(EditAddress, {adr: adr, owner: this, slidedown: !this.editform_opened}), this.root.find('.edit-placeholder')[0]);
         };
         AccountAddressesPage.prototype.scrollToObj = function (target, offset, time) {
             $('html, body').animate({ scrollTop: $(target).offset().top - offset }, time);
@@ -184,7 +185,7 @@ define(["require", "exports", 'react', 'react-dom', '../../lib/jx', 'react-boots
             return Q.resolve(true);
         };
         return AccountAddressesPage;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.AccountAddressesPage = AccountAddressesPage;
     var EditAddress = (function (_super) {
         __extends(EditAddress, _super);
@@ -197,7 +198,7 @@ define(["require", "exports", 'react', 'react-dom', '../../lib/jx', 'react-boots
             if (this.props.slidedown) {
                 __display['display'] = 'none';
             }
-            var html = React.createElement("div", {"className": "row cartListInner", "style": __display}, React.createElement("div", {"className": "col-lg-12 updateArea", "style": { border: 'none!important' }}, React.createElement(controls_1.BigLabel, {"label": "Edit address"}), React.createElement("form", null, React.createElement(b.FormGroup, {"controlId": "txtAddress", "className": "col-lg-6 col-sm-12"}, React.createElement(b.ControlLabel, null, "Address"), React.createElement(b.FormControl, {"type": "text", "data-bind": "textInput:address1", "placeholder": "Enter an address"})), React.createElement(b.FormGroup, {"controlId": "txtPhone", "className": "col-lg-6 col-sm-12"}, React.createElement(b.ControlLabel, null, "Phone"), React.createElement(b.FormControl, {"type": "phone", "data-bind": "textInput:address2", "placeholder": "Enter an phone number"})), React.createElement(b.FormGroup, {"controlId": "txtCity", "className": "col-lg-6 col-sm-12"}, React.createElement(b.ControlLabel, null, "Ville"), React.createElement(b.FormControl, {"type": "text", "data-bind": "textInput:city", "placeholder": "Enter an address"})), React.createElement(b.FormGroup, {"controlId": "txtCountry", "className": "col-lg-6 col-sm-12"}, React.createElement(b.ControlLabel, null, "Pays"), React.createElement("select", {"id": "countries", "type": "text", "className": "form-control bfh-countries"}))), React.createElement("a", {"href": "#", "className": "btn pull-right", "onClick": function () { _this.slide_up(); }, "style": { marginLeft: 10 }}, "Close"), React.createElement("a", {"href": "#", "className": "btn pull-right", "onClick": function () { _this.save(); }}, "Save"), React.createElement("br", null)));
+            var html = React.createElement("div", {className: "row cartListInner", style: __display}, React.createElement("div", {className: "col-lg-12 updateArea", style: { border: 'none!important' }}, React.createElement(controls_1.BigLabel, {label: "Edit address"}), React.createElement("form", null, React.createElement(b.FormGroup, {controlId: "txtAddress", className: "col-lg-6 col-sm-12"}, React.createElement(b.ControlLabel, null, "Address"), React.createElement(b.FormControl, {type: "text", "data-bind": "textInput:address1", placeholder: "Enter an address"})), React.createElement(b.FormGroup, {controlId: "txtPhone", className: "col-lg-6 col-sm-12"}, React.createElement(b.ControlLabel, null, "Phone"), React.createElement(b.FormControl, {type: "phone", "data-bind": "textInput:address2", placeholder: "Enter an phone number"})), React.createElement(b.FormGroup, {controlId: "txtCity", className: "col-lg-6 col-sm-12"}, React.createElement(b.ControlLabel, null, "Ville"), React.createElement(b.FormControl, {type: "text", "data-bind": "textInput:city", placeholder: "Enter an address"})), React.createElement(b.FormGroup, {controlId: "txtCountry", className: "col-lg-6 col-sm-12"}, React.createElement(b.ControlLabel, null, "Pays"), React.createElement("select", {id: "countries", type: "text", className: "form-control bfh-countries"}))), React.createElement("a", {href: "#", className: "btn pull-right", onClick: function () { _this.slide_up(); }, style: { marginLeft: 10 }}, "Close"), React.createElement("a", {href: "#", className: "btn pull-right", onClick: function () { _this.save(); }}, "Save"), React.createElement("br", null)));
             return html;
         };
         EditAddress.prototype.componentDidMount = function () {
@@ -273,6 +274,6 @@ define(["require", "exports", 'react', 'react-dom', '../../lib/jx', 'react-boots
             return d.promise;
         };
         return EditAddress;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/views/account/account_addresses.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/views/account/account_addresses.js.map

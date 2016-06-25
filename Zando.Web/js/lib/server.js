@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Metadata = [];
     function __metadata_exists(entity) {
         var metadata = _.find(Metadata, function (m) {
@@ -64,7 +65,7 @@ define(["require", "exports"], function (require, exports) {
             var obj = __build_entity(entity);
         };
         return DataSource;
-    })();
+    }());
     exports.DataSource = DataSource;
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/lib/server.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/lib/server.js.map

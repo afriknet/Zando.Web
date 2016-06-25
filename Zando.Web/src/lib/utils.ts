@@ -352,24 +352,23 @@ module carts {
             url_img = prod.images[0].file.url;
         }
 
-        var price = numeral(cart_item.price).format('€0,0.00');        
+        var price = cart_item.price; // numeral(cart_item.price).format('€0,0.00');        
         var qty = cart_item.quantity;
-        
-        var html =
-            `<li data-cart-itemid="{4}" data-cart-id="{5}">
-                <div class="row">
-                    <div class="col-sm-3">
-                        <img src="{0}" class="img-responsive" alt="">
-                    </div>
-                    <div class="col-sm-9">
-                        <h4><a href="/explore">{1}</a></h4>
-                        <p>{2}x - €{3}</p>
-                        <a href="#" class="remove"><i class="fa fa-times-circle"></i></a>
-                    </div>
-                </div>
-             </li>
-            `.format(url_img, prod.name, qty, price, cart_item['id'], cart_id); //
 
+        var html =
+            `
+             <li>
+                <a href="/account/product/0-1">
+                    <div class="media">
+                        <img class="media-left media-object" src="{0}" alt="cart-Image" style="width:20%" />
+                        <div class="media-body">
+                            <h5 class="media-heading">{1}<br><span>{2} X €{3}</span></h5>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            `.format(url_img, prod.name, qty, price); //; , cart_item['id'], cart_id
+        
         return html.trim();
     }
 
@@ -381,15 +380,11 @@ module carts {
 
         var html =
             `<li>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <a href="/account/carts" class="btn btn-primary btn-block btn-view-cart">View Cart</a>
-                    </div>
-                    <div class="col-sm-6">
-                        <a href="/account/checkout" class="btn btn-primary btn-block btn-checkout-cart">Checkout</a>
-                    </div>
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default">Shopping Cart</button>
+                    <button type="button" class="btn btn-default">Checkout</button>
                 </div>
-            </li>
+             </li>
             `;
 
         return html.trim();
@@ -490,34 +485,38 @@ module carts {
 
     export function update_cart(email: string) {
 
-        return fetch_account(email).then(acc => {
+        var d = Q.defer();
 
-            var d = Q.defer();
-
+        fetch_account(email).then(acc => {
+            
             schema.call({
                 fn: 'get',
                 params: ['/carts', {
                     where: {
                         account_id: acc['id'],
-                        processed: false
+                        status: 'active'
                     }
                 }]
             }).then(res => {
 
                 var cart_id = utils.guid();
 
+                var cart = res.response.results[0];
+
                 if (res.response.results.length > 0) {
                     cart_id = res.response.results[0]['id'];
                 }
 
+
                 fetch_items_of_carts(res.response.results).then((data: { prods:any[], items:any[] }) => {
-                    
-                    var ul: JQuery = $('.navbar-cart .dropdown-menu');
-                    
-                    if (ul.length === 0) {
-                        ul = $('<ul class="dropdown-menu"></ul>').appendTo($('.navbar-cart'));
-                    } else {
-                        $(ul).empty();
+
+                    var ul = $('.products-cart ul');
+
+                    var must_empty = ul.find('.media').length > 0;
+
+                    if (must_empty) {                        
+                        ul.empty();
+                        ul.append($('<li>Item(s) in your cart</li>'));
                     }
                     
                     _.each(data.prods, prod => {
@@ -528,47 +527,48 @@ module carts {
 
                         ul.append(add_li(cart_id, prod, cart_item)); 
                     });
+
+                    $('.products-cart .cart-total').html('€{0}'.format(cart['grand_total']));
                     
                     if (data.prods.length > 0) {
                         ul.append(add_actions())
                     }
 
                     init_actions(ul);
-
-                    d.resolve(true);
+                    
+                    d.resolve(data.items);
 
                 });
 
             });
-
-            return d.promise;
             
         });
-        
+
+        return d.promise;
     }
 
 
-    //export function update_carts(accountid: string) {
+    export function display_cart() {
 
-    //    function carts() {
+        var account = cookies.get('account');
 
-    //        var d = Q.defer();
+        if (!account) {
 
-    //        schema.call({
-    //            fn: 'get',
-    //            params: ['/carts', { account_id: accountid }]
-    //        }).then(res => {
+            $('.products-cart').addClass('hidden');
 
-    //            if (res.response.results.length > 0) {
-    //                d.resolve(res.response.results[0]);
-    //            } else {
-    //                d.resolve(null);
-    //            }
-    //        });
-    //        return d.promise;
-    //    }        
-    //}
+        } else {
+            
+            update_cart(account['email']).then((list:any) => {
 
+                if (list && list.length > 0) {
+
+                    $('.products-cart').removeClass('hidden');
+
+                }
+            });
+        }
+
+    }
 }
 
 
@@ -578,8 +578,7 @@ module cookies {
     export function set(name: string, obj: any) {
         Cookies.set(name, obj, { expires: 30 });
     }
-
-
+    
     export function get(name: string) {
 
         function isJson(str) {

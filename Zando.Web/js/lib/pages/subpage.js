@@ -8,6 +8,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", '../jx'], function (require, exports, jx) {
+    "use strict";
     var SubPage = (function (_super) {
         __extends(SubPage, _super);
         function SubPage(props) {
@@ -16,7 +17,7 @@ define(["require", "exports", '../jx'], function (require, exports, jx) {
         SubPage.prototype.componentDidMount = function () {
         };
         return SubPage;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.SubPage = SubPage;
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/lib/pages/subpage.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/lib/pages/subpage.js.map

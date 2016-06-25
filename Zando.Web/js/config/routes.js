@@ -3,6 +3,7 @@
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     exports.routes = {
         '/': {
             url: 'home/home',
@@ -28,4 +29,4 @@ define(["require", "exports"], function (require, exports) {
         },
     };
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/config/routes.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/config/routes.js.map

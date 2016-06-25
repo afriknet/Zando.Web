@@ -11,35 +11,44 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", 'react', 'react-dom', '../../lib/jx', './account_home', './account_addresses'], function (require, exports, React, ReactDOM, jx, account_home_1, account_addresses_1) {
-    var DashboardPage = (function (_super) {
-        __extends(DashboardPage, _super);
-        function DashboardPage(props) {
+define(["require", "exports", 'react', 'react-dom', '../../lib/jx', './account_home', './account_addresses', './account_cart'], function (require, exports, React, ReactDOM, jx, account_home_1, account_addresses_1, account_cart_1) {
+    "use strict";
+    var AccountDashboard = (function (_super) {
+        __extends(AccountDashboard, _super);
+        function AccountDashboard(props) {
             _super.call(this, props);
         }
-        Object.defineProperty(DashboardPage.prototype, "content", {
+        Object.defineProperty(AccountDashboard.prototype, "content", {
             get: function () {
                 return $('#page-content').find('.innerWrapper'); //
             },
             enumerable: true,
             configurable: true
         });
-        DashboardPage.prototype.render = function () {
+        AccountDashboard.prototype.render = function () {
             return null;
         };
-        DashboardPage.prototype.componentDidMount = function () {
+        AccountDashboard.prototype.componentDidMount = function () {
             var _this = this;
             $('#page-content').load('/html/account_dashboard.html', function () {
                 _this.resolve_route();
             });
         };
-        DashboardPage.prototype.resolve_route = function () {
+        AccountDashboard.prototype.resolve_route = function () {
             var subview = this.get_subview();
             switch (subview) {
                 case 'addresses':
                 case 'address':
                     {
                         ReactDOM.render(React.createElement(account_addresses_1.AccountAddressesPage, null), this.content[0]);
+                    }
+                    break;
+                case 'cart':
+                    {
+                        this.root.find('.tabs').addClass('hidden');
+                        $('.page-title h2').html('Cart');
+                        $('.page-path').html('Cart');
+                        ReactDOM.render(React.createElement(account_cart_1.AccountCart, null), this.content[0]);
                     }
                     break;
                 default:
@@ -50,7 +59,7 @@ define(["require", "exports", 'react', 'react-dom', '../../lib/jx', './account_h
             }
             this.highlight_active_page();
         };
-        DashboardPage.prototype.highlight_active_page = function () {
+        AccountDashboard.prototype.highlight_active_page = function (__subview) {
             var subview = this.get_subview();
             if (!subview) {
                 subview = 'dashboard';
@@ -64,8 +73,8 @@ define(["require", "exports", 'react', 'react-dom', '../../lib/jx', './account_h
             $('.page-title h2').html(title);
             $('.page-path').html(title);
         };
-        return DashboardPage;
-    })(jx.Views.HomePage);
-    exports.DashboardPage = DashboardPage;
+        return AccountDashboard;
+    }(jx.Views.HomePage));
+    exports.AccountDashboard = AccountDashboard;
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/views/account/account_dashboard.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/views/account/account_dashboard.js.map

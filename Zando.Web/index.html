@@ -81,36 +81,13 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="dropdown">
-                                    <a href="cart-page.html" class="dropdown-toggle current-cart" data-toggle="dropdown disabled"><i class="fa fa-shopping-cart"></i>$0</a>
+                                <li class="dropdown hidden products-cart">
+                                    <a href="/account/checkout" class="dropdown-toggle" data-toggle="dropdown disabled">
+                                        <i class="fa fa-shopping-cart"></i><span class="cart-total">$0</span>
+                                    </a>
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li>Item(s) in your cart</li>
-                                        <li>
-                                            <a href="single-product.html">
-                                                <div class="media">
-                                                    <img class="media-left media-object" src="/img/home/cart-items/cart-item-01.jpg" alt="cart-Image">
-                                                    <div class="media-body">
-                                                        <h5 class="media-heading">INCIDIDUNT UT <br><span>2 X $199</span></h5>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="single-product.html">
-                                                <div class="media">
-                                                    <img class="media-left media-object" src="/img/home/cart-items/cart-item-01.jpg" alt="cart-Image">
-                                                    <div class="media-body">
-                                                        <h5 class="media-heading">INCIDIDUNT UT <br><span>2 X $199</span></h5>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <div class="btn-group" role="group" aria-label="...">
-                                                <button type="button" class="btn btn-default" onclick="location.href='cart-page.html';">Shopping Cart</button>
-                                                <button type="button" class="btn btn-default" onclick="location.href='checkout-step-1.html';">Checkout</button>
-                                            </div>
-                                        </li>
+
                                     </ul>
                                 </li>
                             </ul>
@@ -436,6 +413,7 @@
     <script src="/js/knockout-3.debug.js"></script>
     <script src="/js/ko.mapping.js"></script>        
     <script src="/js/sweetalert-dev.js"></script>
+    <script src="/js/numeral.js"></script>
 
 
     <script>

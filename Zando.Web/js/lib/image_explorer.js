@@ -10,6 +10,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", 'react', './jx', './imageload', './controls'], function (require, exports, React, jx, img, ctrls) {
+    "use strict";
     var b = require('react-bootstrap');
     var ImageExplorer = (function (_super) {
         __extends(ImageExplorer, _super);
@@ -20,11 +21,11 @@ define(["require", "exports", 'react', './jx', './imageload', './controls'], fun
         }
         ImageExplorer.prototype.render = function () {
             if (this.state.loading) {
-                return React.createElement("div", {"style": { minHeight: 300 }});
+                return React.createElement("div", {style: { minHeight: 300 }});
             }
             var images = ["/server/images/product-1.jpg", "/server/images/product-1.jpg", "/server/images/product-2.jpg"];
             var that = this;
-            var html = React.createElement("div", {"className": "mt10", "style": { maxHeight: 840 }}, React.createElement(b.Row, null, React.createElement(b.Col, {"xs": 12}, React.createElement(b.Button, {"id": "btn-open-dz", "bsStyle": "info", "onClick": function () { that.open_dropzone(); }}, "Upload new image"), React.createElement(b.Button, {"id": "btn-close-dz", "bsStyle": "warning", "className": "ml10 hidden", "onClick": function () { that.close_dropzone(); }}, React.createElement(ctrls.Ficon, {"icon": "times"}), " close")), React.createElement(b.Col, {"xs": 12, "className": "image-dropzone", "style": { display: 'none' }}, React.createElement("div", {"className": "mt10"}, React.createElement(img.ImageLoader, {"on_file_added": function (file) { return that.on_img_added(file); }})))), React.createElement("hr", null), React.createElement(b.Row, null, React.createElement(b.Col, {"xs": 12}, React.createElement(ImageList, {"owner": this, "images": this.images}))));
+            var html = React.createElement("div", {className: "mt10", style: { maxHeight: 840 }}, React.createElement(b.Row, null, React.createElement(b.Col, {xs: 12}, React.createElement(b.Button, {id: "btn-open-dz", bsStyle: "info", onClick: function () { that.open_dropzone(); }}, "Upload new image"), React.createElement(b.Button, {id: "btn-close-dz", bsStyle: "warning", className: "ml10 hidden", onClick: function () { that.close_dropzone(); }}, React.createElement(ctrls.Ficon, {icon: "times"}), " close")), React.createElement(b.Col, {xs: 12, className: "image-dropzone", style: { display: 'none' }}, React.createElement("div", {className: "mt10"}, React.createElement(img.ImageLoader, {on_file_added: function (file) { return that.on_img_added(file); }})))), React.createElement("hr", null), React.createElement(b.Row, null, React.createElement(b.Col, {xs: 12}, React.createElement(ImageList, {owner: this, images: this.images}))));
             return html;
         };
         ImageExplorer.prototype.componentDidMount = function () {
@@ -157,7 +158,7 @@ define(["require", "exports", 'react', './jx', './imageload', './controls'], fun
             this.root.find('#btn-close-dz').addClass('hidden');
         };
         return ImageExplorer;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.ImageExplorer = ImageExplorer;
     var ImageList = (function (_super) {
         __extends(ImageList, _super);
@@ -169,7 +170,7 @@ define(["require", "exports", 'react', './jx', './imageload', './controls'], fun
             var _this = this;
             var html = React.createElement(b.Row, null, _.map(this.props.images, function (img) {
                 var img_url = '/server/images/{0}'.format(_.result(img, 'filename'));
-                return React.createElement("div", {"data-img-id": _.result(img, 'objectId')}, React.createElement(ImageThumbnail, {"owner": _this, "img_obj": img, "img_url": img_url}));
+                return React.createElement("div", {"data-img-id": _.result(img, 'objectId')}, React.createElement(ImageThumbnail, {owner: _this, img_obj: img, img_url: img_url}));
             }));
             return html;
         };
@@ -183,7 +184,7 @@ define(["require", "exports", 'react', './jx', './imageload', './controls'], fun
             this.props.owner['remove_image'](id);
         };
         return ImageList;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.ImageList = ImageList;
     var ImageThumbnail = (function (_super) {
         __extends(ImageThumbnail, _super);
@@ -208,7 +209,7 @@ define(["require", "exports", 'react', './jx', './imageload', './controls'], fun
                     _this.on_img_unchecked(id);
                 }
             };
-            var html = React.createElement("div", {"className": "col-lg-3 col-md-4 col-xs-6 thumb"}, React.createElement("a", {"className": "thumbnail", "href": "#"}, React.createElement("img", {"className": "img-responsive", "src": this.props.img_url, "alt": ""})), React.createElement("div", {"className": "pull-right actions", "style": { display: 'none' }}, React.createElement(b.Button, {"bsStyle": "default", "bsSize": "xs", "className": "btn-remove"}, React.createElement(ctrls.Ficon, {"icon": "times"}), " delete ")), React.createElement("div", {"className": "pull-left info"}, React.createElement("div", {"style": { display: 'table' }}, React.createElement("div", {"style": { display: 'table-cell' }}, React.createElement(ctrls.CheckBox, React.__spread({}, check_props))), React.createElement("div", {"style": { display: 'table-cell', paddingLeft: 10 }}, React.createElement("div", {"className": "img-caption {0}".format(this.set_is_main())}, "is main")))));
+            var html = React.createElement("div", {className: "col-lg-3 col-md-4 col-xs-6 thumb"}, React.createElement("a", {className: "thumbnail", href: "#"}, React.createElement("img", {className: "img-responsive", src: this.props.img_url, alt: ""})), React.createElement("div", {className: "pull-right actions", style: { display: 'none' }}, React.createElement(b.Button, {bsStyle: "default", bsSize: "xs", className: "btn-remove"}, React.createElement(ctrls.Ficon, {icon: "times"}), " delete ")), React.createElement("div", {className: "pull-left info"}, React.createElement("div", {style: { display: 'table' }}, React.createElement("div", {style: { display: 'table-cell' }}, React.createElement(ctrls.CheckBox, React.__spread({}, check_props))), React.createElement("div", {style: { display: 'table-cell', paddingLeft: 10 }}, React.createElement("div", {className: "img-caption {0}".format(this.set_is_main())}, "is main")))));
             return html;
         };
         ImageThumbnail.prototype.set_is_main = function () {
@@ -233,7 +234,7 @@ define(["require", "exports", 'react', './jx', './imageload', './controls'], fun
             });
         };
         return ImageThumbnail;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.ImageThumbnail = ImageThumbnail;
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/lib/image_explorer.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/lib/image_explorer.js.map

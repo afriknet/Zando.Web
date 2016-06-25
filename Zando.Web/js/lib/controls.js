@@ -9,6 +9,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (require, exports, React, jx, rb) {
+    "use strict";
     var b = rb;
     var Ficon = (function (_super) {
         __extends(Ficon, _super);
@@ -16,10 +17,10 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             _super.call(this, props);
         }
         Ficon.prototype.render = function () {
-            return React.createElement("i", {"className": "fa fa-{0}".format(this.props.icon)});
+            return React.createElement("i", {className: "fa fa-{0}".format(this.props.icon)});
         };
         return Ficon;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.Ficon = Ficon;
     var BigLabel = (function (_super) {
         __extends(BigLabel, _super);
@@ -38,7 +39,7 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
                 __style.display = 'inline-block';
                 __p_style.display = 'inline-block';
             }
-            var html = React.createElement("div", {"className": "breadcrumb-wrapper", "style": __style}, React.createElement("p", {"className": "label-value", "style": __p_style}, this.format_label(), this.is_required()));
+            var html = React.createElement("div", {className: "breadcrumb-wrapper", style: __style}, React.createElement("p", {className: "label-value", style: __p_style}, this.format_label(), this.is_required()));
             return html;
         };
         BigLabel.prototype.format_label = function () {
@@ -51,7 +52,7 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
         };
         BigLabel.prototype.is_required = function () {
             if (this.props.require) {
-                return React.createElement("span", {"className": "required"}, "*");
+                return React.createElement("span", {className: "required"}, "*");
             }
         };
         BigLabel.prototype.componentDidMount = function () {
@@ -61,7 +62,7 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             }
         };
         return BigLabel;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.BigLabel = BigLabel;
     var Form = (function (_super) {
         __extends(Form, _super);
@@ -72,7 +73,7 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             return React.createElement("form", null, this.props.children);
         };
         return Form;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.Form = Form;
     var FormGroup = (function (_super) {
         __extends(FormGroup, _super);
@@ -87,7 +88,7 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             return React.createElement("div", React.__spread({}, props), this.props.children);
         };
         return FormGroup;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.FormGroup = FormGroup;
     var EditText = (function (_super) {
         __extends(EditText, _super);
@@ -103,7 +104,7 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             return html;
         };
         return EditText;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.EditText = EditText;
     var TableLayout = (function (_super) {
         __extends(TableLayout, _super);
@@ -114,13 +115,13 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             var props = _.extend({
                 style: { display: 'table' }
             }, this.props);
-            var html = React.createElement("div", React.__spread({}, props), React.createElement("div", {"style": { display: 'table-row' }}, React.Children.map(this.props.children, function (child) {
-                return React.createElement("div", {"style": { display: 'table-cell' }}, child);
+            var html = React.createElement("div", React.__spread({}, props), React.createElement("div", {style: { display: 'table-row' }}, React.Children.map(this.props.children, function (child) {
+                return React.createElement("div", {style: { display: 'table-cell' }}, child);
             })));
             return html;
         };
         return TableLayout;
-    })(React.Component);
+    }(React.Component));
     exports.TableLayout = TableLayout;
     var TreeView = (function (_super) {
         __extends(TreeView, _super);
@@ -128,7 +129,7 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             _super.call(this, props);
         }
         TreeView.prototype.render = function () {
-            var html = React.createElement("div", {"id": "nestable2", "className": "treeview-root"}, React.createElement("div", {"className": "dd root"}, React.createElement("ol", {"className": "dd-list"}, this.build_treeview())));
+            var html = React.createElement("div", {id: "nestable2", className: "treeview-root"}, React.createElement("div", {className: "dd root"}, React.createElement("ol", {className: "dd-list"}, this.build_treeview())));
             return html;
         };
         TreeView.prototype.componentDidMount = function () {
@@ -142,7 +143,7 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             });
         };
         TreeView.prototype.build_treenode = function (node) {
-            var li = React.createElement("li", {"className": "dd-item", "data-id": _.result(node, this.props.key_field)}, React.createElement("div", {"className": "dd-handle"}, _.result(node, this.props.display_field)), this.build_children_nodes(node));
+            var li = React.createElement("li", {className: "dd-item", "data-id": _.result(node, this.props.key_field)}, React.createElement("div", {className: "dd-handle"}, _.result(node, this.props.display_field)), this.build_children_nodes(node));
             return li;
         };
         TreeView.prototype.build_children_nodes = function (parent_node) {
@@ -154,13 +155,13 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             if (children.length === 0) {
                 return null;
             }
-            var ol = React.createElement("ol", {"className": "dd-list"}, _.map(children, function (child) {
+            var ol = React.createElement("ol", {className: "dd-list"}, _.map(children, function (child) {
                 return _this.build_treenode(child);
             }));
             return ol;
         };
         return TreeView;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.TreeView = TreeView;
     var TextNumeric = (function (_super) {
         __extends(TextNumeric, _super);
@@ -171,7 +172,7 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             }
         }
         TextNumeric.prototype.render = function () {
-            return React.createElement(b.FormControl, React.__spread({}, this.props, {"value": this.state.value}));
+            return React.createElement(b.FormControl, React.__spread({}, this.props, {value: this.state.value}));
         };
         TextNumeric.prototype.componentDidMount = function () {
             var _this = this;
@@ -188,7 +189,7 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             });
         };
         return TextNumeric;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.TextNumeric = TextNumeric;
     var CheckBox = (function (_super) {
         __extends(CheckBox, _super);
@@ -196,7 +197,7 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             _super.call(this, props);
         }
         CheckBox.prototype.render = function () {
-            var html = React.createElement("div", {"className": "checkbox-x custom"}, React.createElement("label", null, React.createElement("input", {"type": "checkbox"}), React.createElement("span", {"className": "chk-caption"})));
+            var html = React.createElement("div", {className: "checkbox-x custom"}, React.createElement("label", null, React.createElement("input", {type: "checkbox"}), React.createElement("span", {className: "chk-caption"})));
             return html;
         };
         CheckBox.prototype.componentDidMount = function () {
@@ -223,7 +224,7 @@ define(["require", "exports", 'react', './jx', 'react-bootstrap'], function (req
             });
         };
         return CheckBox;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.CheckBox = CheckBox;
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/lib/controls.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/lib/controls.js.map

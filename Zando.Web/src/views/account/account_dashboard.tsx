@@ -14,9 +14,10 @@ import jx = require('../../lib/jx');
 
 import { AccountHomePage } from './account_home';
 import { AccountAddressesPage } from './account_addresses';
+import { AccountCart } from './account_cart';
 
 
-export class DashboardPage extends jx.Views.HomePage {
+export class AccountDashboard extends jx.Views.HomePage {
 
     get content(): JQuery {
         return $('#page-content').find('.innerWrapper'); //
@@ -53,10 +54,20 @@ export class DashboardPage extends jx.Views.HomePage {
 
             case 'addresses':
             case 'address': {
-
                 ReactDOM.render(<AccountAddressesPage />, this.content[0]);
+            } break;
+                            
+            case 'cart': {
+
+                this.root.find('.tabs').addClass('hidden');
+
+                $('.page-title h2').html('Cart');
+                $('.page-path').html('Cart');
+
+                ReactDOM.render(<AccountCart />, this.content[0]);
 
             } break;
+
             
             default: {
 
@@ -70,13 +81,14 @@ export class DashboardPage extends jx.Views.HomePage {
     }
 
 
-    highlight_active_page() {
+    highlight_active_page(__subview?:any) {
 
         var subview = this.get_subview();
 
         if (!subview) {
             subview = 'dashboard';
         }
+        
 
         $('[data-menu]').removeClass('active');
 

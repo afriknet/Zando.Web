@@ -9,6 +9,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", 'react', 'react-dom', './server'], function (require, exports, React, ReactDOM, server_1) {
+    "use strict";
     var API;
     (function (API) {
         API[API["default"] = 0] = "default";
@@ -108,7 +109,7 @@ define(["require", "exports", 'react', 'react-dom', './server'], function (requi
                 return React.createElement("span", {"data-localize": term}, "value");
             };
             return ReactView;
-        })(React.Component);
+        }(React.Component));
         Views.ReactView = ReactView;
         var MasterPage = (function (_super) {
             __extends(MasterPage, _super);
@@ -180,7 +181,7 @@ define(["require", "exports", 'react', 'react-dom', './server'], function (requi
                 return false;
             };
             return MasterPage;
-        })(ReactView);
+        }(ReactView));
         Views.MasterPage = MasterPage;
         var HomePage = (function (_super) {
             __extends(HomePage, _super);
@@ -195,7 +196,7 @@ define(["require", "exports", 'react', 'react-dom', './server'], function (requi
                 return page_tmp;
             };
             return HomePage;
-        })(MasterPage);
+        }(MasterPage));
         Views.HomePage = HomePage;
     })(Views = exports.Views || (exports.Views = {}));
     var Application;
@@ -248,7 +249,7 @@ define(["require", "exports", 'react', 'react-dom', './server'], function (requi
                 return page(urlpath);
             };
             return Router;
-        })();
+        }());
         Application.Router = Router;
         var App = (function () {
             function App() {
@@ -414,7 +415,7 @@ define(["require", "exports", 'react', 'react-dom', './server'], function (requi
                 });
             };
             return App;
-        })();
+        }());
         Application.App = App;
         function InitApplication() {
             __app = new Application.App();
@@ -423,4 +424,4 @@ define(["require", "exports", 'react', 'react-dom', './server'], function (requi
         Application.InitApplication = InitApplication;
     })(Application = exports.Application || (exports.Application = {}));
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/lib/jx.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/lib/jx.js.map

@@ -379,6 +379,7 @@
     <TypeScriptCompile Include="src\lib\server.ts" />
     <TypeScriptCompile Include="src\lib\utils.ts" />
     <TypeScriptCompile Include="src\views\account\account_addresses.tsx" />
+    <TypeScriptCompile Include="src\views\account\account_cart.tsx" />
     <TypeScriptCompile Include="src\views\account\account_dashboard.tsx" />
     <TypeScriptCompile Include="src\views\account\account_home.tsx" />
     <TypeScriptCompile Include="src\views\home\home.tsx" />
@@ -445,7 +446,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2470</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:2475/</IISUrl>
+          <IISUrl>http://localhost:2479/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

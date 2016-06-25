@@ -543,6 +543,7 @@ export module Application {
             return cookies.get('current-user');
         }
 
+
         get_account(): any {
             return cookies.get('account');
         }

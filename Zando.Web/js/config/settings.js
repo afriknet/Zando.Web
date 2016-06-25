@@ -1,5 +1,6 @@
 /// <reference path="../lib/jx.tsx" />
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     exports.settings = {
         rootpage: '#page-content',
         masterpage_template: '/html/masterpage.html',
@@ -9,4 +10,4 @@ define(["require", "exports"], function (require, exports) {
         BACKENDLESS_VERID: 'V1'
     };
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/config/settings.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/config/settings.js.map

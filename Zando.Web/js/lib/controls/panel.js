@@ -7,6 +7,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", 'react', '../jx', '../jx'], function (require, exports, React, jx, jx_1) {
+    "use strict";
     var Panel = (function (_super) {
         __extends(Panel, _super);
         function Panel(props) {
@@ -33,11 +34,11 @@ define(["require", "exports", 'react', '../jx', '../jx'], function (require, exp
             }
         };
         Panel.prototype.render = function () {
-            var html = React.createElement("div", {"className": 'panel {0}'.format(jx_1.Types.Bootstrap.toString(this.props.style))}, React.createElement("div", {"className": "panel-heading"}, this.props.title), React.createElement("div", {"className": "panel-body"}, this.props.children));
+            var html = React.createElement("div", {className: 'panel {0}'.format(jx_1.Types.Bootstrap.toString(this.props.style))}, React.createElement("div", {className: "panel-heading"}, this.props.title), React.createElement("div", {className: "panel-body"}, this.props.children));
             return html;
         };
         return Panel;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.Panel = Panel;
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/lib/controls/panel.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/lib/controls/panel.js.map

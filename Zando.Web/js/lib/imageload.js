@@ -8,6 +8,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", 'react', './jx'], function (require, exports, React, jx) {
+    "use strict";
     var ImageLoader = (function (_super) {
         __extends(ImageLoader, _super);
         function ImageLoader(props) {
@@ -15,7 +16,7 @@ define(["require", "exports", 'react', './jx'], function (require, exports, Reac
             this.files = [];
         }
         ImageLoader.prototype.render = function () {
-            var html = React.createElement("div", {"className": "row"}, React.createElement("div", {"className": "col-lg-12"}, React.createElement("form", {"action": "hn_fileupload.ashx", "name": "upload-file", "className": "dropzone", "id": "dropzone"})));
+            var html = React.createElement("div", {className: "row"}, React.createElement("div", {className: "col-lg-12"}, React.createElement("form", {action: "hn_fileupload.ashx", name: "upload-file", className: "dropzone", id: "dropzone"})));
             return html;
         };
         ImageLoader.prototype.componentDidMount = function () {
@@ -68,7 +69,7 @@ define(["require", "exports", 'react', './jx'], function (require, exports, Reac
             f.status = true;
         };
         return ImageLoader;
-    })(jx.Views.ReactView);
+    }(jx.Views.ReactView));
     exports.ImageLoader = ImageLoader;
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/lib/imageload.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/lib/imageload.js.map

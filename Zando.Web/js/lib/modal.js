@@ -8,6 +8,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", 'react', 'react-bootstrap', './jx'], function (require, exports, React, reactboot, jx_1) {
+    "use strict";
     var b = reactboot;
     var Modal = (function (_super) {
         __extends(Modal, _super);
@@ -43,7 +44,7 @@ define(["require", "exports", 'react', 'react-bootstrap', './jx'], function (req
                 props.bsSize = this.props.bsSize;
             }
             var action = this.props.action ? this.props.action : 'Save changes';
-            var html = React.createElement(b.Modal, React.__spread({}, props), React.createElement(b.Modal.Header, {"closeButton": true}, React.createElement(b.Modal.Title, null)), React.createElement(b.Modal.Body, null, this.state.content), React.createElement(b.Modal.Footer, null, React.createElement(b.Button, {"onClick": function () { that.save(); }, "className": 'btn-save', "bsStyle": "primary"}, action)));
+            var html = React.createElement(b.Modal, React.__spread({}, props), React.createElement(b.Modal.Header, {closeButton: true}, React.createElement(b.Modal.Title, null)), React.createElement(b.Modal.Body, null, this.state.content), React.createElement(b.Modal.Footer, null, React.createElement(b.Button, {onClick: function () { that.save(); }, className: 'btn-save', bsStyle: "primary"}, action)));
             return html;
         };
         Modal.prototype.save = function () {
@@ -55,7 +56,7 @@ define(["require", "exports", 'react', 'react-bootstrap', './jx'], function (req
             }
         };
         return Modal;
-    })(jx_1.Views.ReactView);
+    }(jx_1.Views.ReactView));
     exports.Modal = Modal;
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/lib/modal.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/lib/modal.js.map

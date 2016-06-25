@@ -38,6 +38,11 @@ export var routes: Types.RouteList = {
     '/explore': {
         url: 'products/products_browser'
     },
+
+
+    //'/cart': {
+    //    url: 'account/account_cart'
+    //},
     
     //'/checkout': {
     //    url: 'account/checkout',

@@ -7,6 +7,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", '../../lib/jx'], function (require, exports, jx) {
+    "use strict";
     var LoginPage = (function (_super) {
         __extends(LoginPage, _super);
         function LoginPage() {
@@ -41,7 +42,7 @@ define(["require", "exports", '../../lib/jx'], function (require, exports, jx) {
             });
         };
         return LoginPage;
-    })(jx.Views.HomePage);
+    }(jx.Views.HomePage));
     exports.LoginPage = LoginPage;
 });
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/views/home/login.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/views/home/login.js.map

@@ -248,15 +248,15 @@ var carts;
         if (prod.images && prod.images.length > 0) {
             url_img = prod.images[0].file.url;
         }
-        var price = numeral(cart_item.price).format('€0,0.00');
+        var price = cart_item.price; // numeral(cart_item.price).format('€0,0.00');        
         var qty = cart_item.quantity;
-        var html = "<li data-cart-itemid=\"{4}\" data-cart-id=\"{5}\">\n                <div class=\"row\">\n                    <div class=\"col-sm-3\">\n                        <img src=\"{0}\" class=\"img-responsive\" alt=\"\">\n                    </div>\n                    <div class=\"col-sm-9\">\n                        <h4><a href=\"/explore\">{1}</a></h4>\n                        <p>{2}x - \u20AC{3}</p>\n                        <a href=\"#\" class=\"remove\"><i class=\"fa fa-times-circle\"></i></a>\n                    </div>\n                </div>\n             </li>\n            ".format(url_img, prod.name, qty, price, cart_item['id'], cart_id); //
+        var html = "\n             <li>\n                <a href=\"/account/product/0-1\">\n                    <div class=\"media\">\n                        <img class=\"media-left media-object\" src=\"{0}\" alt=\"cart-Image\" style=\"width:20%\" />\n                        <div class=\"media-body\">\n                            <h5 class=\"media-heading\">{1}<br><span>{2} X \u20AC{3}</span></h5>\n                        </div>\n                    </div>\n                </a>\n            </li>\n            ".format(url_img, prod.name, qty, price); //; , cart_item['id'], cart_id
         return html.trim();
     }
     function add_actions() {
         //account/carts
         //account/checkout
-        var html = "<li>\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <a href=\"/account/carts\" class=\"btn btn-primary btn-block btn-view-cart\">View Cart</a>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <a href=\"/account/checkout\" class=\"btn btn-primary btn-block btn-checkout-cart\">Checkout</a>\n                    </div>\n                </div>\n            </li>\n            ";
+        var html = "<li>\n                <div class=\"btn-group\" role=\"group\" aria-label=\"...\">\n                    <button type=\"button\" class=\"btn btn-default\">Shopping Cart</button>\n                    <button type=\"button\" class=\"btn btn-default\">Checkout</button>\n                </div>\n             </li>\n            ";
         return html.trim();
     }
     function fetch_account(__email) {
@@ -320,28 +320,28 @@ var carts;
         //});
     }
     function update_cart(email) {
-        return fetch_account(email).then(function (acc) {
-            var d = Q.defer();
+        var d = Q.defer();
+        fetch_account(email).then(function (acc) {
             schema.call({
                 fn: 'get',
                 params: ['/carts', {
                         where: {
                             account_id: acc['id'],
-                            processed: false
+                            status: 'active'
                         }
                     }]
             }).then(function (res) {
                 var cart_id = utils.guid();
+                var cart = res.response.results[0];
                 if (res.response.results.length > 0) {
                     cart_id = res.response.results[0]['id'];
                 }
                 fetch_items_of_carts(res.response.results).then(function (data) {
-                    var ul = $('.navbar-cart .dropdown-menu');
-                    if (ul.length === 0) {
-                        ul = $('<ul class="dropdown-menu"></ul>').appendTo($('.navbar-cart'));
-                    }
-                    else {
-                        $(ul).empty();
+                    var ul = $('.products-cart ul');
+                    var must_empty = ul.find('.media').length > 0;
+                    if (must_empty) {
+                        ul.empty();
+                        ul.append($('<li>Item(s) in your cart</li>'));
                     }
                     _.each(data.prods, function (prod) {
                         var cart_item = _.find(data.items, function (itm) {
@@ -349,17 +349,32 @@ var carts;
                         });
                         ul.append(add_li(cart_id, prod, cart_item));
                     });
+                    $('.products-cart .cart-total').html('€{0}'.format(cart['grand_total']));
                     if (data.prods.length > 0) {
                         ul.append(add_actions());
                     }
                     init_actions(ul);
-                    d.resolve(true);
+                    d.resolve(data.items);
                 });
             });
-            return d.promise;
         });
+        return d.promise;
     }
     carts.update_cart = update_cart;
+    function display_cart() {
+        var account = cookies.get('account');
+        if (!account) {
+            $('.products-cart').addClass('hidden');
+        }
+        else {
+            update_cart(account['email']).then(function (list) {
+                if (list && list.length > 0) {
+                    $('.products-cart').removeClass('hidden');
+                }
+            });
+        }
+    }
+    carts.display_cart = display_cart;
 })(carts || (carts = {}));
 var cookies;
 (function (cookies) {
@@ -413,4 +428,4 @@ var iCheck;
     }
     iCheck.icheck = icheck;
 })(iCheck || (iCheck = {}));
-//# sourceMappingURL=C:/afriknet/afriknet.bigbag/afriknet.bigbag/js/lib/utils.js.map
+//# sourceMappingURL=C:/afriknet/Zando.Web/Zando.Web/js/lib/utils.js.map
