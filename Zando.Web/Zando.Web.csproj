@@ -1,0 +1,465 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4BCFF659-EFBB-4966-848B-7AFB08CD01A8}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>afriknet.bigbag</RootNamespace>
+    <AssemblyName>afriknet.bigbag</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="css\animate.css" />
+    <Content Include="css\bootstrap-formhelpers.css" />
+    <Content Include="css\bootstrap-formhelpers.min.css" />
+    <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\colors\deepBlue.css.map" />
+    <Content Include="css\colors\default.css.map" />
+    <Content Include="css\colors\orange.css.map" />
+    <Content Include="css\colors\pink.css.map" />
+    <Content Include="css\colors\purple.css.map" />
+    <Content Include="css\custom.css" />
+    <Content Include="css\dropzone.css" />
+    <Content Include="css\fa-animate.css" />
+    <Content Include="css\grabbing.png" />
+    <Content Include="css\green%402x.png" />
+    <Content Include="css\green.png" />
+    <Content Include="css\icheck.css" />
+    <Content Include="css\jquery.dataTables.css" />
+    <Content Include="css\raleway.css" />
+    <Content Include="css\rippler.css" />
+    <Content Include="css\style.css.map" />
+    <Content Include="css\sweetalert.css" />
+    <Content Include="css\toastr.css" />
+    <Content Include="css\umarket.css" />
+    <Content Include="css\waitMe.css" />
+    <Content Include="html\account_dashboard.html" />
+    <Content Include="html\account_home.html" />
+    <Content Include="html\home.html" />
+    <Content Include="html\login.html" />
+    <Content Include="js\jquery.rippler.js" />
+    <Content Include="plugins\bootstrap\css\bootstrap-theme.css.map" />
+    <Content Include="plugins\bootstrap\css\bootstrap-theme.min.css.map" />
+    <Content Include="plugins\bootstrap\css\bootstrap.css.map" />
+    <Content Include="plugins\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="plugins\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="plugins\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="plugins\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="plugins\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="plugins\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="plugins\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="plugins\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="plugins\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="plugins\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="plugins\rs-plugin\assets\arrows.psd" />
+    <Content Include="plugins\rs-plugin\assets\bullets.psd" />
+    <Content Include="plugins\rs-plugin\assets\small_arrows.psd" />
+    <Content Include="plugins\rs-plugin\font\revicons.eot" />
+    <Content Include="plugins\rs-plugin\font\revicons.ttf" />
+    <Content Include="plugins\rs-plugin\font\revicons.woff" />
+    <Content Include="scss\deepBlue.scss" />
+    <Content Include="scss\default.scss" />
+    <Content Include="scss\orange.scss" />
+    <Content Include="scss\partials\_media-query.scss" />
+    <Content Include="scss\partials\_mixins.scss" />
+    <Content Include="scss\partials\_variables.scss" />
+    <Content Include="scss\pink.scss" />
+    <Content Include="scss\purple.scss" />
+    <Content Include="scss\style.scss" />
+    <Content Include="scss\_404.scss" />
+    <Content Include="scss\_about-us.scss" />
+    <Content Include="scss\_blog.scss" />
+    <Content Include="scss\_comming-soon.scss" />
+    <Content Include="scss\_common.scss" />
+    <Content Include="scss\_footer.scss" />
+    <Content Include="scss\_form.scss" />
+    <Content Include="scss\_generic-content.scss" />
+    <Content Include="scss\_header-v1.scss" />
+    <Content Include="scss\_home.scss" />
+    <Content Include="scss\_modal.scss" />
+    <Content Include="scss\_page-header.scss" />
+    <Content Include="scss\_products.scss" />
+    <Content Include="scss\_reset.scss" />
+    <Content Include="scss\_sidebars.scss" />
+    <Content Include="scss\_steps.scss" />
+    <Content Include="scss\_user-profile.scss" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="css\colors\deepBlue.css" />
+    <Content Include="css\colors\default.css" />
+    <Content Include="css\colors\orange.css" />
+    <Content Include="css\colors\pink.css" />
+    <Content Include="css\colors\purple.css" />
+    <Content Include="css\style.css" />
+    <Content Include="img\about-us\list-point.png" />
+    <Content Include="img\about-us\people-01.jpg" />
+    <Content Include="img\about-us\people-02.jpg" />
+    <Content Include="img\about-us\people-03.jpg" />
+    <Content Include="img\about-us\people-04.jpg" />
+    <Content Include="img\about-us\store-bg.jpg" />
+    <Content Include="img\about-us\title-img.jpg" />
+    <Content Include="img\blog\avatar.jpg" />
+    <Content Include="img\blog\blog-01.jpg" />
+    <Content Include="img\blog\blog-02.jpg" />
+    <Content Include="img\blog\blog-03.jpg" />
+    <Content Include="img\blog\blog-04.jpg" />
+    <Content Include="img\blog\blog-05.jpg" />
+    <Content Include="img\blog\blog-small-01.jpg" />
+    <Content Include="img\blog\blog-small-02.jpg" />
+    <Content Include="img\blog\blog-small-03.jpg" />
+    <Content Include="img\comming-soon\comming-soon-bg.jpg" />
+    <Content Include="img\comming-soon\logo-comming.png" />
+    <Content Include="img\home\articles\articles-01.jpg" />
+    <Content Include="img\home\articles\articles-02.jpg" />
+    <Content Include="img\home\articles\articles-03.jpg" />
+    <Content Include="img\home\articles\articles-04.jpg" />
+    <Content Include="img\home\banner-slider\shoe1.png" />
+    <Content Include="img\home\banner-slider\shoe2.png" />
+    <Content Include="img\home\banner-slider\shoe3.png" />
+    <Content Include="img\home\banner-slider\slider-bg.jpg" />
+    <Content Include="img\home\cart-items\cart-item-01.jpg" />
+    <Content Include="img\home\featured-collection\featured-collection-01.jpg" />
+    <Content Include="img\home\featured-collection\featured-collection-02.jpg" />
+    <Content Include="img\home\featured-collection\featured-collection-03.jpg" />
+    <Content Include="img\home\featured-product\product-01.jpg" />
+    <Content Include="img\home\featured-product\product-02.jpg" />
+    <Content Include="img\home\featured-product\product-03.jpg" />
+    <Content Include="img\home\featured-product\product-04.jpg" />
+    <Content Include="img\home\featured-product\product-05.jpg" />
+    <Content Include="img\home\featured-product\product-06.jpg" />
+    <Content Include="img\home\featured-product\product-07.jpg" />
+    <Content Include="img\home\featured-product\product-08.jpg" />
+    <Content Include="img\home\featured-product\product-09.jpg" />
+    <Content Include="img\home\featured-product\product-10.jpg" />
+    <Content Include="img\home\featured-product\product-11.jpg" />
+    <Content Include="img\home\featured-product\product-12.jpg" />
+    <Content Include="img\home\featured-product\product-13.jpg" />
+    <Content Include="img\home\featured-product\product-14.jpg" />
+    <Content Include="img\home\featured-product\product-15.jpg" />
+    <Content Include="img\home\featured-product\product-16.jpg" />
+    <Content Include="img\home\featured-product\product-17.jpg" />
+    <Content Include="img\home\featured-product\product-18.jpg" />
+    <Content Include="img\home\partners\partner-01.png" />
+    <Content Include="img\home\partners\partner-02.png" />
+    <Content Include="img\home\partners\partner-03.png" />
+    <Content Include="img\home\partners\partner-04.png" />
+    <Content Include="img\home\partners\partner-05.png" />
+    <Content Include="img\logo.png" />
+    <Content Include="img\logo1.png" />
+    <Content Include="img\logo2.png" />
+    <Content Include="img\logo3.png" />
+    <Content Include="img\logo4.png" />
+    <Content Include="img\menu-photo.jpg" />
+    <Content Include="img\products\cart-image.jpg" />
+    <Content Include="img\products\page-header-image.jpg" />
+    <Content Include="img\products\products-01.jpg" />
+    <Content Include="img\products\products-02.jpg" />
+    <Content Include="img\products\products-03.jpg" />
+    <Content Include="img\products\products-04.jpg" />
+    <Content Include="img\products\products-05.jpg" />
+    <Content Include="img\products\products-06.jpg" />
+    <Content Include="img\products\products-07.jpg" />
+    <Content Include="img\products\products-08.jpg" />
+    <Content Include="img\products\products-09.jpg" />
+    <Content Include="img\products\products-10.jpg" />
+    <Content Include="img\products\products-11.jpg" />
+    <Content Include="img\products\products-12.jpg" />
+    <Content Include="img\products\products-13.jpg" />
+    <Content Include="img\products\products-14.jpg" />
+    <Content Include="img\products\products-15.jpg" />
+    <Content Include="img\products\products-16.jpg" />
+    <Content Include="img\products\products-17.jpg" />
+    <Content Include="img\products\products-18.jpg" />
+    <Content Include="img\products\profile\profile-image.jpg" />
+    <Content Include="img\products\quick-view\quick-view-01.jpg" />
+    <Content Include="img\products\signle-product\product-slide-big-01.jpg" />
+    <Content Include="img\products\signle-product\product-slide-big-02.jpg" />
+    <Content Include="img\products\signle-product\product-slide-big-03.jpg" />
+    <Content Include="img\products\signle-product\product-slide-big-04.jpg" />
+    <Content Include="img\products\signle-product\product-slide-small-01.jpg" />
+    <Content Include="img\products\signle-product\product-slide-small-02.jpg" />
+    <Content Include="img\products\signle-product\product-slide-small-03.jpg" />
+    <Content Include="img\products\signle-product\product-slide-small-04.jpg" />
+    <Content Include="img\shopping-bag_blue.png" />
+    <Content Include="img\shopping_bag.png" />
+    <Content Include="index.html" />
+    <Content Include="js\autoNumeric.js" />
+    <Content Include="js\backendless.js" />
+    <Content Include="js\bootstrap-formhelpers.js" />
+    <Content Include="js\bootstrap.js" />
+    <Content Include="js\breeze.ajax.post.js" />
+    <Content Include="js\breeze.debug.js" />
+    <Content Include="js\breeze.metadata-helper.js" />
+    <Content Include="js\chance.js" />
+    <Content Include="js\custom.js" />
+    <Content Include="js\dropzone.js" />
+    <Content Include="js\icheck.js" />
+    <Content Include="js\jquery-2.1.1.js" />
+    <Content Include="js\jquery.dataTables.js" />
+    <Content Include="js\jquery.localize.js" />
+    <Content Include="js\jquery.nestable.js" />
+    <Content Include="js\jquery.simplePagination.js" />
+    <Content Include="js\jquery.storageapi.js" />
+    <Content Include="js\jquery.validate.js" />
+    <Content Include="js\jquery.zen-coding.js" />
+    <Content Include="js\js.cookie.js" />
+    <Content Include="js\knockout-3.debug.js" />
+    <Content Include="js\ko.mapping.js" />
+    <Content Include="js\lodash.js" />
+    <Content Include="js\moltin.js" />
+    <Content Include="js\moment.js" />
+    <Content Include="js\numeral.js" />
+    <Content Include="js\page.js" />
+    <Content Include="js\q.js" />
+    <Content Include="js\react-addons.js" />
+    <Content Include="js\react-addons_v15.js" />
+    <Content Include="js\react-bootstrap.js" />
+    <Content Include="js\react-dom.js" />
+    <Content Include="js\react-dom_v15.js" />
+    <Content Include="js\react.js" />
+    <Content Include="js\react_v15.js" />
+    <Content Include="js\require.js" />
+    <Content Include="js\sweetalert-dev.js" />
+    <Content Include="js\toastr.js" />
+    <Content Include="js\waitMe.js" />
+    <Content Include="plugins\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="plugins\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="plugins\bootstrap\css\bootstrap.css" />
+    <Content Include="plugins\bootstrap\css\bootstrap.min.css" />
+    <Content Include="plugins\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="plugins\bootstrap\js\bootstrap.js" />
+    <Content Include="plugins\bootstrap\js\bootstrap.min.js" />
+    <Content Include="plugins\bootstrap\js\npm.js" />
+    <Content Include="plugins\countdown\jquery.syotimer.js" />
+    <Content Include="plugins\font-awesome\css\font-awesome.css" />
+    <Content Include="plugins\font-awesome\css\font-awesome.min.css" />
+    <Content Include="plugins\font-awesome\css\mixins.css" />
+    <Content Include="plugins\font-awesome\css\variables.css" />
+    <Content Include="plugins\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="plugins\jquery-ui\jquery-ui.css" />
+    <Content Include="plugins\jquery-ui\jquery-ui.js" />
+    <Content Include="plugins\owl-carousel\images\left-arrow.png" />
+    <Content Include="plugins\owl-carousel\images\right-arrow.png" />
+    <Content Include="plugins\owl-carousel\owl.carousel.css" />
+    <Content Include="plugins\owl-carousel\owl.carousel.js" />
+    <Content Include="plugins\rs-plugin\assets\arrowleft.png" />
+    <Content Include="plugins\rs-plugin\assets\arrowright.png" />
+    <Content Include="plugins\rs-plugin\assets\arrow_large_left.png" />
+    <Content Include="plugins\rs-plugin\assets\arrow_large_right.png" />
+    <Content Include="plugins\rs-plugin\assets\arrow_left.png" />
+    <Content Include="plugins\rs-plugin\assets\arrow_left2.png" />
+    <Content Include="plugins\rs-plugin\assets\arrow_right.png" />
+    <Content Include="plugins\rs-plugin\assets\arrow_right2.png" />
+    <Content Include="plugins\rs-plugin\assets\black50.png" />
+    <Content Include="plugins\rs-plugin\assets\boxed_bgtile.png" />
+    <Content Include="plugins\rs-plugin\assets\bullet.png" />
+    <Content Include="plugins\rs-plugin\assets\bullets.png" />
+    <Content Include="plugins\rs-plugin\assets\bullets2.png" />
+    <Content Include="plugins\rs-plugin\assets\bullet_boxed.png" />
+    <Content Include="plugins\rs-plugin\assets\coloredbg.png" />
+    <Content Include="plugins\rs-plugin\assets\grain.png" />
+    <Content Include="plugins\rs-plugin\assets\gridtile.png" />
+    <Content Include="plugins\rs-plugin\assets\gridtile_3x3.png" />
+    <Content Include="plugins\rs-plugin\assets\gridtile_3x3_white.png" />
+    <Content Include="plugins\rs-plugin\assets\gridtile_white.png" />
+    <Content Include="plugins\rs-plugin\assets\large_left.png" />
+    <Content Include="plugins\rs-plugin\assets\large_right.png" />
+    <Content Include="plugins\rs-plugin\assets\loader.gif" />
+    <Content Include="plugins\rs-plugin\assets\loader2.gif" />
+    <Content Include="plugins\rs-plugin\assets\navigdots.png" />
+    <Content Include="plugins\rs-plugin\assets\navigdots_bgtile.png" />
+    <Content Include="plugins\rs-plugin\assets\shadow1.png" />
+    <Content Include="plugins\rs-plugin\assets\shadow2.png" />
+    <Content Include="plugins\rs-plugin\assets\shadow3.png" />
+    <Content Include="plugins\rs-plugin\assets\small_left.png" />
+    <Content Include="plugins\rs-plugin\assets\small_left_boxed.png" />
+    <Content Include="plugins\rs-plugin\assets\small_right.png" />
+    <Content Include="plugins\rs-plugin\assets\small_right_boxed.png" />
+    <Content Include="plugins\rs-plugin\assets\timer.png" />
+    <Content Include="plugins\rs-plugin\assets\timerdot.png" />
+    <Content Include="plugins\rs-plugin\assets\transparent.jpg" />
+    <Content Include="plugins\rs-plugin\assets\white50.png" />
+    <Content Include="plugins\rs-plugin\css\settings-ie8.css" />
+    <Content Include="plugins\rs-plugin\css\settings.css" />
+    <Content Include="plugins\rs-plugin\font\revicons.svg" />
+    <Content Include="plugins\rs-plugin\images\decor_inside.png" />
+    <Content Include="plugins\rs-plugin\images\decor_inside_white.png" />
+    <Content Include="plugins\rs-plugin\images\decor_testimonial.png" />
+    <Content Include="plugins\rs-plugin\images\gradient\g30.png" />
+    <Content Include="plugins\rs-plugin\images\gradient\g40.png" />
+    <Content Include="plugins\rs-plugin\js\jquery.themepunch.enablelog.js" />
+    <Content Include="plugins\rs-plugin\js\jquery.themepunch.revolution.js" />
+    <Content Include="plugins\rs-plugin\js\jquery.themepunch.revolution.min.js" />
+    <Content Include="plugins\rs-plugin\js\jquery.themepunch.tools.min.js" />
+    <Content Include="plugins\selectbox\images\arrow-down-1.png" />
+    <Content Include="plugins\selectbox\images\drop-down-arrow.jpg" />
+    <Content Include="plugins\selectbox\jquery.selectbox-0.1.3.min.js" />
+    <Content Include="plugins\selectbox\select_option1.css" />
+    <Content Include="svg\circle.svg" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\data\" />
+    <Folder Include="src\lib\data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="src\config\routes.ts" />
+    <TypeScriptCompile Include="src\config\settings.ts" />
+    <TypeScriptCompile Include="src\config\start.tsx" />
+    <TypeScriptCompile Include="src\lib\controls.tsx" />
+    <TypeScriptCompile Include="src\lib\controls\panel.tsx" />
+    <TypeScriptCompile Include="src\lib\editpage.tsx" />
+    <TypeScriptCompile Include="src\lib\imageload.tsx" />
+    <TypeScriptCompile Include="src\lib\image_explorer.tsx" />
+    <TypeScriptCompile Include="src\lib\jx.tsx" />
+    <TypeScriptCompile Include="src\lib\modal.tsx" />
+    <TypeScriptCompile Include="src\lib\pages\subpage.tsx" />
+    <TypeScriptCompile Include="src\lib\server.ts" />
+    <TypeScriptCompile Include="src\lib\utils.ts" />
+    <TypeScriptCompile Include="src\views\account\account_addresses.tsx" />
+    <TypeScriptCompile Include="src\views\account\account_dashboard.tsx" />
+    <TypeScriptCompile Include="src\views\account\account_home.tsx" />
+    <TypeScriptCompile Include="src\views\home\home.tsx" />
+    <TypeScriptCompile Include="src\views\home\login.tsx" />
+    <TypeScriptCompile Include="src\views\products\products_browser.tsx" />
+    <TypeScriptCompile Include="typings\backendless.d.ts" />
+    <TypeScriptCompile Include="typings\breeze\breeze.d.ts" />
+    <TypeScriptCompile Include="typings\jquery.dataTables\jquery.dataTables.d.ts" />
+    <TypeScriptCompile Include="typings\jquery.noty\jquery.noty.d.ts" />
+    <TypeScriptCompile Include="typings\jquery.validation\jquery.validation.d.ts" />
+    <TypeScriptCompile Include="typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="typings\knockout\knockout.d.ts" />
+    <TypeScriptCompile Include="typings\moment\moment-node.d.ts" />
+    <TypeScriptCompile Include="typings\moment\moment.d.ts" />
+    <TypeScriptCompile Include="typings\q\Q.d.ts" />
+    <TypeScriptCompile Include="typings\react\react-addons-create-fragment.d.ts" />
+    <TypeScriptCompile Include="typings\react\react-addons-css-transition-group.d.ts" />
+    <TypeScriptCompile Include="typings\react\react-addons-linked-state-mixin.d.ts" />
+    <TypeScriptCompile Include="typings\react\react-addons-perf.d.ts" />
+    <TypeScriptCompile Include="typings\react\react-addons-pure-render-mixin.d.ts" />
+    <TypeScriptCompile Include="typings\react\react-addons-test-utils.d.ts" />
+    <TypeScriptCompile Include="typings\react\react-addons-transition-group.d.ts" />
+    <TypeScriptCompile Include="typings\react\react-addons-update.d.ts" />
+    <TypeScriptCompile Include="typings\react\react-bootstrap.d.ts" />
+    <TypeScriptCompile Include="typings\react\react-dom.d.ts" />
+    <TypeScriptCompile Include="typings\react\react-global.d.ts" />
+    <TypeScriptCompile Include="typings\react\react.d.ts" />
+    <TypeScriptCompile Include="typings\requirejs\require.d.ts" />
+    <TypeScriptCompile Include="typings\toastr\toastr.d.ts" />
+    <TypeScriptCompile Include="typings\tsd.d.ts" />
+    <TypeScriptCompile Include="typings\underscore\underscore.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir>$(ProjectDir)js/</TypeScriptOutDir>
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot>$(ProjectDir)js/</TypeScriptMapRoot>
+    <TypeScriptSourceRoot>$(ProjectDir)src/</TypeScriptSourceRoot>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>2470</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:2475/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
