@@ -1,26 +1,5 @@
 ﻿
-.btn-white:hover {
-  background-color: #47bac1;
-  border-color: #47bac1;
-  color: #ffffff;
-}
-
-@media (max-width: 479px) {
-  .btn-white {
-    width: 100%;
-    float: left;
-  }
-}
-
-@media (min-width: 480px) {
-  .btn-white {
-    width: 100%;
-    float: left;
-  }
-}
-@media (min-width: 768px) {
-  .btn-white {
-    width: 127px;
-    float: right;
-  }
+td .responsive-img {
+    max-width:100%;
+    height:auto;
 }

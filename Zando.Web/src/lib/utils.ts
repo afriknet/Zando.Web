@@ -381,8 +381,8 @@ module carts {
         var html =
             `<li>
                 <div class="btn-group" role="group" aria-label="...">
-                    <button type="button" class="btn btn-default">Shopping Cart</button>
-                    <button type="button" class="btn btn-default">Checkout</button>
+                    <button type="button" class="btn btn-default btn-cart">Shopping Cart</button>
+                    <button type="button" class="btn btn-default btn-checkout">Checkout</button>
                 </div>
              </li>
             `;
