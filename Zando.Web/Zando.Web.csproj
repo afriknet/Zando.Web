@@ -382,6 +382,7 @@
     <TypeScriptCompile Include="src\views\account\account_addresses.tsx" />
     <TypeScriptCompile Include="src\views\account\account_cart.tsx" />
     <TypeScriptCompile Include="src\views\account\account_checkout.tsx" />
+    <TypeScriptCompile Include="src\views\account\account_checkout_billing.tsx" />
     <TypeScriptCompile Include="src\views\account\account_dashboard.tsx" />
     <TypeScriptCompile Include="src\views\account\account_home.tsx" />
     <TypeScriptCompile Include="src\views\home\home.tsx" />
