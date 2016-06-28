@@ -11,8 +11,6 @@ import { BigLabel, BigLabelProps} from '../../lib/controls';
 
 
 interface AccountCheckoutBillingState extends jx.Views.ReactState {
-    selected_billing_address_id: string
-    selected_shipping_address_id: string
 }
 
 export interface AccountCheckoutBillingProps extends jx.Views.ReactProps {
@@ -26,8 +24,25 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
     state: AccountCheckoutBillingState;
 
     item: any;
-    billing_address: any;
-    shipping_address: any;
+    private __account: any;
+
+    get account(): any {
+        if (!this.__account) {
+            this.__account = this.props.owner['data'] = ko['mapping'].fromJS(this.item);
+        }
+        return this.__account;
+    }
+
+    private __address: any;
+    get address(): any {
+
+        if (!this.__address) {
+            // temprary, this must be properly resolved
+            this.__address = this.props.owner['address'] = ko['mapping'].fromJS(this.item['addresses'].results[0]);
+        }
+        return this.__address;
+    }
+    
 
     constructor(props: AccountCheckoutBillingProps) {
         super(props);
@@ -41,8 +56,9 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
 
                 <div className="col-xs-12">
                     <div className="page-header">
-                        <h4>Billing information</h4>
+                        <h4>Billing</h4>                        
                     </div>
+
                     {this.fill_with_controls()}
                 </div>
 
@@ -56,16 +72,21 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
     fill_with_controls() {
 
         if (!this.state.loading) {
-
-            var obj = this.app.get_account();
+                       
 
             var html = [
 
-                <TextControl label="First Name" field="first_name" obj={obj} />,
-                <TextControl label="Last Name" field="last_name" obj={obj} />
+                <TextControl label="First Name" field="first_name" obj={this.account} />,
+                <TextControl label="Last Name" field="last_name" obj={this.account} />,
+                <TextControl label= "Email" type="email" field= "email" obj= { this.account } />,
+                <TextControl label= "Telephone" field= "address2" obj= { this.address} />,
+
+                <TextControl label= "Address" field= "address1" obj= { this.address} />,
+                <TextControl label= "City" field= "city" obj= { this.address } />,
+
+                <CountryControl label= "Country" field= "country" obj= { this.address }/>
             ];
-
-
+            
             return html;
 
         }
@@ -82,10 +103,7 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
 
                 this.setState({
                     loading:false
-                });
-
-                //this.bind_data(this.root.find('.billing-content'), this.billing_address);
-                //this.bind_data(this.root.find('.shipping-content'), this.shipping_address);
+                });                
             });
         }
     }
@@ -99,59 +117,10 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
 
                 this.setState({
                     loading: false
-                });
-
-                //this.bind_data(this.root.find('.billing-content'), this.billing_address);
-                //this.bind_data(this.root.find('.shipping-content'), this.shipping_address);
+                });                
             });
         }
     }
-
-
-    //select_billing_addr() {
-
-    //    var _modal: IModalDialog = (this.refs['modal'] as any) as IModalDialog;
-
-    //    _modal.onSave = () => {
-
-    //        var $sel = $('.modal').find('[type="checkbox"].selected');
-
-    //        var address_id = $sel.closest('tr').attr('data-rowid');
-
-    //        this.setState(_.extend(this.state, {
-    //            loading: true,
-    //            selected_address_id: address_id
-    //        }));
-
-
-    //        return Q.resolve(true);
-    //    };
-
-    //    (this.refs['modal'] as Modal).show(<AccountAddressList owner={this} select={true} />);
-    //}
-
-
-    //select_shipping_adr() {
-
-    //    var _modal: IModalDialog = (this.refs['modal'] as any) as IModalDialog;
-
-    //    _modal.onSave = () => {
-
-    //        var $sel = $('.modal').find('[type="checkbox"].selected');
-
-    //        var address_id = $sel.closest('tr').attr('data-rowid');
-
-    //        this.setState(_.extend(this.state, {
-    //            loading: true,
-    //            selected_shipping_address_id: address_id
-    //        }));
-
-
-    //        return Q.resolve(true);
-    //    };
-
-    //    (this.refs['modal'] as Modal).show(<AccountAddressList owner={this} select={true} />);
-    //}
 
 
     bind_data($root: JQuery, address: any) {
@@ -202,43 +171,14 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
 
         utils.spin(this.root);
 
+        
+
         schema.call({
             fn: 'get',
             params: ['/accounts/{0}'.format(id), { expand: 'addresses' }]
         }).then(res => {
 
-            this.item = res.response;
-
-            if (res.response['addresses'].results && res.response['addresses'].results.length > 0) {
-
-                that.billing_address = that.shipping_address = res.response['addresses'].results[0];
-
-                if (this.state.selected_billing_address_id) {
-
-                    that.billing_address = _.find(res.response['addresses'].results, addr => {
-                        return addr['id'] === this.state.selected_billing_address_id
-                    });
-
-                    this.state.selected_billing_address_id = null;
-                }
-
-
-                if (this.state.selected_shipping_address_id) {
-
-                    that.shipping_address = _.find(res.response['addresses'].results, addr => {
-                        return addr['id'] === this.state.selected_shipping_address_id
-                    });
-
-                    this.state.selected_shipping_address_id = null;
-                }
-
-                that.props.owner['data']['billing_address'] = that.billing_address;
-                that.props.owner['data']['shipping_address'] = that.shipping_address;
-
-                if (that.props.owner['onAddressChange']) {
-                    that.props.owner['onAddressChange']();
-                }
-            }
+            this.item = that.props.owner['data'] = res.response;
             
             d.resolve(true);
 
@@ -256,7 +196,9 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
 interface TextControlProps extends jx.Views.ReactProps {
     label: string,
     obj: any,
-    field: string
+    field: string,
+    property?: string,
+    type?: string
 }
 class TextControl extends jx.Views.ReactView {
 
@@ -264,10 +206,14 @@ class TextControl extends jx.Views.ReactView {
 
     render() {
 
+        var property = this.props.property ? this.props.property :'textInput';
+        
+        var type = this.props.type ? this.props.type:'text';
+        
         var html =
             <div className="form-group col-sm-6 col-xs-12">
                 <label htmlFor="">{this.props.label}</label>
-                <input type="text" className="form-control" id=""/>
+                <input type="text" data-bind={"{0}:{1}".format(property, this.props.field) } className="form-control" id=""/>
             </div>
 
 
@@ -275,10 +221,59 @@ class TextControl extends jx.Views.ReactView {
     }
 
     componentDidMount() {
-        this.root.find('input').val(_.result(this.props.obj, this.props.field));
+
+        this.bind();
     }
 
     componentDidUpdate() {
-        this.root.find('input').val(_.result(this.props.obj, this.props.field));
+
+        this.bind();
     }
+
+
+    bind() {
+
+        ko.cleanNode(this.root[0]);
+        ko.applyBindings(this.props.obj, this.root[0]);
+
+    }
+}
+
+
+
+class CountryControl extends TextControl {
+
+
+    render() {
+
+        var html =
+            <div className="form-group col-sm-6 col-xs-12">
+                <label htmlFor="">{this.props.label}</label>
+                <select  id="" type="text" className="form-control bfh-countries"/>
+            </div>
+
+        return html;
+    }
+
+    componentDidMount() {
+
+        this.root.find('.bfh-countries')['bfhcountries']();
+
+        var that = this;
+
+        this.root.find('.bfh-countries').change(() => {
+            that.props.obj['country'](this.root.find('.bfh-countries').val());            
+        });
+
+        this.bind();
+    }
+    
+
+    bind() {
+
+        if (this.props.obj['country']()) {
+            this.root.find('.bfh-countries').val(this.props.obj['country']());
+        }
+    }
+
 }

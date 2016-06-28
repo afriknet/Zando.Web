@@ -11,6 +11,13 @@ import jx = require('../../lib/jx');
 import { BigLabel, BigLabelProps} from '../../lib/controls';
 
 import {AccountCheckoutBilling} from './account_checkout_billing';
+import { AccountCheckoutShipments } from './account_checkout_shipments';
+
+interface PageInfo {
+    index: number,
+    view: any;
+}
+
 
 interface AccountCheckoutState extends jx.Views.ReactState {
     activepage: number
@@ -24,11 +31,15 @@ export class AccountCheckout extends jx.Views.ReactView {
         this.state.activepage = 0;
         
         this['data'] = {};
+
+        this.pages = [];
     }
 
+
     state: AccountCheckoutState;
-    count: number;
+    pages: PageInfo[];
     
+
     render() {
 
         var __style = {
@@ -54,11 +65,14 @@ export class AccountCheckout extends jx.Views.ReactView {
 
                         <form>
 
-                            <div className="page-content">
+                            <div className="page-content" style={{ paddingLeft: 0, paddingRight:0 }}>
 
                             </div>
-
+                            
                             <div className="col-xs-12">
+
+                                <hr />
+
                                 <div className="well well-lg clearfix">
                                     <ul className="pager">
                                         <li className="previous"><a href="#" onClick={(e) => { e.preventDefault(); this.go_back() } } className={this.display_backBtn() }>back</a></li>
@@ -93,12 +107,31 @@ export class AccountCheckout extends jx.Views.ReactView {
     go_next() {
 
         if (this.state.activepage < 3) {
-            
-            this.setState({
-                activepage: ++this.state.activepage
+
+            this.can_go_next().then(() => {
+
+                this.setState({
+                    activepage: ++this.state.activepage
+                });
             });
+            
         }
     }
+
+
+    can_go_next(): Q.Promise<boolean> {
+
+        var info = _.find(this.pages, p => {
+            return p.index === this.state.activepage;
+        });
+
+        if (info && info.view['can_go_next']) {
+            return info.view['can_go_next']();
+        }
+
+        return Q.resolve(true);
+    }
+
 
     go_back() {
         
@@ -140,15 +173,21 @@ export class AccountCheckout extends jx.Views.ReactView {
             switch (this.state.activepage) {
 
                 case 0:
+
+                    view = <AccountCheckoutBilling owner={this} />;
                     
-                    view = <AccountCheckoutBilling owner={this} />
+                    break;
+
+                case 1:
+
+                    view = <AccountCheckoutShipments owner={this} index={1}  />
 
                     break;
                 
             }
 
             if (view) {
-
+                
                 ReactDOM.render(view, $page[0]);
             }
 
@@ -181,7 +220,7 @@ class ProgressBar extends jx.Views.ReactView {
             <div className="col-lg-12">
 
                 <ProgressBarItem pageindex={0} activepage={this.props.activepage}
-                    title={<span>Billing &amp; Shipping Address</span>}  />
+                    title={<span>Billing Address</span>}  />
 
                 <ProgressBarItem pageindex={1} activepage={this.props.activepage}
                     title={<span>Shipping Method</span>} />

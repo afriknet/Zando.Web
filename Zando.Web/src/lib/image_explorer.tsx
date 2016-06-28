@@ -376,10 +376,10 @@ export class ImageThumbnail extends jx.Views.ReactView {
         var check_props: ctrls.CheckBoxProps = {
             is_checked: this.is_main,
             onchecked: (id) => {
-                this.on_img_checked(id)
+                //this.on_img_checked(id)
             },
             onunchecked: (id) => {
-                this.on_img_unchecked(id);
+                //this.on_img_unchecked(id);
             }
         }
 

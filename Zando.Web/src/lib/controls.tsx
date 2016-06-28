@@ -363,15 +363,16 @@ export class TextNumeric extends jx.Views.ReactView {
 
 export interface CheckBoxProps extends jx.Views.ReactProps {
     is_checked: boolean,
-    onchecked?: (id) => void,
-    onunchecked?:(id) => void 
+    onchecked?: (row?: JQuery) => void,
+    onunchecked?: (row?: JQuery) => void 
 }
 export class CheckBox extends jx.Views.ReactView {
 
     props: CheckBoxProps;
+    skip: boolean;
 
     constructor(props: CheckBoxProps) {
-        super(props);
+        super(props);        
     }
 
     render() {
@@ -402,22 +403,48 @@ export class CheckBox extends jx.Views.ReactView {
 
         this.root.find('input').on('ifChecked', e => {
 
+            if (this.skip) {
+                return;
+            }
+
             if (this.props.onchecked) {
 
-                var img_id = $(e.currentTarget).closest('[data-img-id]').attr('data-img-id');
+                var old_val = this.skip;
+                
+                try {
 
-                this.props.onchecked(img_id);
+                    this.skip = true;
+
+                    this.props.onchecked($(e.currentTarget).closest('tr'));
+
+                } finally {
+                    this.skip = old_val;
+                }
             }
         });
 
 
         this.root.find('input').on('ifUnchecked', e => {
 
-            if (this.props.onunchecked)
-            {
-                var img_id = $(e.currentTarget).closest('[data-img-id]').attr('data-img-id');
+            if (this.skip) {
+                return;
+            }
 
-                this.props.onunchecked(img_id);
+            if (this.props.onunchecked)
+            {            
+                var old_val = this.skip;
+
+                try{
+                   
+                    this.skip = true;
+                     
+                    this.props.onunchecked($(e.currentTarget).closest('tr'));
+
+                } finally {
+
+                    this.skip = old_val;
+
+                }
             }
         });
 

@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "scss/_page-header.css",
+    "inputFile": "scss/_page-header.scss"
+  },
+  {
+    "outputFile": "scss/_comming-soon.css",
+    "inputFile": "scss/_comming-soon.scss"
+  },
+  {
+    "outputFile": "scss/_user-profile.css",
+    "inputFile": "scss/_user-profile.scss"
+  }
+]

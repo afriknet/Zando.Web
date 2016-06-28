@@ -117,7 +117,7 @@
 .notFound h1,
 .commentsArea .media .media-body .btn-link:hover,
 .userProfile .innerWrapper h3 span,
-.orderBox .table-responsive .table tbody tr td:first-child,
+/*.orderBox .table-responsive .table tbody tr td:first-child,*/
 .orderBox.myAddress.wishList .table-responsive .table tbody tr td:nth-child(4),
 .navbar-default .navbar-collapse li.dropdown .dropdown-menu li.active a {
   color: #47bac1;
