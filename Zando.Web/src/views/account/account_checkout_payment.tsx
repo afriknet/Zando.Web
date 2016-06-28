@@ -113,7 +113,13 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
 
 
     componentDidMount() {
+
+        this.root.find('input').css('font-size', '18px');
+        this.root.find('select').css('font-size', '18px');
+
         this.root.find('.select-drop')['selectbox']();
+
+        this.root.find('.step-drop a').css('font-size', '18px');
     }
 
 

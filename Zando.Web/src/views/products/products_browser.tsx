@@ -3,9 +3,6 @@
 // https://github.com/Microsoft/TypeScript/wiki/JSX
 
 
-
-
-
 import React = require('react');
 import ReactDOM = require('react-dom');
 import jx = require('../../lib/jx');

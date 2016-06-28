@@ -13,6 +13,7 @@ import { BigLabel, BigLabelProps} from '../../lib/controls';
 import {AccountCheckoutBilling} from './account_checkout_billing';
 import { AccountCheckoutShipments } from './account_checkout_shipments';
 import { AccountCheckoutPayments } from './account_checkout_payment';
+import { AccountCheckoutReview } from './account_checkout_review';
 
 
 
@@ -191,6 +192,12 @@ export class AccountCheckout extends jx.Views.ReactView {
 
                     view = <AccountCheckoutPayments owner={this}/>
 
+                    break;
+
+                case 3:
+
+                    view = <AccountCheckoutReview owner={this}/>
+                    
                     break;
                 
             }

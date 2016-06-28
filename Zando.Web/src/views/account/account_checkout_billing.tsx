@@ -212,8 +212,11 @@ class TextControl extends jx.Views.ReactView {
         
         var html =
             <div className="form-group col-sm-6 col-xs-12">
+
                 <label htmlFor="">{this.props.label}</label>
-                <input type="text" data-bind={"{0}:{1}".format(property, this.props.field) } className="form-control" id=""/>
+
+                <input type="text" data-bind={"{0}:{1}".format(property, this.props.field) }
+                    className="form-control" id="" style={{ fontSize: 18 }}/>
             </div>
 
 
