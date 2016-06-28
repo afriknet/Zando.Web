@@ -12,6 +12,9 @@ import { BigLabel, BigLabelProps} from '../../lib/controls';
 
 import {AccountCheckoutBilling} from './account_checkout_billing';
 import { AccountCheckoutShipments } from './account_checkout_shipments';
+import { AccountCheckoutPayments } from './account_checkout_payment';
+
+
 
 interface PageInfo {
     index: number,
@@ -181,6 +184,12 @@ export class AccountCheckout extends jx.Views.ReactView {
                 case 1:
 
                     view = <AccountCheckoutShipments owner={this} index={1}  />
+
+                    break;
+
+                case 2:
+
+                    view = <AccountCheckoutPayments owner={this}/>
 
                     break;
                 
