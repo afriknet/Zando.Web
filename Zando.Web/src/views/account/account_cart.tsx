@@ -31,6 +31,7 @@ export class AccountCart extends jx.Views.ReactView {
 
         var html =
             <div>
+
                 <BigLabel label="Cart items" />
             
                 <hr />
@@ -45,13 +46,15 @@ export class AccountCart extends jx.Views.ReactView {
 
                                 <div className="table-responsive">
 
-                                    <table className="table">
+                                    <table className="table" >
                                         
                                     </table>
 
                                 </div>
 
                             </form>
+
+                            <br />
 
                         </div>
 
@@ -226,11 +229,10 @@ export class AccountCart extends jx.Views.ReactView {
 
         var cols: DataTables.ColumnSettings[] = [
             {
-                title: '', data: null, createdCell: (cell: Node, data: any) => {
-
+                title: '', data: null, width:'10%', createdCell: (cell: Node, data: any) => {
+                    
                     $(cell).empty();
-                    //$(cell).addClass('col-xs-2');
-
+                    
                     var prod = _.find(this.products, p => {
                         return p['id'] === data['product_id']
                     });
@@ -239,14 +241,18 @@ export class AccountCart extends jx.Views.ReactView {
                     var img = null;
 
                     if (prod.images && prod.images.length > 0) {
+
                         var url = prod.images[0].file.url;
-                        img = <span className="cartImage"><img src={url} alt="image"></img></span>;
+
+                        $(cell).append($('<div class="cartImage" style="width:100%"><img class="responsive-img" src="{0}" style="width:100%" alt="image"></img></div>'.format(url)));
+                        
+                        
                     } else {
                         // add empty image
-                        img = <span className="cartImage"></span>;
+                        //img = <span className="cartImage"></span>;
                     }
 
-                    ReactDOM.render(img, $(cell)[0]);
+                    //ReactDOM.render(img, $(cell)[0]);
                 }
             },
             {

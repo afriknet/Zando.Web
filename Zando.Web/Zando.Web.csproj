@@ -89,6 +89,7 @@
     <Content Include="html\account_home.html" />
     <Content Include="html\home.html" />
     <Content Include="html\login.html" />
+    <Content Include="js\imgLiquid.js" />
     <Content Include="js\jquery.rippler.js" />
     <Content Include="plugins\bootstrap\css\bootstrap-theme.css.map" />
     <Content Include="plugins\bootstrap\css\bootstrap-theme.min.css.map" />
@@ -379,6 +380,8 @@
     <TypeScriptCompile Include="src\lib\utils.ts" />
     <TypeScriptCompile Include="src\views\account\account_addresses.tsx" />
     <TypeScriptCompile Include="src\views\account\account_cart.tsx" />
+    <TypeScriptCompile Include="src\views\account\account_checkout.tsx" />
+    <TypeScriptCompile Include="src\views\account\account_checkout_billing.tsx" />
     <TypeScriptCompile Include="src\views\account\account_dashboard.tsx" />
     <TypeScriptCompile Include="src\views\account\account_home.tsx" />
     <TypeScriptCompile Include="src\views\home\home.tsx" />

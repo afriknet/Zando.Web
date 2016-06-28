@@ -15,6 +15,7 @@ import jx = require('../../lib/jx');
 import { AccountHomePage } from './account_home';
 import { AccountAddressesPage } from './account_addresses';
 import { AccountCart } from './account_cart';
+import { AccountCheckout } from './account_checkout';
 
 
 export class AccountDashboard extends jx.Views.HomePage {
@@ -23,9 +24,11 @@ export class AccountDashboard extends jx.Views.HomePage {
         return $('#page-content').find('.innerWrapper'); //
     }
 
+    skip: boolean;
 
     constructor(props?: any) {
         super(props);
+        this.skip = false;
     }
 
 
@@ -36,10 +39,16 @@ export class AccountDashboard extends jx.Views.HomePage {
     }
 
 
+
     componentDidMount() {
 
         $('#page-content').load('/html/account_dashboard.html', () => {
-            this.resolve_route();
+
+            if (!this.skip) {
+                this.skip = true;
+                this.resolve_route();
+            }
+
         });        
     }
 
@@ -49,6 +58,9 @@ export class AccountDashboard extends jx.Views.HomePage {
 
         var subview = this.get_subview();
 
+        //mainContent clearfix userProfile animated fadeInUp
+
+        $('.mainContent').removeClass().addClass('mainContent clearfix userProfile animated fadeInUp');
 
         switch (subview) {
 
@@ -65,6 +77,20 @@ export class AccountDashboard extends jx.Views.HomePage {
                 $('.page-path').html('Cart');
 
                 ReactDOM.render(<AccountCart />, this.content[0]);
+
+            } break;
+
+
+            case 'checkout': {
+
+                $('.mainContent').removeClass().addClass('mainContent clearfix stepsWrapper animated fadeInUp');
+
+                this.root.find('.tabs').addClass('hidden');
+
+                $('.page-title h2').html('Checkout');
+                $('.page-path').html('Checkout');
+
+                ReactDOM.render(<AccountCheckout />, this.content[0]);
 
             } break;
 

@@ -451,41 +451,10 @@ module carts {
 
     function init_actions(ul: JQuery) {
 
-        ul.find('.remove').click((e) => {
-
-            var li = $(e.currentTarget).closest('li');
-
-            var cartid = li.attr('data-cart-id');
-            var itemid = li.attr('data-cart-itemid');
-
-            utils.spin(ul);
-
-            schema.call({
-                fn: 'delete',
-                params: ['/carts/{0}/items/{1}'.format(cartid, itemid)]
-            }).then(res => {
-
-                carts.update_cart(cookies.get('current-user')['email']);
-
-            }).fail(err => {
-                toastr.error(err);
-            }).finally(() => {
-                utils.unspin(ul);
-            });            
-        });
-
-
-        ul.find('.btn-checkout').off('click');
         ul.find('.btn-checkout').click((e) => {
-        
             page('/account/checkout');
-                
         });
         
-        //ul.find('.btn-view-cart').click(e => {
-        //    e.preventDefault();
-        //    page('');
-        //});
     }
 
 

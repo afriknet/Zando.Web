@@ -6,6 +6,20 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.map
+
+/js/config/**/*.map
+/js/config/**/*.js
+
+/js/config/*.map
+/js/config/*.js
+
+/js/lib/**/*.map
+/js/lib/**/*.js
+
+/js/views/**/*.map
+/js/views/**/*.js
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -243,3 +257,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/Zando.Web/js/views/account
