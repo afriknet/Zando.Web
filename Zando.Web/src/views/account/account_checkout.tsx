@@ -71,7 +71,7 @@ export class AccountCheckout extends jx.Views.ReactView {
 
                             </div>
 
-                            <div className="col-xs-12">
+                            <div className="col-xs-12 no-p">
 
                                 <hr />
 

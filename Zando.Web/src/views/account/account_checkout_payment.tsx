@@ -39,28 +39,28 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
     }
 
     get method_select(): JQuery {
-        return this.get_ctrl('.method-select');
+        return this.jget('.method-select');
     }
 
     get cardtype_select(): JQuery {
-        return this.get_ctrl('.card-select');
+        return this.jget('.card-select');
     }
 
     
     get cardno_txt(): JQuery {
-        return this.get_ctrl('.card-no');
+        return this.jget('.card-no');
     }
 
     get cardcv_txt(): JQuery {
-        return this.get_ctrl('.card-cv');
+        return this.jget('.card-cv');
     }
 
     get cardexp_month_select(): JQuery {
-        return this.get_ctrl('.card-expire');
+        return this.jget('.card-expire');
     }
 
     get cardexp_year_select(): JQuery {
-        return this.get_ctrl('.card-year');
+        return this.jget('.card-year');
     }
 
 
@@ -68,7 +68,7 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
         var html =
             <div >
 
-                <div className="col-xs-12">
+                <div className="col-xs-12 no-p">
                     <div className="page-header">
                         <h4>Payment Information</h4>
                     </div>
@@ -136,8 +136,16 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
                         <label htmlFor="">CV Code</label>
                         <input type="text" required name="cardcv" className="form-control card-cv" id=""/>
                       </div>
-                
+                    
                </form>
+
+               <br/>
+
+                <div className="col-xs-12 paypal no-p" style={{ display: 'none', textAlign:'center' }}>
+                    <h4 style={{ display:'inline-block' }}><i className="fa fa-hourglass-end" aria-hidden="true"></i> <span>Under construction</span></h4>
+                </div>
+
+               
 
            </div>;
 
@@ -157,12 +165,15 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
 
                 if (parseInt(val) === PaymentOptions.paypal) {
 
-                    this.get_ctrl('.card').hide();
+                    this.jget('.card').hide();
+
+                    this.jget('.paypal').show();
 
                 } else {
 
-                    this.get_ctrl('.card').show();
+                    this.jget('.card').show();
 
+                    this.jget('.paypal').hide();
                 }
 
             }
@@ -171,32 +182,7 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
         this.root.find('.step-drop a').css('font-size', '18px');
 
         this.set_validations();
-
-        var that = this;
-
-        //this.method_select.change(() => {
-
-        //    var val = that.method_select['selectbox']('value');
-            
-        //    var meth = that.sel_val(that.method_select);
-            
-
-        //    if (parseInt(val) === PaymentOptions.paypal) {
-
-        //        this.get_ctrl('.card').hide();
-
-        //    } else {
-
-        //        this.get_ctrl('.card').show();
-
-        //        //var vdtor = that['validator'];
-
-        //        //this.get_ctrl('[name]').each((i, el) => {
-        //        //    vdtor.settings.unhighlight(el);
-        //        //});            
-        //    }
-            
-        //});
+        
     }
 
 
@@ -285,7 +271,7 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
 
         if (meth === PaymentOptions.card) {
 
-            var ok = this.get_ctrl('form').valid();
+            var ok = this.jget('form').valid();
 
             if (ok) {
                 return Q.resolve(true);
@@ -294,6 +280,6 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
             }
         }
 
-        return Q.resolve(true);
+        return Q.reject(false) as any;
     }
 }

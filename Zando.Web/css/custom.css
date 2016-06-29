@@ -55,3 +55,7 @@ label.error{
     color: red;
 }
 
+
+.no-p {
+    padding:0!important
+}

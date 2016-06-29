@@ -31,7 +31,7 @@ export class AccountCart extends jx.Views.ReactView {
 
         var html =
 
-            <div>
+            <div style={{ color:'gray' }}>
 
                 <BigLabel label="Cart items" />
             
@@ -45,7 +45,7 @@ export class AccountCart extends jx.Views.ReactView {
 
                             <div className="table-responsive">
 
-                                    <table className="table" >
+                                    <table className="table" style={{ fontSize:18 }} >
 
                                     </table>
 

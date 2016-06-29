@@ -41,7 +41,7 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
         var html =
             <div >
 
-                <div className="col-xs-12">
+                <div className="col-xs-12 no-p">
                     <div className="page-header">
                         <h4>Shipments</h4>                        
                      </div>                    

@@ -60,7 +60,7 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
 
             <div>
 
-                <div className="col-xs-12">
+                <div className="col-xs-12 no-p">
                     <div className="page-header">
                         <h4>Billing</h4>                        
                     </div>

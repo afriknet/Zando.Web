@@ -109,8 +109,8 @@ class Panel extends jx.Views.ReactView {
                 <div className="panel panel-default">
                     <div className="panel-heading">
                         <h4 className="panel-title">{this.props.title}</h4>
-                    </div>
-                    <div className="panel-body">
+                        </div>
+                    <div className="panel-body" style={{ color:'gray' }}>
                         {this.props.children}
                     </div>
                 </div>

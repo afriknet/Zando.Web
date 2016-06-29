@@ -170,7 +170,7 @@ export module Views {
         }
 
 
-        get_ctrl(sel: string): JQuery {
+        jget(sel: string): JQuery {
             return this.root.find(sel);
         }
 
