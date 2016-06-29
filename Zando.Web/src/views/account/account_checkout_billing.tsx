@@ -130,6 +130,7 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
                     loading: false
                 });
 
+
                 this.set_validations();
             });
         }
