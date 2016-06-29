@@ -192,7 +192,7 @@ export class AccountCheckout extends jx.Views.ReactView {
 
                 case 2:
 
-                    view = <AccountCheckoutPayments owner={this}/>
+                    view = <AccountCheckoutPayments owner={this} index={2}/>
 
                     break;
 

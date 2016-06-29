@@ -168,6 +168,21 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
 
 
     can_go_next(): Q.Promise<boolean> {
-        return Q.resolve(true);
+
+        var has_selection = _.find(this.root.find('table [type="checkbox"]'), p => {
+            return $(p).prop("checked") === true;
+        }) != undefined;
+
+        if (has_selection) {
+            return Q.resolve(true);
+        } else {
+
+            toastr.error('You must select one shipment method', null, {
+                "positionClass": "toast-bottom-full-width"
+            });
+
+            return Q.reject(false) as any;
+        }
+        
     }
 }

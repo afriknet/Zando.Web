@@ -110,6 +110,7 @@
     <Content Include="plugins\rs-plugin\font\revicons.eot" />
     <Content Include="plugins\rs-plugin\font\revicons.ttf" />
     <Content Include="plugins\rs-plugin\font\revicons.woff" />
+    <Content Include="plugins\selectbox\jquery.selectbox-0.1.3.js" />
     <Content Include="scss\deepBlue.scss" />
     <Content Include="scss\default.scss" />
     <Content Include="scss\orange.scss" />

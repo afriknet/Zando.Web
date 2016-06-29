@@ -170,6 +170,11 @@ export module Views {
         }
 
 
+        get_ctrl(sel: string): JQuery {
+            return this.root.find(sel);
+        }
+
+
         notify(cmd: string, data?: any): Q.Promise<any> {
             return Q.resolve(true);
         }
