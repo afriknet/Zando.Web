@@ -192,12 +192,50 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
         var can_go = this.root.find('form').valid();
 
         if (can_go) {
-            return Q.resolve(true);
+            return this.update_cart();
         } else {
             return Q.reject(false) as any;
         }
-
         
+    }
+
+
+    update_cart(): Q.Promise<boolean> {
+
+        var d = Q.defer<boolean>();
+
+        utils.spin(this.root);
+        
+        schema.call({
+            fn: 'put',
+            params: ['/carts/{0}'.format(this.props.owner['data']['cart']['id']), {
+
+                billing: {
+                    
+                    address1: this.props.owner['data']['address']['address1'],
+                    city: this.props.owner['data']['address']['city'],
+                    country: this.props.owner['data']['address']['country'],
+                    name: 'shipment-address-{0}'.format(this.app.get_account()['id']),
+                    phone: this.props.owner['data']['address']['address2'],
+                    
+                }
+            }]
+        }).then(() => {
+
+            d.resolve(true);
+
+        }).fail(() => {
+
+            d.reject(false);
+
+        }).finally(() => {
+
+            utils.unspin(this.root);
+        });
+
+
+        return d.promise;
+
     }
 
 

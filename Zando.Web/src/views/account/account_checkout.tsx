@@ -16,6 +16,8 @@ import { AccountCheckoutPayments } from './account_checkout_payment';
 import { AccountCheckoutReview } from './account_checkout_review';
 
 
+declare var chance;
+
 
 interface PageInfo {
     index: number,
@@ -50,6 +52,12 @@ export class AccountCheckout extends jx.Views.ReactView {
             borderBottom: 0
         }
 
+        var str_next = 'Continue';
+        if (this.state.activepage === 3) {
+            str_next = 'Complete';
+        }
+
+
 
         var html =
 
@@ -78,7 +86,7 @@ export class AccountCheckout extends jx.Views.ReactView {
                                 <div className="well well-lg clearfix">
                                     <ul className="pager">
                                         <li className="previous"><a href="#" onClick={(e) => { e.preventDefault(); this.go_back() } } className={this.display_backBtn() }>back</a></li>
-                                        <li className="next"><a href="#" onClick={(e) => { e.preventDefault(); this.go_next() } }>Continue</a></li>
+                                        <li className="next"><a href="#" onClick={(e) => { e.preventDefault(); this.go_next() } }>{str_next}</a></li>
                                     </ul>
                                 </div>
                            </div>
@@ -112,16 +120,30 @@ export class AccountCheckout extends jx.Views.ReactView {
 
     go_next() {
 
-        if (this.state.activepage < 3) {
+        if (this.state.activepage <= 3) {
 
-            this.can_go_next().then(() => {
+            if (this.state.activepage < 3) {
 
-                this.setState({
-                    activepage: ++this.state.activepage
+                this.can_go_next().then(() => {
+
+                    this.setState({
+                        activepage: ++this.state.activepage
+                    });
                 });
-            });
+
+            } else {
+
+
+            }
             
         }
+    }
+
+
+    complete_order() {
+
+
+
     }
 
 

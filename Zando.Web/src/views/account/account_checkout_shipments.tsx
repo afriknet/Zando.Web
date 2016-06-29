@@ -8,7 +8,7 @@ import ReactDOM = require('react-dom');
 import jx = require('../../lib/jx');
 import { BigLabel, BigLabelProps, CheckBox} from '../../lib/controls';
 
-
+declare var chance;
 
 
 export interface AccountCheckoutShipmentsProps extends jx.Views.ReactProps {
@@ -94,6 +94,11 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
                 data: this.services,
                 lengthChange: false,
                 searching: false,
+
+                createdRow: (row: Node, data: any) => {
+                    $(row).attr('data-rowid', data['id']);
+                },
+
                 columns: [
                     {
                         title: '', data: null, createdCell: (cell, data) => {
@@ -137,6 +142,10 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
         this.root.find('table [type="checkbox"]')['iCheck']('Uncheck');
 
         $(row).find('[type="checkbox"]')['iCheck']('check');
+
+        var service_id = $(row).attr('data-rowid');
+
+        this.jget('table').attr('data-service_id', service_id);
     }
     
 
@@ -174,7 +183,9 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
         }) != undefined;
 
         if (has_selection) {
-            return Q.resolve(true);
+
+            return this.update_cart();
+
         } else {
 
             toastr.error('You must select one shipment method', null, {
@@ -184,5 +195,63 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
             return Q.reject(false) as any;
         }
         
+    }
+
+
+    update_cart(): Q.Promise<boolean> {
+
+        var d = Q.defer<boolean>();
+
+        utils.spin(this.root);
+
+        var srv_id = this.jget('table').attr('data-service_id');
+
+        var srv_obj = _.find(this.services, srv => {
+            return srv['id'] === srv_id;
+        });
+
+
+        schema.call({
+            fn: 'put',
+            params: ['/carts/{0}'.format(this.props.owner['data']['cart']['id']), {
+
+                //billing: {
+                //    address1: this.props.owner['data']['address']['address1'],
+                //    city: this.props.owner['data']['address']['city'],
+                //    country: this.props.owner['data']['address']['country'],
+                //    name: chance.string({ length: 10 }),
+                //    phone: this.props.owner['data']['address']['address2'],
+                //},
+
+                shipping: {
+
+                    account_address_id: this.props.owner['data']['address']['id'],
+
+                    address1: this.props.owner['data']['address']['address1'],
+                    city: this.props.owner['data']['address']['city'],
+                    country: this.props.owner['data']['address']['country'],
+                    name: 'shipment-address-{0}'.format(this.app.get_account()['id']),
+                    phone: this.props.owner['data']['address']['address2'],
+
+                    service: srv_id,
+                    service_name: srv_obj['name']
+                }
+            }]
+        }).then(() => {
+
+            d.resolve(true);
+
+        }).fail(() => {
+
+            d.reject(false);
+
+        }).finally(() => {
+
+            utils.unspin(this.root);
+        });
+
+
+        return d.promise;
+
     }
 }
