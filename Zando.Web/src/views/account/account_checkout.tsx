@@ -133,17 +133,38 @@ export class AccountCheckout extends jx.Views.ReactView {
 
             } else {
 
-
+                this.post_order();
             }
             
         }
     }
 
 
-    complete_order() {
+    post_order() {
 
+        var d = Q.defer();
 
+        schema.call({
+            fn: 'post',
+            params: ['/orders', {
+                cart_id: this['cart']['id']
+            }]
+        }).then(res => {
 
+            d.resolve(true);
+
+        }).fail(err => {
+
+            toastr.error(err);
+
+            d.reject(err);
+
+        }).finally(() => {
+
+            utils.unspin(this.root);
+        });
+
+        return d.promise;
     }
 
 
@@ -275,9 +296,7 @@ class ProgressBar extends jx.Views.ReactView {
         return html;
 
     }
-
-
-    
+        
 }
 
 

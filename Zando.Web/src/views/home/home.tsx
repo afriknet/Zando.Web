@@ -285,9 +285,7 @@ class FeaturedProductItem extends jx.Views.ReactView {
         schema.call({
             fn: 'post',
             params: ['/carts', {
-
-                status: 'active',
-
+                
                 account: {
                     email: this.app.get_user()['email']
                 },

@@ -213,25 +213,17 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
 
         schema.call({
             fn: 'put',
-            params: ['/carts/{0}'.format(this.props.owner['data']['cart']['id']), {
-
-                //billing: {
-                //    address1: this.props.owner['data']['address']['address1'],
-                //    city: this.props.owner['data']['address']['city'],
-                //    country: this.props.owner['data']['address']['country'],
-                //    name: chance.string({ length: 10 }),
-                //    phone: this.props.owner['data']['address']['address2'],
-                //},
-
+            params: ['/carts/{0}'.format(this.props.owner['cart']['id']), {
+                
                 shipping: {
 
-                    account_address_id: this.props.owner['data']['address']['id'],
+                    account_address_id: this.props.owner['address']['id'],
 
-                    address1: this.props.owner['data']['address']['address1'],
-                    city: this.props.owner['data']['address']['city'],
-                    country: this.props.owner['data']['address']['country'],
+                    address1: this.props.owner['address']['address1'],
+                    city: this.props.owner['address']['city'],
+                    country: this.props.owner['address']['country'],
                     name: 'shipment-address-{0}'.format(this.app.get_account()['id']),
-                    phone: this.props.owner['data']['address']['address2'],
+                    phone: this.props.owner['address']['address2'],
 
                     service: srv_id,
                     service_name: srv_obj['name']

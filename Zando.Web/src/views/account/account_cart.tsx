@@ -14,6 +14,7 @@ import ReactDOM = require('react-dom');
 import jx = require('../../lib/jx');
 import { BigLabel, BigLabelProps} from '../../lib/controls';
 
+declare var numeral;
 
 export class AccountCart extends jx.Views.ReactView {
 
@@ -56,11 +57,41 @@ export class AccountCart extends jx.Views.ReactView {
                         </div>
 
                     </div>
+
+                    <div className="cartListInner">
+
+                        <div className="col-xs-12 totalAmountArea" style={{ border: 'none', fontSize:18 }}>
+
+                            <hr />
+
+                            <div className="col-sm-4 col-sm-offset-8 col-xs-12">
+                                <ul className="list-unstyled">
+                                    <li>Sub Total <span data-curr="sub_total"></span></li>
+                                    <li>Taxes <span data-curr="tax_included_total"></span></li>
+                                    <li>Shipment <span data-curr="shipment_total"></span></li>
+                                    <li>Discount <span data-curr="discount_total"></span></li>                                    
+                                    <li>Total <span data-curr="grand_total" className="grandTotal"></span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    
                 </div>
 
             </div>
 
         return html;
+    }
+
+
+    value(field: string) {
+
+        //if (!this.cart) {
+        //    return null;
+        //}
+
+        //return numeral(this.cart[field]).format('€0,0.00')
 
     }
 
@@ -73,14 +104,26 @@ export class AccountCart extends jx.Views.ReactView {
 
             this.load_items().then(() => {
 
-                this.state.loading = false;
-
-                this.init_datatable();
+                this.setState({
+                    loading: false
+                });
                 
             });
-        }
+        }        
+    }
 
-        //lang.localize();
+
+    currencyfy() {
+
+        this.jget('[data-curr]').each((i, el) => {
+
+            $(el)['autoNumeric']('init',{ 'aSign': '€' });
+
+            var field = $(el).attr('data-curr');
+
+            $(el)['autoNumeric']('set', this.cart[field]);
+
+        });
     }
     
 
@@ -90,15 +133,17 @@ export class AccountCart extends jx.Views.ReactView {
 
             this.load_items().then(() => {
 
-                this.state.loading = false;
-
-                this.init_datatable();
-
+                this.setState({
+                    loading: false
+                });
+                
             });
 
         } else {
 
             this.state.loading = false;
+
+            this.currencyfy();
 
             this.init_datatable();
         }
@@ -224,17 +269,19 @@ export class AccountCart extends jx.Views.ReactView {
 
     init_columns(): DataTables.ColumnSettings[] {
 
+        var that = this;
+
         var cols: DataTables.ColumnSettings[] = [
             {
-                title: '', data: null, width:'10%', createdCell: (cell: Node, data: any) => {
-                    
+                title: '', data: null, width: '10%', createdCell: (cell: Node, data: any) => {
+
                     $(cell).empty();
-                    
+
                     var prod = _.find(this.products, p => {
                         return p['id'] === data['product_id']
                     });
 
-                    
+
                     var img = null;
 
                     if (prod.images && prod.images.length > 0) {
@@ -242,8 +289,8 @@ export class AccountCart extends jx.Views.ReactView {
                         var url = prod.images[0].file.url;
 
                         $(cell).append($('<div class="cartImage" style="width:100%"><img class="responsive-img" src="{0}" style="width:100%" alt="image"></img></div>'.format(url)));
-                        
-                        
+
+
                     } else {
                         // add empty image
                         //img = <span className="cartImage"></span>;
@@ -263,85 +310,41 @@ export class AccountCart extends jx.Views.ReactView {
 
                     $(cell).html(prod.name);
                 }
+            },
+            {
+                title: 'Unit price', data: null, createdCell: (cell: Node, data: any) => {
+
+                    $(cell).empty();
+
+                    var prod = _.find(this.products, p => {
+                        return p['id'] === data['product_id']
+                    });
+
+                    $(cell).append($('<span>{0}</span>'.format(prod.price)));
+
+                    $(cell).find('span')['autoNumeric']('init');//, { 'aSign': '€' }
+                    
+                    $(cell).find('span')['autoNumeric']('set', prod.price);
+
+                }
+            },
+            {
+                title: 'Quantity', data: 'quantity'
+            },
+
+            {
+                title: 'Total', data: 'price_total', createdCell: (cell: Node, data: any) => {
+
+                    $(cell).empty();
+
+                    $(cell).append($('<span></span>'));
+
+                    $(cell).find('span')['autoNumeric']('init');//, { 'aSign': '€' }
+
+                    $(cell).find('span')['autoNumeric']('set', data);
+                }
             }
         ];
-
-        /*
-
-        // 1. add image column if exists
-        if (prod.images && prod.images.length > 0) {
-            var url = prod.images[0].file.url;
-            tds.push(<td className="col-xs-1"><img src={url} alt="" className="img-response" ></img></td>);
-        } else {
-            // add empty image
-            tds.push(<td className="col-xs-1"></td>);
-        }
-
-        */
-
-        //if (this.props.select) {
-
-        //    var that = this;
-
-        //    cols.unshift({
-        //        title: 'Select', data: null, createdCell: (cell: Node, cellData: any) => {
-
-        //            $(cell).empty();
-
-        //            var label = $('<label></label>').appendTo($(cell));
-        //            var input = $('<input type="checkbox" />').appendTo(label);
-
-        //            iCheck.icheck({
-
-        //                $el: input,
-
-        //                onChecked: (e) => {
-
-        //                    var $el = $(e.currentTarget);
-
-        //                    that.root.find('table [type="checkbox"]').removeClass('selected');
-
-        //                    $el.addClass('selected')
-
-        //                    that.root.find('table [type="checkbox"]').not('.selected')['iCheck']('Uncheck');
-
-        //                    //$el['iCheck']('Check');
-
-        //                }
-        //            })
-
-        //        }
-        //    });
-
-        //} else {
-
-        //    cols.push({
-        //        title: '', width: '15%', data: null, createdCell: (cell: Node, cellData: any) => {
-
-        //            $(cell).empty();
-
-        //            var btn_edit = $('<button type="button" class="btn btn-default"><i class="fa fa-pencil" ></i></button>').appendTo($(cell));
-        //            var btn_delete = $('<button type="button" class="btn btn-default"><i class="fa fa-times" ></i></button>').appendTo($(cell));
-
-        //            $(btn_edit).click(() => {
-        //                this.edit_address($(btn_edit).closest('tr').attr('data-rowid'));
-        //            });
-
-        //            $(btn_delete).click(() => {
-
-        //                utils.can_delete().then(() => {
-
-        //                    this.delete_address($(btn_edit).closest('tr').attr('data-rowid')).then(() => {
-
-        //                        this.notify('update-list');
-        //                    });
-
-        //                });
-        //            });
-
-        //        }
-        //    });
-        //}
 
         return cols;
     }

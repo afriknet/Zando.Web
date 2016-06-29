@@ -195,8 +195,30 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
             return this.update_cart();
         } else {
             return Q.reject(false) as any;
-        }
+        }        
+    }
+
+
+    fetch_cart() {
+
+        var d = Q.defer();
+
+        schema.call({
+            fn: 'get',
+            params: ['/carts', {
+                where: {
+                    account_id: this.app.get_account()['id'],
+                    status: 'active'
+                }
+            }]
+        }).then(res => {
+
+            this.props.owner['cart'] = res.response.results[0];
+
+            d.resolve(res.response.results[0]);
+        });
         
+        return d.promise;
     }
 
 
@@ -205,35 +227,46 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
         var d = Q.defer<boolean>();
 
         utils.spin(this.root);
-        
-        schema.call({
-            fn: 'put',
-            params: ['/carts/{0}'.format(this.props.owner['data']['cart']['id']), {
 
-                billing: {
-                    
-                    address1: this.props.owner['data']['address']['address1'],
-                    city: this.props.owner['data']['address']['city'],
-                    country: this.props.owner['data']['address']['country'],
-                    name: 'shipment-address-{0}'.format(this.app.get_account()['id']),
-                    phone: this.props.owner['data']['address']['address2'],
-                    
-                }
-            }]
-        }).then(() => {
+        this.fetch_cart().then(cart => {
 
-            d.resolve(true);
+            schema.call({
+                fn: 'put',
+                params: ['/carts/{0}'.format(cart['id']), {
 
-        }).fail(() => {
+                    billing: {
+
+                        address1: this.props.owner['address']['address1'],
+                        city: this.props.owner['address']['city'],
+                        country: this.props.owner['address']['country'],
+                        name: 'shipment-address-{0}'.format(this.app.get_account()['id']),
+                        phone: this.props.owner['address']['address2'],
+
+                    }
+                }]
+
+            }).then(() => {
+
+                d.resolve(true);
+
+            }).fail(() => {
+
+                d.reject(false);
+
+            }).finally(() => {
+
+                utils.unspin(this.root);
+
+            });
+
+        }).fail((err) => {
+
+            toastr.error(err);
 
             d.reject(false);
 
-        }).finally(() => {
-
-            utils.unspin(this.root);
         });
-
-
+        
         return d.promise;
 
     }
@@ -286,9 +319,7 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
         var id = this.app.get_account()['id']
 
         utils.spin(this.root);
-
         
-
         schema.call({
             fn: 'get',
             params: ['/accounts/{0}'.format(id), { expand: 'addresses' }]

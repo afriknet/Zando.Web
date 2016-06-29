@@ -67,27 +67,11 @@ export class AccountCheckoutReview extends jx.Views.ReactView {
                     <AccountCart owner={this} />
                 </div>
 
-
+                
           </div>
 
         return html;
     }    
-}
-
-
-class AccountCarts extends jx.Views.ReactView {
-
-    render() {
-
-
-        var html;
-        
-        return html;
-    }
-
-    componentDidMount() {
-
-    }
 }
 
 

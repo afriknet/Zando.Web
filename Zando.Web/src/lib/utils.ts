@@ -454,7 +454,10 @@ module carts {
         ul.find('.btn-checkout').click((e) => {
             page('/account/checkout');
         });
-        
+
+        ul.find('.btn-cart').click((e) => {
+            page('/account/cart');
+        });
     }
 
 
@@ -503,13 +506,18 @@ module carts {
                         ul.append(add_li(cart_id, prod, cart_item)); 
                     });
 
-                    $('.products-cart .cart-total').html('€{0}'.format(cart['grand_total']));
+                    if (cart) {
+                        $('.products-cart .cart-total').html('€{0}'.format(cart['grand_total']));
+                    }
                     
                     if (data.prods.length > 0) {
-                        ul.append(add_actions())
+
+                        ul.append(add_actions());
+
+                        init_actions(ul);
                     }
 
-                    init_actions(ul);
+                    $('.products-cart').removeClass('hidden');
                     
                     d.resolve(data.items);
 

@@ -258,3 +258,6 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 /Zando.Web/js/views/account
+/Zando.Web/js/config
+/Zando.Web/js/lib
+/Zando.Web/js/views
