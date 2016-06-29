@@ -8,7 +8,7 @@
 import React = require('react');
 import ReactDOM = require('react-dom');
 import jx = require('../../lib/jx');
-import { BigLabel, BigLabelProps, CheckBox} from '../../lib/controls';
+import { BigLabel, BigLabelProps} from '../../lib/controls';
 import { AccountCart} from './account_cart';
 
 
@@ -35,8 +35,8 @@ export class AccountCheckoutReview extends jx.Views.ReactView {
 
                     <div className="page-header">
                         <h4>order review</h4>
-                    </div>                    
-                </div>
+                        </div>
+                    </div>
 
                 <br/>
 
@@ -48,33 +48,46 @@ export class AccountCheckoutReview extends jx.Views.ReactView {
                         <span>Shyamoli, Dhaka </span>
                         <br/>
                         <span>Bangladesh</span>
-                    </address>
-                </Panel>
+                        </address>
+                    </Panel>
 
                 <Panel title="Payment Method">
                     <address>
                         <span>Credit Card - VISA</span>
-                    </address>
-                </Panel>
+                        </address>
+                    </Panel>
 
                 <Panel title="Payment Method">
                     <address>
                         <span>Shipping Method</span>
-                    </address>
+                        </address>
                 </Panel>
 
-                <br />
-
-                <div className="col-lg-12 carts">
-                    <AccountCart />
+                <div className="col-lg-12" style={{ marginTop:30 }}>
+                    <AccountCart owner={this} />
                 </div>
-                
 
-            </div>
+
+          </div>
 
         return html;
+    }    
+}
+
+
+class AccountCarts extends jx.Views.ReactView {
+
+    render() {
+
+
+        var html;
+        
+        return html;
     }
-    
+
+    componentDidMount() {
+
+    }
 }
 
 

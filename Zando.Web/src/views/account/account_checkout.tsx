@@ -67,12 +67,10 @@ export class AccountCheckout extends jx.Views.ReactView {
 
                     <div className="col-lg-12" style={{ marginTop:45 }}>
 
-                        <form>
-
-                            <div className="page-content" style={{ paddingLeft: 0, paddingRight:0 }}>
+                        <div className="page-content" style={{ paddingLeft: 0, paddingRight: 0 }}>
 
                             </div>
-                            
+
                             <div className="col-xs-12">
 
                                 <hr />
@@ -83,8 +81,12 @@ export class AccountCheckout extends jx.Views.ReactView {
                                         <li className="next"><a href="#" onClick={(e) => { e.preventDefault(); this.go_next() } }>Continue</a></li>
                                     </ul>
                                 </div>
-                            </div>
+                           </div>
 
+
+                        <form>
+
+                            
                         </form>
 
 
@@ -178,7 +180,7 @@ export class AccountCheckout extends jx.Views.ReactView {
 
                 case 0:
 
-                    view = <AccountCheckoutBilling owner={this} />;
+                    view = <AccountCheckoutBilling owner={this} index={0} />;
                     
                     break;
 

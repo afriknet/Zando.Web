@@ -30,6 +30,7 @@ export class AccountCart extends jx.Views.ReactView {
 
 
         var html =
+
             <div>
 
                 <BigLabel label="Cart items" />
@@ -42,17 +43,13 @@ export class AccountCart extends jx.Views.ReactView {
 
                         <div className="cartListInner">
 
-                            <form action="#">
-
-                                <div className="table-responsive">
+                            <div className="table-responsive">
 
                                     <table className="table" >
-                                        
+
                                     </table>
 
-                                </div>
-
-                            </form>
+                            </div>
 
                             <br />
 
@@ -350,44 +347,3 @@ export class AccountCart extends jx.Views.ReactView {
     }
     
 }
-
-
-/*
-<thead>
-    <tr>
-        <th></th>
-        <th>Product Name</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Sub Total</th>
-    </tr>
-</thead>
-<tbody>
-
-    <tr>
-        <td className="col-xs-2">
-            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times; </span>
-            </button>
-            <span className="cartImage"><img src="/img/products/cart-image.jpg" alt="image"/></span>
-        </td>
-        <td className="col-xs-4">Italian Winter Hat</td>
-        <td className="col-xs-2">$ 99.00</td>
-        <td className="col-xs-2"><input type="text" placeholder="1"/></td>
-        <td className="col-xs-2">$ 99.00</td>
-    </tr>
-    <tr>
-        <td className="col-xs-2">
-            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times; </span>
-            </button>
-            <span className="cartImage"><img src="/img/products/cart-image.jpg" alt="image"/></span>
-        </td>
-        <td className="col-xs-4">Italian Winter Hat</td>
-        <td className="col-xs-2">$ 99.00</td>
-        <td className="col-xs-2"><input type="text" placeholder="1"/></td>
-        <td className="col-xs-2">$ 99.00</td>
-    </tr>
-
-</tbody>
-*/

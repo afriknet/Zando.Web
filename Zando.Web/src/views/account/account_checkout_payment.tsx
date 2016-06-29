@@ -47,65 +47,69 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
 
                 <br/>
 
-               <div className="form-group col-sm-4 col-xs-12" style={{ marginBottom: 50 }}>
+                <form>
 
-                    <label htmlFor="">Payment By</label>
+                   <div className="form-group col-sm-4 col-xs-12" style={{ marginBottom: 60 }}>
 
-                    <span className="step-drop" >
-                      <select name="guiest_id3" id="guiest_id3" className="select-drop">
-                        <option value="0">Credit Card</option>
-                        <option value="1">Paypal</option>                        
-                      </select>
-                    </span>
-               </div>
+                        <label htmlFor="">Payment By</label>
 
-               <div className="form-group col-sm-4 col-xs-12" style={{ marginBottom: 50 }}>
-                    <label htmlFor="">Card type </label>
-                    <span className="step-drop">
-                      <select name="guiest_id3" id="guiest_id3" className="select-drop">
-                        <option value="0">Visa</option>
-                        <option value="1">Master</option>                        
-                      </select>
-                    </span>
-              </div>
-
-               <div className="form-group col-sm-4 col-xs-12" style={{ marginBottom: 50 }}>
-                    <label htmlFor="">Card Number</label>
-                    <input type="password" className="form-control" id=""/>
-               </div>
-                
-
-                <div className="form-group col-sm-4 col-xs-12">
-                    <label htmlFor="">Expiration Date</label>
-                    <div className="row">
-                      <div className="col-xs-6">
-                        <span className="step-drop">
+                        <span className="step-drop" >
                           <select name="guiest_id3" id="guiest_id3" className="select-drop">
-                            <option value="0">month</option>
-                            <option value="1">month 1</option>
-                            <option value="2">month 2</option>
-                            <option value="3">month 3</option>
+                            <option value="0">Credit Card</option>
+                            <option value="1">Paypal</option>                        
                           </select>
                         </span>
-                      </div>
-                      <div className="col-xs-6">
+                   </div>
+
+                   <div className="form-group col-sm-4 col-xs-12" style={{ marginBottom: 60 }}>
+                        <label htmlFor="">Card type </label>
                         <span className="step-drop">
                           <select name="guiest_id3" id="guiest_id3" className="select-drop">
-                            <option value="0">2016</option>
-                            <option value="1">2017</option>
-                            <option value="2">2018</option>
-                            <option value="3">2019</option>
+                            <option value="0">Visa</option>
+                            <option value="1">Master</option>                        
                           </select>
                         </span>
-                      </div>
-                    </div>
                   </div>
 
-                  <div className="form-group col-sm-4 col-xs-12">
-                    <label htmlFor="">CV Code</label>
-                    <input type="text" className="form-control" id=""/>
-                  </div>
+                   <div className="form-group col-sm-4 col-xs-12" style={{ marginBottom: 60 }}>
+                        <label htmlFor="">Card Number</label>
+                        <input type="password" className="form-control" id=""/>
+                   </div>
                 
+
+                    <div className="form-group col-sm-4 col-xs-12">
+                        <label htmlFor="">Expiration Date</label>
+                        <div className="row">
+                          <div className="col-xs-6">
+                            <span className="step-drop">
+                              <select name="guiest_id3" id="guiest_id3" className="select-drop">
+                                <option value="0">month</option>
+                                <option value="1">month 1</option>
+                                <option value="2">month 2</option>
+                                <option value="3">month 3</option>
+                              </select>
+                            </span>
+                          </div>
+                          <div className="col-xs-6">
+                            <span className="step-drop">
+                              <select name="guiest_id3" id="guiest_id3" className="select-drop">
+                                <option value="0">2016</option>
+                                <option value="1">2017</option>
+                                <option value="2">2018</option>
+                                <option value="3">2019</option>
+                              </select>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="form-group col-sm-4 col-xs-12">
+                        <label htmlFor="">CV Code</label>
+                        <input type="text" className="form-control" id=""/>
+                      </div>
+                
+               </form>
+
            </div>;
 
         return html;

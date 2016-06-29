@@ -14,9 +14,8 @@ interface AccountCheckoutBillingState extends jx.Views.ReactState {
 }
 
 export interface AccountCheckoutBillingProps extends jx.Views.ReactProps {
-    
+    index: number
 }
-
 
 export class AccountCheckoutBilling extends jx.Views.ReactView {
 
@@ -46,20 +45,30 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
 
     constructor(props: AccountCheckoutBillingProps) {
         super(props);
+
         this.state.loading = true;
+
+        this.props.owner['pages'].push({
+            index: this.props.index,
+            view: this
+        });
     }
 
 
     render() {
         var html =
-            <div >
+
+            <div>
 
                 <div className="col-xs-12">
                     <div className="page-header">
                         <h4>Billing</h4>                        
                     </div>
 
-                    {this.fill_with_controls()}
+                    <form>
+                        {this.fill_with_controls() }
+                    </form>
+
                 </div>
 
 
@@ -76,15 +85,15 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
 
             var html = [
 
-                <TextControl label="First Name" field="first_name" obj={this.account} />,
-                <TextControl label="Last Name" field="last_name" obj={this.account} />,
-                <TextControl label= "Email" type="email" field= "email" obj= { this.account } />,
+                <TextControl label="First Name" required={true} field="first_name" obj={this.account} />,
+                <TextControl label="Last Name" field="last_name" obj={this.account}  required={true} />,
+                <TextControl label= "Email" type="email" field= "email" obj= { this.account } required={true}/>,
                 <TextControl label= "Telephone" field= "address2" obj= { this.address} />,
 
-                <TextControl label= "Address" field= "address1" obj= { this.address} />,
-                <TextControl label= "City" field= "city" obj= { this.address } />,
+                <TextControl label= "Address" field= "address1" obj= { this.address} required={true}/>,
+                <TextControl label= "City" field= "city" obj= { this.address } required={true}/>,
 
-                <CountryControl label= "Country" field= "country" obj= { this.address }/>
+                <CountryControl label= "Country" field= "country" obj= { this.address } required={true}/>
             ];
             
             return html;
@@ -104,6 +113,8 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
                 this.setState({
                     loading:false
                 });                
+
+                this.set_validations();
             });
         }
     }
@@ -117,9 +128,75 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
 
                 this.setState({
                     loading: false
-                });                
+                });
+
+                this.set_validations();
             });
         }
+    }
+
+
+    set_validations() {
+
+        this.root.find('form').validate({
+
+            rules: {
+                email: {
+                    email:true
+                }
+            },
+
+            errorPlacement: function (error, element) { },
+
+            highlight: (el) => {
+                this.set_error($(el));                
+            },
+
+            unhighlight: (el) => {
+                this.unset_error($(el));                
+            },
+        });
+    }
+
+
+    set_error(el: JQuery) {
+
+        var __error = {
+            border: '1px solid #CC5965',
+            'box-shadow': '0 0 3px #CC5965'
+        }
+
+        el.css(__error);
+
+        var label = el.closest('.form-group').find('label');
+
+        label.attr('data-color', label.css('color'));
+
+        label.css('color','#CC5965');
+    }
+
+
+    unset_error(el: JQuery) {
+
+        el.css("border", "medium none");
+        el.css("box-shadow", "none");   
+         
+        var label = el.closest('.form-group').find('label');
+        
+        label.css('color', '#555!important');
+    }
+
+    can_go_next(): Q.Promise<boolean> {
+
+        var can_go = this.root.find('form').valid();
+
+        if (can_go) {
+            return Q.resolve(true);
+        } else {
+            return Q.reject(false) as any;
+        }
+
+        
     }
 
 
@@ -198,7 +275,8 @@ interface TextControlProps extends jx.Views.ReactProps {
     obj: any,
     field: string,
     property?: string,
-    type?: string
+    type?: string,
+    required?: boolean
 }
 class TextControl extends jx.Views.ReactView {
 
@@ -210,12 +288,21 @@ class TextControl extends jx.Views.ReactView {
         
         var type = this.props.type ? this.props.type:'text';
         
+        var _props: any = {
+        }
+
+        if (this.props.required) {
+            _props.required = true;
+        }
+
+
         var html =
+
             <div className="form-group col-sm-6 col-xs-12">
 
                 <label htmlFor="">{this.props.label}</label>
 
-                <input type="text" data-bind={"{0}:{1}".format(property, this.props.field) }
+                <input type="text" {..._props} name={this.props.field} data-bind={"{0}:{1}".format(property, this.props.field) }
                     className="form-control" id="" style={{ fontSize: 18 }}/>
             </div>
 
@@ -249,10 +336,17 @@ class CountryControl extends TextControl {
 
     render() {
 
+        var _props: any = {
+        }
+
+        if (this.props.required) {
+            _props.required = true;
+        }
+
         var html =
             <div className="form-group col-sm-6 col-xs-12">
                 <label htmlFor="">{this.props.label}</label>
-                <select  id="" type="text" className="form-control bfh-countries"/>
+                <select  id="" type="text" {..._props} name="country" className="form-control bfh-countries"/>
             </div>
 
         return html;

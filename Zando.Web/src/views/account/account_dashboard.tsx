@@ -92,6 +92,8 @@ export class AccountDashboard extends jx.Views.HomePage {
 
                 ReactDOM.render(<AccountCheckout />, this.content[0]);
 
+                //ReactDOM.render(<AccountCart />, this.content[0]);
+
             } break;
 
             
