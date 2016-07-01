@@ -17,6 +17,7 @@ import { AccountAddressesPage } from './account_addresses';
 import { AccountCart } from './account_cart';
 import { AccountCheckout } from './account_checkout';
 import { AccountProfilePage } from './account_profile';
+import { AccountOrdersPage } from './account_orders';
 
 
 export class AccountDashboard extends jx.Views.HomePage {
@@ -66,6 +67,11 @@ export class AccountDashboard extends jx.Views.HomePage {
             case 'addresses':
             case 'address': {
                 ReactDOM.render(<AccountAddressesPage />, this.content[0]);
+            } break;
+
+            case 'order':
+            case 'orders': {
+                ReactDOM.render(<AccountOrdersPage />, this.content[0]);
             } break;
                             
             case 'cart': {

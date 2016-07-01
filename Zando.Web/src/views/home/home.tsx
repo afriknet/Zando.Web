@@ -177,7 +177,7 @@ class FeaturedProductItem extends jx.Views.ReactView {
                     <div className="productMasking">
                         <ul className="list-inline btn-group" role="group">
                             <li><a data-toggle="modal" href=".login-modal" className="btn btn-default"><i className="fa fa-heart"></i></a></li>
-                            <li><a href="javascript:void(0)" onClick={() => { that.add_to_cart() } }
+                            <li><a href="javascript:void(0)" onClick={(e) => { that.add_to_cart(e) } }
                                 className="btn btn-default rippler rippler-inverse"><i className="fa fa-shopping-cart"></i></a></li>
                             <li><a data-toggle="modal" href=".quick-view" className="btn btn-default"><i className="fa fa-eye"></i></a></li>
                         </ul>
@@ -216,9 +216,15 @@ class FeaturedProductItem extends jx.Views.ReactView {
     }
 
 
-    add_to_cart() {
+    add_to_cart(ev: React.MouseEvent) {
 
-        this.insert_new_cart();
+        carts.flyToElement($(ev.currentTarget), $('.products-cart'), () => {
+
+            this.insert_new_cart();
+
+        });
+
+        
     }
 
 
@@ -236,6 +242,10 @@ class FeaturedProductItem extends jx.Views.ReactView {
 
 
     insert_new_cart() {
+
+        if (!this.app.get_user()) {
+            return;
+        }
 
         var _email = this.app.get_user()['email'];
 

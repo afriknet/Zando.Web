@@ -345,6 +345,18 @@ export class AccountCart extends jx.Views.ReactView {
 
                     $(cell).find('span')['autoNumeric']('set', data);
                 }
+            },
+            {
+                title: '', data: null, createdCell: (cell, data) => {
+
+                    $(cell).empty().css('text-align','right');
+
+                    var btn = <button type="button" className="btn btn-info btn-sm" style={{ padding: 10 }}>
+                                    <i className="fa fa-times"></i> Delete
+                              </button>  
+
+                    ReactDOM.render(btn, $(cell)[0]);
+                }                
             }
         ];
 
