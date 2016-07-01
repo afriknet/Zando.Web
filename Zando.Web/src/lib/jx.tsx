@@ -515,7 +515,8 @@ export module Application {
             cookies.set('current-user', usr);            
         }
 
-        private store_account(__email: string): Q.Promise<Boolean> {
+
+        store_account(__email: string): Q.Promise<Boolean> {
 
             var d = Q.defer<Boolean>();
             

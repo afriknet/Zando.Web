@@ -452,3 +452,102 @@ export class CheckBox extends jx.Views.ReactView {
     }
 
 }
+
+
+
+
+interface ModalState extends jx.Views.ReactState {
+    show: boolean,
+    content: any
+}
+export interface ModalProps extends jx.Views.ReactProps {
+    showModal?: boolean,
+    bsSize?: string,
+    action?: string,
+    onFinish?: () => Q.Promise<Boolean>
+}
+
+export class Modal extends jx.Views.ReactView {
+
+    props: ModalProps;
+    state: ModalState;
+
+    constructor(props: ModalProps) {
+
+        super(props);
+
+        this.state.show = false;
+
+        if (this.props.showModal != undefined) {
+            this.state.show = this.props.showModal;
+        }
+    }
+    
+
+    show(content?: any) {
+        this.setState({ show: true, content: content });
+    }
+
+
+    close() {
+
+        this.setState({ show: false });
+    }
+
+
+    render() {
+
+        var that = this;
+
+        var props: any = {
+            show: this.state.show,
+            onHide: () => {
+                that.close()
+            }
+        }
+
+        if (this.props.bsSize) {
+            props.bsSize = this.props.bsSize;
+        }
+
+        var action = this.props.action ? this.props.action : 'Save';
+
+        var html = <b.Modal {...props}>
+
+                        <b.Modal.Header closeButton>
+
+                            <b.Modal.Title>
+                            </b.Modal.Title>
+
+                            </b.Modal.Header >
+
+                        <b.Modal.Body className="row">
+
+                            {this.state.content}
+
+                        </b.Modal.Body>
+
+                        <b.Modal.Footer>
+                            <b.Button style={{padding: 10}} onClick={() => { that.save() } } className='btn-save' bsStyle="primary">{action}</b.Button>
+                        </b.Modal.Footer>
+
+            </b.Modal>
+
+        return html;
+
+    }
+
+
+
+    save() {
+
+        if (this.props.onFinish) {
+            this.props.onFinish().then(() => {
+                this.close();
+            });
+        }
+        
+    }
+
+
+}
