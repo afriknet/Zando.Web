@@ -36,24 +36,8 @@ export var routes: Types.RouteList = {
     },
     
     '/explore': {
-        url: 'products/products_browser'
+        url: 'products/products_explore'
     },
-
-
-    //'/cart': {
-    //    url: 'account/account_cart'
-    //},
-    
-    //'/checkout': {
-    //    url: 'account/checkout',
-    //    descr: 'Checkout'
-    //},
-    
-
-    //'*': {
-    //    url: 'error/page404',
-    //    descr:'error'
-    //}
 
     
 }

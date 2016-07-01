@@ -89,6 +89,7 @@
     <Content Include="html\account_home.html" />
     <Content Include="html\home.html" />
     <Content Include="html\login.html" />
+    <Content Include="html\products_explore.html" />
     <Content Include="js\imgLiquid.js" />
     <Content Include="js\jquery.rippler.js" />
     <Content Include="plugins\bootstrap\css\bootstrap-theme.css.map" />
@@ -396,7 +397,7 @@
     <TypeScriptCompile Include="src\views\account\account_profile.tsx" />
     <TypeScriptCompile Include="src\views\home\home.tsx" />
     <TypeScriptCompile Include="src\views\home\login.tsx" />
-    <TypeScriptCompile Include="src\views\products\products_browser.tsx" />
+    <TypeScriptCompile Include="src\views\products\products_explore.tsx" />
     <TypeScriptCompile Include="typings\backendless.d.ts" />
     <TypeScriptCompile Include="typings\breeze\breeze.d.ts" />
     <TypeScriptCompile Include="typings\jquery.dataTables\jquery.dataTables.d.ts" />
