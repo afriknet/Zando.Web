@@ -16,6 +16,7 @@ import { AccountHomePage } from './account_home';
 import { AccountAddressesPage } from './account_addresses';
 import { AccountCart } from './account_cart';
 import { AccountCheckout } from './account_checkout';
+import { AccountProfilePage } from './account_profile';
 
 
 export class AccountDashboard extends jx.Views.HomePage {
@@ -57,10 +58,8 @@ export class AccountDashboard extends jx.Views.HomePage {
     resolve_route() {
 
         var subview = this.get_subview();
-
-        //mainContent clearfix userProfile animated fadeInUp
-
-        $('.mainContent').removeClass().addClass('mainContent clearfix userProfile animated fadeInUp');
+        
+        $('.mainContent').removeClass().addClass('mainContent clearfix userProfile');
 
         switch (subview) {
 
@@ -83,7 +82,7 @@ export class AccountDashboard extends jx.Views.HomePage {
 
             case 'checkout': {
 
-                $('.mainContent').removeClass().addClass('mainContent clearfix stepsWrapper animated fadeInUp');
+                $('.mainContent').removeClass().addClass('mainContent clearfix stepsWrapper');
 
                 this.root.find('.tabs').addClass('hidden');
 
@@ -93,6 +92,15 @@ export class AccountDashboard extends jx.Views.HomePage {
                 ReactDOM.render(<AccountCheckout />, this.content[0]);
 
                 //ReactDOM.render(<AccountCart />, this.content[0]);
+
+            } break;
+
+            
+            case 'profile': {
+
+                $('.mainContent').find('.innerWrapper').addClass('profile');
+
+                ReactDOM.render(<AccountProfilePage />, this.content[0]);
 
             } break;
 

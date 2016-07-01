@@ -39,11 +39,12 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
 
     render() {
         var html =
-            <div >
+            <div className=" animated fadeInUp">
 
                 <div className="col-xs-12 no-p">
                     <div className="page-header">
-                        <h4>Shipments</h4>                        
+                        <h4>Shipments</h4>  
+                        <h2 style={{ textTransform: 'none' }}><small>Select a shipping method</small></h2>                      
                      </div>                    
                 </div>
 

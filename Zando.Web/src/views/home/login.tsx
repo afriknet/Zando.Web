@@ -49,7 +49,7 @@ export class LoginPage extends jx.Views.HomePage {
                     toastr.error(err.message);
 
                 }).finally(() => {
-                    utils.unspin(that.root.find('form'));
+                    utils.unspin(that.root);
                 });
             }
         });

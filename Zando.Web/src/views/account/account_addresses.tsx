@@ -33,7 +33,7 @@ export class AccountAddressesPage extends jx.Views.ReactView {
         var that = this;
 
         var html =
-            <div className="orderBox myAddress commentsForm">
+            <div className="orderBox myAddress commentsForm animated fadeInUp">
 
                 <h4 style={{ display: 'inline-block' }}>
                     My Address

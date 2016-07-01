@@ -62,9 +62,9 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
 
                 <div className="col-xs-12 no-p">
                     <div className="page-header">
-                        <h4>Billing</h4>                        
-                    </div>
-
+                        <h4>Billing</h4>
+                        <h2 style={{ textTransform:'none' }}><small>Enter your address.This address will also use to ship in your order.</small></h2>
+                    </div>                    
                     <form>
                         {this.fill_with_controls() }
                     </form>

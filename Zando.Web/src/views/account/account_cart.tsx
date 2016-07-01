@@ -32,7 +32,7 @@ export class AccountCart extends jx.Views.ReactView {
 
         var html =
 
-            <div style={{ color:'gray' }}>
+            <div className="animated fadeInUp" style={{ color: 'gray' }}>
 
                 <BigLabel label="Cart items" />
             
@@ -67,9 +67,9 @@ export class AccountCart extends jx.Views.ReactView {
                             <div className="col-sm-4 col-sm-offset-8 col-xs-12">
                                 <ul className="list-unstyled">
                                     <li>Sub Total <span data-curr="sub_total"></span></li>
-                                    <li>Taxes <span data-curr="tax_included_total"></span></li>
+                                    <li className="hidden">Taxes <span data-curr="tax_included_total"></span></li>
                                     <li>Shipment <span data-curr="shipment_total"></span></li>
-                                    <li>Discount <span data-curr="discount_total"></span></li>                                    
+                                    <li className="">Discount <span data-curr="discount_total"></span></li>                                    
                                     <li>Total <span data-curr="grand_total" className="grandTotal"></span></li>
                                 </ul>
                             </div>
@@ -115,13 +115,15 @@ export class AccountCart extends jx.Views.ReactView {
 
     currencyfy() {
 
+        var that = this;
+
         this.jget('[data-curr]').each((i, el) => {
 
             $(el)['autoNumeric']('init',{ 'aSign': '€' });
 
             var field = $(el).attr('data-curr');
 
-            $(el)['autoNumeric']('set', this.cart[field]);
+            $(el)['autoNumeric']('set', that.cart[field]);
 
         });
     }

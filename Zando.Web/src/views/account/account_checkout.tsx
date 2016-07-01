@@ -61,7 +61,7 @@ export class AccountCheckout extends jx.Views.ReactView {
 
         var html =
 
-            <div className="clearfix stepsPage">
+            <div className="clearfix stepsPage animated fadeInUp">
 
                 <div className="progress-wizard" style={__style}>
 
