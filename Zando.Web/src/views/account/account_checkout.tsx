@@ -13,7 +13,7 @@ import { BigLabel, BigLabelProps} from '../../lib/controls';
 import {AccountCheckoutBilling} from './account_checkout_billing';
 import { AccountCheckoutShipments } from './account_checkout_shipments';
 import { AccountCheckoutPayments } from './account_checkout_payment';
-import { AccountCheckoutReview } from './account_checkout_review';
+import * as rv from './account_checkout_review';
 
 
 declare var chance;
@@ -241,7 +241,7 @@ export class AccountCheckout extends jx.Views.ReactView {
 
                 case 3:
 
-                    view = <AccountCheckoutReview owner={this}/>
+                    view = <rv.AccountCheckoutReview owner={this}/>
                     
                     break;
                 

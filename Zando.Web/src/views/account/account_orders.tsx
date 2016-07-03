@@ -9,7 +9,17 @@ var b: any = ReactB;
 import { BigLabel, BigLabelProps} from '../../lib/controls';
 
 
-interface AccountOrdersPageState extends jx.Views.ReactState {
+enum WorkflowState { Mounted, Idle, DataFetching, DataFetched, CardOpened }
+enum WorkflowAction { FetchData, InitTable, OpenCard, CloseCard }
+
+interface Workflow {
+    state: WorkflowState,
+    payload?: any
+}
+
+interface AccountOrdersPageState extends jx.Views.ReactState {    
+    workflow_state?: WorkflowState,
+    workflow_payload?: any 
 }
 export interface AccountOrdersPageProps extends jx.Views.ReactProps {
     select?: boolean,
@@ -22,59 +32,192 @@ export class AccountOrdersPage extends jx.Views.ReactView {
     editform_opened: boolean;
 
     constructor(props?: AccountOrdersPageProps) {
+
         super(props);
-        this.state.loading = true;
-        this.editform_opened = false;
+        
+        this.state = {
+            workflow_state: WorkflowState.Idle
+        };
     }
 
 
+    exec_action(action: WorkflowAction, payload?:any): Q.Promise<any> {
+
+        switch (action) {
+
+            case WorkflowAction.FetchData: {
+                return this.do_fetch_data()
+            }
+
+            case WorkflowAction.InitTable: {
+                return this.do_init_table();
+            }
+
+            case WorkflowAction.OpenCard: {
+                return this.open_card(payload);
+            }
+                
+            default:
+                return Q.resolve(true);
+        }
+    }
+
+
+    private cloase_card() {
+
+        return this.exec_action(WorkflowAction.FetchData);
+        
+    }
+
+
+    private open_card(id:any) {
+
+        this.set_workflow({
+            state: WorkflowState.CardOpened,
+            payload: {
+                order_id: id
+            }
+        });
+
+        return Q.resolve(true);
+
+    }
+
+
+    private do_fetch_data(): Q.Promise<any> {
+
+        this.set_workflow({ state: WorkflowState.DataFetching });
+
+        return this.load_data().then((data) => {
+
+            return this.set_workflow({
+                state: WorkflowState.DataFetched,
+                payload: data
+            });
+        });
+    }
+
+
+    private do_init_table(): Q.Promise<any> {
+
+        this.internal_init_datatable();
+
+        this.reset_workflow({ state: WorkflowState.Idle });
+
+        return Q.resolve(true);
+    }
+
+
+    set_workflow(next_workflow: Workflow): Workflow {
+             
+        this.setState(_.extend({}, this.state, {
+            workflow_state: next_workflow.state,
+            workflow_payload: next_workflow.payload
+        } ));
+
+        return next_workflow;
+    }
+
+
+    reset_workflow(workflow: Workflow) {
+
+        _.extend(this.state, {
+            workflow_state: workflow.state,
+            workflow_payload: workflow.payload
+        });
+    }
+
+
+    get_workflow(): Workflow {
+        return {
+            state: this.state.workflow_state,
+            payload: this.state.workflow_payload
+        } as Workflow;
+    }
+    
+
+
     render() {
-
-        var that = this;
-
+        
         var html =
-            <div className="orderBox animated fadeInUp">
+            <div className={"orderBox animated fadeInUp" }>
 
                 <BigLabel label="My orders" />
                 
                 <hr/>
 
-                <div className="edit-placeholder"/>
-                    
-                <div className="table-responsive">
-                        <table className="table" style={{ fontSize:15 }}/>
-                    </div>
-
-                </div>
+                {this.display_content() }
+                
+                
+             </div>
 
         return html;
     }
 
 
-    componentDidMount() {
+    display_content() {
 
-        if (this.state.loading) {
+        switch (this.get_workflow().state) {
 
-            this.load_data().then(() => {
+            case WorkflowState.Mounted: {
+                
+            } break;
 
-                this.state.loading = false;
+            case WorkflowState.DataFetching: {
 
-                this.init_datatable();
+                return <div className="row" style={{ textAlign: 'right' }}>
+                            <i className="fa fa-spin fa-spinner fa-2x"></i>
+                       </div> 
+            } 
 
-            });
+            case WorkflowState.DataFetched: {
+
+                var animate = null;
+
+                if (this.state['re-animate']) {
+                    animate = 'animated fadeInUp';
+                    delete this.state['re-animate'];
+                }
+
+                return <div className={"table-responsive {0}".format(animate) }>
+                            <table className="table" style={{ fontSize: 15 }}/>
+                       </div>
+
+            } 
+
+            case WorkflowState.CardOpened: {
+
+                return <ViewOrder owner={this} order_id={null} slidedown={false}  />               
+
+            } 
+
         }
+    }
+    
+
+    componentDidMount() {
+        this.set_workflow({ state: WorkflowState.Mounted });        
     }
 
 
     componentDidUpdate() {
 
-        this.state.loading = false;
+        switch (this.get_workflow().state) {
+            
+            case WorkflowState.Mounted: {
+                this.exec_action(WorkflowAction.FetchData);
+            } break;
 
-        this.init_datatable();
+            case WorkflowState.DataFetched: {
+                this.exec_action(WorkflowAction.InitTable);                
+            } break;
+            
+        }
+        
     }
 
 
-    init_datatable() {
+    internal_init_datatable() {
 
         var that = this;
 
@@ -143,14 +286,35 @@ export class AccountOrdersPage extends jx.Views.ReactView {
             },
             {
                 title: '', data: null, createdCell: (cell) => {
+
                     $(cell).empty();
-                    $(cell).append($('<a href="#" class="btn btn-default">View</a>'));
+                    $(cell).append($('<a href="javascript:void(0)" class="btn btn-default">View</a>'));
+
+                    $(cell).find('.btn').click((e) => {
+
+                        this.open_order($(e.currentTarget).closest('tr').attr('data-rowid'))
+                    });
                 }
             }
         ];
 
         
         return cols;
+    }
+
+
+    display_order_view() {
+
+        //if (this.state.open_order) {
+
+        //    return <ViewOrder order_id={this.state.order_id} owner={this} slidedown={true} />
+        //}
+    }
+
+
+
+    open_order(order_id: any) {
+        this.exec_action(WorkflowAction.OpenCard, order_id);        
     }
 
 
@@ -254,7 +418,7 @@ export class AccountOrdersPage extends jx.Views.ReactView {
 
         ReactDOM.unmountComponentAtNode(this.root.find('.edit-placeholder')[0]);
 
-        ReactDOM.render(<EditAddress slidedown={!this.editform_opened} owner={this} />, this.root.find('.edit-placeholder')[0]);
+        //ReactDOM.render(<ViewOrder slidedown={!this.editform_opened} owner={this} />, this.root.find('.edit-placeholder')[0]);
 
     }
 
@@ -269,7 +433,7 @@ export class AccountOrdersPage extends jx.Views.ReactView {
         
         ReactDOM.unmountComponentAtNode(this.root.find('.edit-placeholder')[0]);
 
-        ReactDOM.render(<EditAddress adr={adr} owner={this} slidedown={!this.editform_opened}/>, this.root.find('.edit-placeholder')[0]);
+        ReactDOM.render(<ViewOrder order_id={adr} owner={this} slidedown={!this.editform_opened}/>, this.root.find('.edit-placeholder')[0]);
 
     }
 
@@ -287,9 +451,17 @@ export class AccountOrdersPage extends jx.Views.ReactView {
 
                 this.load_data().then(() => {
 
-                    this.init_datatable();
+                    this.internal_init_datatable();
 
                 });
+
+            } break;
+
+            case 'close_card': {
+
+                this.state['re-animate'] = true;
+
+                this.exec_action(WorkflowAction.FetchData);
 
             } break;
         }
@@ -299,67 +471,61 @@ export class AccountOrdersPage extends jx.Views.ReactView {
 }
 
 
-interface EditAddressProps extends jx.Views.ReactProps {
-    adr?: any,
+
+interface ViewOrderState extends jx.Views.ReactState {
+}
+interface ViewOrderProps extends jx.Views.ReactProps {
+    order_id: any,
     slidedown?: boolean
 }
-class EditAddress extends jx.Views.ReactView {
+class ViewOrder extends jx.Views.ReactView {
 
-    props: EditAddressProps;
+    props: ViewOrderProps;
+    state: ViewOrderState;
+    order: any;
 
-    constructor(props: EditAddressProps) {
+    constructor(props: ViewOrderProps) {
         super(props);
+        this.state.loading = true;
     }
 
     render() {
 
-        var __display = {
+        var __style = {
         }
 
         if (this.props.slidedown) {
-            __display['display'] = 'none';
+            __style['display'] = 'none';
         }
+        
 
         var html =
 
-            <div className="row cartListInner" style={__display}>
+            <div className="row commentsForm animated fadeInUp" style={__style} >
 
-                <div className="col-lg-12 updateArea" style={{ border: 'none!important' }}>
+                <div className="row" style={{ paddingLeft: 20, paddingRight: 20 }}>
 
-                    <BigLabel label="Edit address" />
-
-                    <form>
-
-                        <b.FormGroup controlId="txtAddress" className="col-lg-6 col-sm-12">
-                            <b.ControlLabel>Address</b.ControlLabel>
-                            <b.FormControl type="text" data-bind="textInput:address1" placeholder="Enter an address"/>
-                            </b.FormGroup>
-
-                        <b.FormGroup controlId="txtPhone" className="col-lg-6 col-sm-12">
-                            <b.ControlLabel>Phone</b.ControlLabel>
-                            <b.FormControl type="phone" data-bind="textInput:address2"  placeholder="Enter an phone number"/>
-                            </b.FormGroup>
-
-                        <b.FormGroup controlId="txtCity" className="col-lg-6 col-sm-12">
-                            <b.ControlLabel>Ville</b.ControlLabel>
-                            <b.FormControl type="text"  data-bind="textInput:city"  placeholder="Enter an address"/>
-                            </b.FormGroup>
-
-                        <b.FormGroup controlId="txtCountry" className="col-lg-6 col-sm-12">
-                            <b.ControlLabel>Pays</b.ControlLabel>
-                            <select  id="countries" type="text" className="form-control bfh-countries"/>
-                            </b.FormGroup>
-
-                        </form>
-
-                    <a href="#" className="btn pull-right" onClick={() => { this.slide_up(); } } style={{ marginLeft: 10 }}>Close</a>
-                    <a href="#" className="btn pull-right" onClick={() => { this.save(); } } >Save</a>
-
-                    <br />
-
-                    </div>
+                    <button type="button" className="btn btn-primary btn-back pull-right"><i className="fa fa-times"></i> Refermer</button>
 
                 </div>
+
+                <div className="row" style={{ paddingLeft: 20, paddingRight:20 }}>
+
+                    <br/>
+
+                    <b.Col lg={6} style={{paddingLeft:20, paddingRight:20}} >
+
+                        <BigLabel label="Order code" p_style={{ marginBottom: 15 }} />
+
+                        <p>{this.order ? this.order['number'] : null}</p>
+
+                    </b.Col >
+
+                </div>
+                
+                <hr />
+
+            </div>
 
         return html;
     }
@@ -367,40 +533,77 @@ class EditAddress extends jx.Views.ReactView {
 
     componentDidMount() {
 
-        this.root.find('.bfh-countries')['bfhcountries']();
+        this.jget('.btn-back').click(() => {
 
-        this.bind_controls();
+            this.props.owner['notify']('close_card');
 
-        if (this.props.slidedown) {
-
-            this.props.owner['editform_opened'] = true;
-
-            this.root.slideDown();
-        }
+        });
+        
     }
 
-    componentDidUpdate() {
+    //componentWillReceiveProps() {
 
-        this.bind_controls();
+    //    this.setState(_.extend({}, this.state, {
+    //        loading: true
+    //    }));
 
-        if (this.props.slidedown) {
+    //}
 
-            this.props.owner['editform_opened'] = true;
 
-            this.root.slideDown();
-        }
+    //componentDidUpdate() {
+
+    //    if (this.state.loading) {
+
+    //        this.load_order().then(() => {
+
+    //            this.setState(_.extend({}, this.state, {
+    //                loading: false
+    //            }));
+    //        });
+
+    //    } else {
+
+    //        if (this.props.slidedown) {
+    //            this.root.slideDown();
+    //        }
+
+    //    }
+        
+    //}
+
+
+    load_order() {
+
+        var d = Q.defer();
+
+        utils.spin(this.root);
+
+        schema.call({
+            fn: 'get',
+            params: ['/orders/{0}'.format(this.props.order_id)]
+        }).then(res => {
+
+            this.order = res.response;
+
+            d.resolve(true);
+
+        }).finally(() => {
+            utils.unspin(this.root);
+        });
+
+        return d.promise;
     }
-
+    
 
     bind_controls() {
 
         ko.cleanNode(this.root.find('form')[0]);
 
-        if (this.props.adr) {
+        if (this.props.order_id) {
 
-            this.root.find('.bfh-countries').val(this.props.adr['country']);
+            this.root.find('.bfh-countries').val(this.props.order_id['country']);
 
-            ko.applyBindings(this.props.adr, this.root.find('form')[0]);
+            ko.applyBindings(this.props.order_id, this.root.find('form')[0]);
         }
     }
 
@@ -413,78 +616,66 @@ class EditAddress extends jx.Views.ReactView {
     }
 
 
-    save(): Q.Promise<Boolean> {
+}
 
-        if (this.props.adr) {
 
-            return this.internal_save('put');
+interface TextControlProps extends jx.Views.ReactProps {
+    label: string,
+    obj: any,
+    field: string,
+    property?: string,
+    type?: string,
+    required?: boolean
+}
+class TextControl extends jx.Views.ReactView {
 
-        } else {
+    props: TextControlProps;
 
-            return this.internal_save('post');
+    render() {
+
+        var property = this.props.property ? this.props.property : 'textInput';
+
+        var type = this.props.type ? this.props.type : 'text';
+
+        var _props: any = {
         }
+
+        if (this.props.required) {
+            _props.required = true;
+        }
+
+
+        var html =
+
+            <div className="form-group col-sm-6 col-xs-12">
+
+                <label htmlFor="">{this.props.label}</label>
+
+                <input type="text" {..._props} name={this.props.field} data-bind={"{0}:{1}".format(property, this.props.field) }
+                    className="form-control" id="" style={{ fontSize: 18 }}/>
+            </div>
+
+
+        return html;
+    }
+
+    componentDidMount() {
+
+        this.bind();
+    }
+
+    componentDidUpdate() {
+
+        this.bind();
     }
 
 
-    internal_save(method: string) {
+    bind() {
 
-        var d = Q.defer<Boolean>();
-
-        utils.spin(this.root);
-
-        var country = this.root.find('.bfh-countries').val();
-        var city = this.root.find('#txtCity').val();
-        var address = this.root.find('#txtAddress').val();
-        var phone = this.root.find('#txtPhone').val();
-
-        if (!country || !city || !address) {
-
-            toastr.error('Vous devez saisir un pays, une ville et une adresse (rue, numero, code postal)');
-
-            utils.unspin(this.root);
-
-            return Q['reject'](false) as any;
+        if (this.props.obj) {
+            ko.cleanNode(this.root[0]);
+            ko.applyBindings(this.props.obj, this.root[0]);
         }
-
-        var account_id = this.app.get_account()['id'];
-
-        var obj = {
-            address1: address,
-            address2: phone,
-            city: city,
-            country: country
-        };
-
-        var params = ['/accounts/{0}/addresses/'.format(account_id), obj];
-
-        if (this.props.adr) {
-            params = ['/accounts/{0}/addresses/{1}'.format(account_id, this.props.adr['id']), obj];
-        }
-
-
-        schema.call({
-            fn: method,
-            params: params
-        }).then(res => {
-
-            this.props.owner.notify('update-list');
-
-            d.resolve(res.response as any);
-
-        }).fail(err => {
-
-            toastr.error(err['message'])
-
-            d.reject(false);
-
-        }).finally(() => {
-
-            utils.unspin(this.root);
-
-        });
-
-        return d.promise;
 
     }
-
 }
