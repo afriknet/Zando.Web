@@ -132,7 +132,7 @@ function metadata(model: string): Q.Promise<any> {
 
 
 export module Views {
-
+    
     
     export interface ReactProps extends React.Props<any> {
         owner?: ReactView,
@@ -183,6 +183,11 @@ export module Views {
         }
 
 
+        get redux_enabled(): boolean {
+            return this.props.flow;
+        }
+
+
 
         get app(): Application.App {
             return __app;
@@ -212,7 +217,7 @@ export module Views {
 
         componentWillMount() {
 
-            if (this.props.flow) {
+            if (this.redux_enabled) {
 
                 this.flow.attach();
 
@@ -227,7 +232,7 @@ export module Views {
 
         componentDidUpdate() {
 
-            if (this.props.flow) {
+            if (this.redux_enabled) {
                 this.onStateHasChanged();
             }
         }
@@ -235,13 +240,17 @@ export module Views {
 
         componentWillUnmount() {
 
-            if (this.props.flow) {
+            if (this.redux_enabled) {
                 this.unsubscribe();
             }
             
         }
 
-        componentDidMount() {            
+        componentDidMount() {    
+
+            if (this.redux_enabled) {
+                this.flow.start();
+            }                    
         }
 
 

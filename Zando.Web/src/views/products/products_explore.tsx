@@ -27,17 +27,22 @@ export class ProductExplorerPage extends jx.Views.ReactView {
     }
 
 
-    render() {
-        
+    render() {        
         return null
+    }
 
+    get redux_enabled(): boolean {
+        return true;
     }
 
 
     componentDidMount() {
-
+        
         $('#page-content').load('/html/products_explore.html', () => {
+
             this.init_view();
+
+            super.componentDidMount();
         });
     }
 
@@ -86,6 +91,11 @@ export class ProductExplorerPage extends jx.Views.ReactView {
 
 
         return d.promise;
+    }
+
+
+    onStateHasChanged() {
+
     }
 }
 

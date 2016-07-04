@@ -23,9 +23,12 @@ export interface ApplicationState extends String {
 export class FlowAction {
     static ACTION_IDLE: ApplicationAction = 'ACTION_IDLE';
     static ACTION_ATTACH: ApplicationAction = 'ACTION_ATTACH';
+    static ACTION_START: ApplicationAction = 'ACTION_START';
 }
 export class FlowState {
-    static NONE: ApplicationState = 'None'
+    static STATE_NONE: ApplicationState = 'None';
+    static STATE_STARTED: ApplicationState = 'STARTED';
+    static STATE_ATTACHED: ApplicationState = 'ATTACHED';
 }
 
 var count: number;
@@ -79,20 +82,29 @@ export class Workflow {
 
 
     attach() {
-
         this.attach_workflow();
     }
-        
+
+    start() {
+
+        var attach: rdx.ReduxAction = {
+            type: FlowState.STATE_STARTED,
+            flowid: this.id
+        }
+        this.store.dispatch(attach)
+    }    
 
     private attach_workflow() {
 
         var attach: rdx.ReduxAction = {
-            type: FlowAction.ACTION_ATTACH,
+            type: FlowState.STATE_ATTACHED,
             flowid: this.id
         }
-
         this.store.dispatch(attach)
     }
+
+
+
 
 
 
