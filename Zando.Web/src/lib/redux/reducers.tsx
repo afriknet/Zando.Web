@@ -4,9 +4,9 @@
 // https://github.com/Microsoft/TypeScript/wiki/JSX
 
 
-import rdx = require('redux');
+import rx = require('redux');
 
-export interface ReduxAction extends rdx.Action {
+export interface ReduxAction extends rx.Action {    
     flowid?: any,
     payload?: any
 }
@@ -19,7 +19,7 @@ export interface ReduxState {
 
 
 export function Reduce(state: ReduxState, action: ReduxAction): ReduxState {
-
+    
     if (action) {
 
         if (action.flowid) {

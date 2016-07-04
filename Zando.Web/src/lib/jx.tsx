@@ -174,7 +174,7 @@ export module Views {
         private __flow: flow.Workflow;
         get flow(): flow.Workflow {
             if (!this.__flow) {
-                this.__flow = new flow.Workflow();
+                this.__flow = this.get_workflow();
             }
             return this.__flow;
         }
@@ -278,13 +278,26 @@ export module Views {
 
             if (app_state['current_flowid'] === that.flow_id) {
 
-                var new_flow = app_state[that.flow_id];
+                var new_flow = this.onGetFlowState(app_state[that.flow_id]);
 
-                this.setState(_.extend({}, that.state, {
-                    flow: new_flow
-                }));
+                if (new_flow) {
+
+                    this.setState(_.extend({}, that.state, {
+                        flow: new_flow
+                    }));
+                }
+                
             }
         }
+
+
+
+        onGetFlowState(new_flow: any) {
+
+            return new_flow;
+
+        }
+
 
 
         onStateHasChanged() {

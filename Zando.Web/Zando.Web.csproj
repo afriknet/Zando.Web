@@ -384,6 +384,7 @@
     <TypeScriptCompile Include="src\lib\jx.tsx" />
     <TypeScriptCompile Include="src\lib\modal.tsx" />
     <TypeScriptCompile Include="src\lib\pages\subpage.tsx" />
+    <TypeScriptCompile Include="src\lib\redux\generic_workflow.tsx" />
     <TypeScriptCompile Include="src\lib\redux\reducers.tsx" />
     <TypeScriptCompile Include="src\lib\server.ts" />
     <TypeScriptCompile Include="src\lib\utils.ts" />
@@ -401,6 +402,8 @@
     <TypeScriptCompile Include="src\views\home\home.tsx" />
     <TypeScriptCompile Include="src\views\home\login.tsx" />
     <TypeScriptCompile Include="src\views\products\products_explore.tsx" />
+    <TypeScriptCompile Include="src\views\products\products_griditem.tsx" />
+    <TypeScriptCompile Include="src\views\products\products_gridlist.tsx" />
     <TypeScriptCompile Include="typings\backendless.d.ts" />
     <TypeScriptCompile Include="typings\breeze\breeze.d.ts" />
     <TypeScriptCompile Include="typings\jquery.dataTables\jquery.dataTables.d.ts" />
