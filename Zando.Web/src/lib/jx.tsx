@@ -142,9 +142,8 @@ export module Views {
     }
 
 
-    export interface ReactState {
-        loading?: boolean,
-        flow?: rdx.ReduxState
+    export interface ReactState extends rdx.ReduxState {
+        loading?: boolean,        
     }
 
 
@@ -163,10 +162,8 @@ export module Views {
             this.props = props;
 
             this.state = {
-                flow: {
-                    flowid: this.flow.id,
-                    flowstate: -1
-                }
+                flowid: this.flow.id,
+                flowstate: -1
             }
         }
 
@@ -280,12 +277,7 @@ export module Views {
 
                 var new_flow = this.onGetFlowState(app_state[that.flow_id]);
 
-                if (new_flow) {
-
-                    this.setState(_.extend({}, that.state, {
-                        flow: new_flow
-                    }));
-                }
+                this.setState(_.extend({}, that.state, new_flow));
                 
             }
         }

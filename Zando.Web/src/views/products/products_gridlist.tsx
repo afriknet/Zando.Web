@@ -42,7 +42,7 @@ export class ProductsGridList extends jx.Views.ReactView {
 
     onStateHasChanged() {
         
-        switch (this.state.flow.flowstate) {
+        switch (this.state.flowstate) {
 
             case States.STATE_STARTED: {
                 
@@ -64,7 +64,7 @@ export class ProductsGridList extends jx.Views.ReactView {
 
     fill_with_items() {
 
-        switch (this.state.flow.flowstate) {
+        switch (this.state.flowstate) {
 
             case States.STATE_STARTED: {
 

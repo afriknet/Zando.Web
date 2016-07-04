@@ -20,14 +20,9 @@ import gr = require('./products_gridlist');
 
 
 
-interface RxState extends rdx.ReduxState {
-    payload: {
-        active_page: number
-        data: any
-    }
-}
 interface ProductExplorerPageState extends jx.Views.ReactState {
-    flow: RxState
+    active_page: number
+    data: any
 }
 export interface ProductExplorerPageProps extends jx.Views.ReactProps {
 }
@@ -122,7 +117,7 @@ export class ProductExplorerPage extends jx.Views.ReactView {
 
         var count = 0;
 
-        switch (this.state.flow.flowstate) {
+        switch (this.state.flowstate) {
 
             case ProdExplStates.STATE_STARTED: {
                 
@@ -139,19 +134,19 @@ export class ProductExplorerPage extends jx.Views.ReactView {
 
             case ProdExplStates.STATE_FETCH_DONE: {
 
-                var data = this.state.flow.payload.data
+                var data = this.state.data
 
                 ReactDOM.render(<gr.ProductsGridList items={data} />, $('.items')[0]);
 
-                var __active_page = this.state.flow.payload.active_page;
+                var __active_page = this.state.active_page;
 
                 if (!__active_page) {
                     __active_page = 1;
                 }
 
-                this.flow.Exec(ProdExplActions.ACTION_PAGE_DATA, _.extend({}, this.state.flow.payload, {
+                this.flow.Exec(ProdExplActions.ACTION_PAGE_DATA,{
                     active_page: __active_page
-                }));
+                });
                     
             } break;
 

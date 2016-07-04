@@ -38,16 +38,14 @@ export class GenericWorkflow extends wk.Workflow {
 
 
     private fetch(params: schema.callParams) {
-
-
+        
         this.dispatch(GenericStates.STATE_FETCHING);
-
-
+        
         this.internal_fetch(params).then((data) => {
-
-            data = this.update_flow_state(data);
             
-            this.dispatch(GenericStates.STATE_FETCH_DONE, data);
+            this.dispatch(GenericStates.STATE_FETCH_DONE, {
+                data:data
+            });
 
         }).fail((err) => {
 
@@ -55,18 +53,7 @@ export class GenericWorkflow extends wk.Workflow {
         });
     }
 
-
-    update_flow_state(data: any) {
-
-        var flow_state = this.get_flow_state();
-
-        return _.extend({}, flow_state.payload, {
-            data: data
-        });
-
-    }
-
-
+    
 
     private internal_fetch(params: schema.callParams) {
 
