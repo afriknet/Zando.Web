@@ -1,8 +1,12 @@
 ﻿/// <reference path="server.ts" />
 /// <reference path="../../typings/backendless.d.ts" />
+/// <reference path="redux/reducers.tsx" />
+/// <reference path="redux/workflow.ts" />
 // A '.tsx' file enables JSX support in the TypeScript compiler, 
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
+/// <reference path="redux/workflow.ts" />
+/// <reference path="redux/reducers.tsx" />
 
 
 
@@ -10,6 +14,10 @@ import React = require('react');
 import ReactDOM = require('react-dom');
 
 import { DataSource } from './server';
+
+import rx = require('redux');
+import flow = require('./redux/workflow');
+import rdx = require('./redux/reducers');
 
 
 enum API { default, moltin, schemaIo };
@@ -128,12 +136,14 @@ export module Views {
     
     export interface ReactProps extends React.Props<any> {
         owner?: ReactView,
+        flow?: boolean,
         className?: string
     }
 
 
     export interface ReactState {
-        loading?: boolean
+        loading?: boolean,
+        flow?: rdx.ReduxState
     }
 
 
@@ -142,6 +152,8 @@ export module Views {
         state: ReactState;
         props: ReactProps;
         __context: any;
+        unsubscribe: rx.Unsubscribe;
+
 
         constructor(props?: ReactProps) {            
 
@@ -149,7 +161,25 @@ export module Views {
 
             this.props = props;
 
-            this.state = this.initalize_state();
+            this.state = {
+                flow: {
+                    flowid: this.flow.id,
+                    flowstate: -1
+                }
+            }
+        }
+
+
+        private __flow: flow.Workflow;
+        get flow(): flow.Workflow {
+            if (!this.__flow) {
+                this.__flow = new flow.Workflow();
+            }
+            return this.__flow;
+        }
+
+        get flow_id(): string {
+            return 'flowid-{0}'.format(this.flow.id);
         }
 
 
@@ -180,12 +210,67 @@ export module Views {
         }
 
 
+        componentWillMount() {
+
+            if (this.props.flow) {
+
+                this.flow.attach();
+
+                this.unsubscribe = this.flow.store.subscribe(() => {
+
+                    this.onStateWillChanged();
+                });
+
+            }
+        }
+
+
+        componentDidUpdate() {
+
+            if (this.props.flow) {
+                this.onStateHasChanged();
+            }
+        }
+
+
+        componentWillUnmount() {
+
+            if (this.props.flow) {
+                this.unsubscribe();
+            }
+            
+        }
+
         componentDidMount() {            
         }
+
 
         get_html_lang(term: string, value?: string) {
             return <span data-localize={term}>value</span>
         }
+
+
+        onStateWillChanged() {
+            
+            var app_state = this.flow.store.getState();
+
+            var that = this;
+
+            if (app_state['current_flowid'] === that.flow_id) {
+
+                var new_flow = app_state[that.flow_id];
+
+                this.setState(_.extend({}, that.state, {
+                    flow: new_flow
+                }));
+            }
+        }
+
+
+        onStateHasChanged() {
+
+        }
+
     }
 
 

@@ -92,6 +92,7 @@
     <Content Include="html\products_explore.html" />
     <Content Include="js\imgLiquid.js" />
     <Content Include="js\jquery.rippler.js" />
+    <Content Include="js\redux.js" />
     <Content Include="plugins\bootstrap\css\bootstrap-theme.css.map" />
     <Content Include="plugins\bootstrap\css\bootstrap-theme.min.css.map" />
     <Content Include="plugins\bootstrap\css\bootstrap.css.map" />
@@ -369,7 +370,7 @@
   <ItemGroup>
     <Folder Include="src\data\" />
     <Folder Include="src\lib\data\" />
-    <Folder Include="src\views\products\" />
+    <Folder Include="typings\redux\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\config\routes.ts" />
@@ -383,6 +384,7 @@
     <TypeScriptCompile Include="src\lib\jx.tsx" />
     <TypeScriptCompile Include="src\lib\modal.tsx" />
     <TypeScriptCompile Include="src\lib\pages\subpage.tsx" />
+    <TypeScriptCompile Include="src\lib\redux\reducers.tsx" />
     <TypeScriptCompile Include="src\lib\server.ts" />
     <TypeScriptCompile Include="src\lib\utils.ts" />
     <TypeScriptCompile Include="src\views\account\account_addresses.tsx" />
@@ -398,6 +400,7 @@
     <TypeScriptCompile Include="src\views\account\account_profile.tsx" />
     <TypeScriptCompile Include="src\views\home\home.tsx" />
     <TypeScriptCompile Include="src\views\home\login.tsx" />
+    <TypeScriptCompile Include="src\views\products\products_explore.tsx" />
     <TypeScriptCompile Include="typings\backendless.d.ts" />
     <TypeScriptCompile Include="typings\breeze\breeze.d.ts" />
     <TypeScriptCompile Include="typings\jquery.dataTables\jquery.dataTables.d.ts" />
@@ -420,6 +423,7 @@
     <TypeScriptCompile Include="typings\react\react-dom.d.ts" />
     <TypeScriptCompile Include="typings\react\react-global.d.ts" />
     <TypeScriptCompile Include="typings\react\react.d.ts" />
+    <TypeScriptCompile Include="src\lib\redux\workflow.ts" />
     <TypeScriptCompile Include="typings\requirejs\require.d.ts" />
     <TypeScriptCompile Include="typings\toastr\toastr.d.ts" />
     <TypeScriptCompile Include="typings\tsd.d.ts" />
