@@ -1,4 +1,6 @@
 ﻿/// <reference path="../../../typings/tsd.d.ts" />
+/// <reference path="../../lib/redux/reducers.tsx" />
+/// <reference path="../../lib/redux/workflow.ts" />
 // A '.tsx' file enables JSX support in the TypeScript compiler, 
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
@@ -7,6 +9,9 @@
 import React = require('react');
 import ReactDOM = require('react-dom');
 import jx = require('../../lib/jx');
+
+import rdx = require('../../lib/redux/reducers');
+import flow = require('../../lib/redux/workflow');
 
 
 
@@ -30,6 +35,7 @@ export class ProductExplorerPage extends jx.Views.ReactView {
     render() {        
         return null
     }
+
 
     get redux_enabled(): boolean {
         return true;
@@ -93,11 +99,34 @@ export class ProductExplorerPage extends jx.Views.ReactView {
         return d.promise;
     }
 
+    get_workflow() {        
+        return new Workflow();
+    }
+
 
     onStateHasChanged() {
 
     }
 }
+
+
+
+class Actions extends flow.FlowAction {
+}
+
+class States extends flow.FlowState {
+
+}
+
+class Workflow extends flow.Workflow {
+
+
+    
+
+}
+
+
+
 
 
 

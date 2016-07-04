@@ -14,21 +14,21 @@ import rdx = require('./reducers');
 var __store = rx.createStore<rdx.ReduxAction>(rdx.Reduce as any, {} as any);
 
 
-export interface ApplicationAction extends String {
+export interface FlowActionValue extends String {
 }
-export interface ApplicationState extends String {
+export interface FlowStateValue extends String {
 }
 
 
 export class FlowAction {
-    static ACTION_IDLE: ApplicationAction = 'ACTION_IDLE';
-    static ACTION_ATTACH: ApplicationAction = 'ACTION_ATTACH';
-    static ACTION_START: ApplicationAction = 'ACTION_START';
+    static ACTION_IDLE: FlowActionValue = 'ACTION_IDLE';
+    static ACTION_ATTACH: FlowActionValue = 'ACTION_ATTACH';
+    static ACTION_START: FlowActionValue = 'ACTION_START';
 }
 export class FlowState {
-    static STATE_NONE: ApplicationState = 'None';
-    static STATE_STARTED: ApplicationState = 'STARTED';
-    static STATE_ATTACHED: ApplicationState = 'ATTACHED';
+    static STATE_NONE: FlowStateValue = 'None';
+    static STATE_STARTED: FlowStateValue = 'STARTED';
+    static STATE_ATTACHED: FlowStateValue = 'ATTACHED';
 }
 
 var count: number;

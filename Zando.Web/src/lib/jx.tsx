@@ -136,7 +136,8 @@ export module Views {
     
     export interface ReactProps extends React.Props<any> {
         owner?: ReactView,
-        flow?: boolean,
+        redux?: boolean,
+        flow?: any,
         className?: string
     }
 
@@ -184,7 +185,17 @@ export module Views {
 
 
         get redux_enabled(): boolean {
-            return this.props.flow;
+            return this.props.redux;
+        }
+
+
+        get_workflow() {
+
+            if (this.props.flow) {
+                return this.props.flow;
+            }
+
+            return new flow.Workflow();
         }
 
 
