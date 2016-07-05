@@ -10,6 +10,9 @@
 
 import React = require('react');
 import ReactDOM = require('react-dom');
+import reactboot = require('react-bootstrap');
+var b: any = reactboot
+
 import jx = require('../../lib/jx');
 
 import rdx = require('../../lib/redux/reducers');
@@ -74,9 +77,9 @@ export class ProductExplorerPage extends jx.Views.ReactView {
 
     mount_quickview() {
 
-        ReactDOM.unmountComponentAtNode($('.item-quickview')[0]);
+        ReactDOM.unmountComponentAtNode($('.quick-view')[0]);
 
-        ReactDOM.render(<ProdModal owner={this} />, $('.item-quickview')[0]);
+        ReactDOM.render(<ProdModal owner={this} bsSize='lg' />, $('.quick-view')[0]);
     }
 
 
@@ -152,16 +155,6 @@ export class ProductExplorerPage extends jx.Views.ReactView {
         }
     }
 
-
-    quickview() {
-
-        $('.btn-quickview').click(() => {
-
-            (this['modal'] as Modal).show();
-        
-        });
-
-    }
 
 
     get_page_from_url() {
@@ -315,6 +308,13 @@ class ProdModal extends Modal {
         this.props.owner['modal'] = this;
     }
 
+}
+
+
+
+interface QuickviewState extends jx.Views.ReactState {
+    show: boolean,
+    content: any
 }
 
 
