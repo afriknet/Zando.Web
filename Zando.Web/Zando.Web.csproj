@@ -93,6 +93,7 @@
     <Content Include="js\image-scale.js" />
     <Content Include="js\image-scale.min.js" />
     <Content Include="js\imgLiquid.js" />
+    <Content Include="js\jquery-imagefill.js" />
     <Content Include="js\jquery.imagefit.js" />
     <Content Include="js\jquery.imagefit.min.js" />
     <Content Include="js\jquery.rippler.js" />

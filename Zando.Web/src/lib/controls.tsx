@@ -11,7 +11,9 @@ import ReactDOM = require('react-dom');
 import jx = require('./jx');
 import rb = require('react-bootstrap');
 
-var b:any = rb;
+var b: any = rb;
+var __modal_count: number;
+__modal_count = 0;
 
 
 export interface FiconProps extends jx.Views.ReactProps {
@@ -469,6 +471,7 @@ export interface ModalProps extends jx.Views.ReactProps {
     bsSize?: string,
     action?: string,
     hide_footer?: boolean,
+    classlist?: string,
     onFinish?: () => Q.Promise<Boolean>
 }
 
@@ -476,6 +479,14 @@ export class Modal extends jx.Views.ReactView {
 
     props: ModalProps;
     state: ModalState;
+
+    private __modal_count: number;
+    get modal_count(): number {
+        if (!this.__modal_count) {
+            this.__modal_count = ++__modal_count;
+        }
+        return this.__modal_count;
+    }
 
     constructor(props: ModalProps) {
 
@@ -518,25 +529,23 @@ export class Modal extends jx.Views.ReactView {
         var should_hide_footer = this.props.hide_footer ? 'hidden' : null;
 
         var action = this.props.action ? this.props.action : 'Save';
+        
 
-        var html = <b.Modal {...props}>
+        var html =
+            <b.Modal {...props} className={"modal-count-{0} {1}".format(this.modal_count, this.props.classlist) }>
 
-                        <b.Modal.Header closeButton>
+                <b.Modal.Header closeButton>
+                    <b.Modal.Title>
+                    </b.Modal.Title>
+                </b.Modal.Header >
 
-                            <b.Modal.Title>
-                            </b.Modal.Title>
+                <b.Modal.Body className="row">
+                    {this.state.content}
+                </b.Modal.Body>
 
-                            </b.Modal.Header >
-
-                        <b.Modal.Body className="row">
-
-                            {this.state.content}
-
-                        </b.Modal.Body>
-
-                        <b.Modal.Footer class={should_hide_footer}>
-                            <b.Button style={{padding: 10}} onClick={() => { that.save() } } className='btn-save' bsStyle="primary">{action}</b.Button>
-                        </b.Modal.Footer>
+                <b.Modal.Footer className={should_hide_footer}>
+                    <b.Button style={{ padding: 10 }} onClick={() => { that.save() } } className='btn-save' bsStyle="primary">{action}</b.Button>
+                </b.Modal.Footer>
 
             </b.Modal>
 
