@@ -161,9 +161,16 @@ export module Views {
 
             this.props = props;
 
-            this.state = {
-                flowid: this.flow.id,
-                flowstate: -1
+            if (this.redux_enabled) {
+
+                this.state = {
+                    flowid: this.flow.id,
+                    flowstate: -1
+                }
+            } else {
+
+                this.state = {};
+
             }
         }
 

@@ -35,13 +35,13 @@ export class Workflow {
     get id(): number {
         return this.__id;
     }
+    
 
     get store(): rx.Store<rdx.ReduxAction> {
         return __store;
     }
-    
-    constructor() {
-        
+
+    constructor() {        
         this.__id = ++count;
     }
 

@@ -90,7 +90,11 @@
     <Content Include="html\home.html" />
     <Content Include="html\login.html" />
     <Content Include="html\products_explore.html" />
+    <Content Include="js\image-scale.js" />
+    <Content Include="js\image-scale.min.js" />
     <Content Include="js\imgLiquid.js" />
+    <Content Include="js\jquery.imagefit.js" />
+    <Content Include="js\jquery.imagefit.min.js" />
     <Content Include="js\jquery.rippler.js" />
     <Content Include="js\redux.js" />
     <Content Include="plugins\bootstrap\css\bootstrap-theme.css.map" />
@@ -462,7 +466,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2470</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

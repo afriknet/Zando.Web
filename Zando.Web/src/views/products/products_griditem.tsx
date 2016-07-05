@@ -10,13 +10,18 @@ import ReactDOM = require('react-dom');
 import jx = require('../../lib/jx');
 
 import rdx = require('../../lib/redux/reducers');
-import flow = require('../../lib/redux/workflow');
+import fl = require('../../lib/redux/workflow');
 import gn = require('../../lib/redux/generic_workflow');
 
 
 
 
+export interface ProductGridItemProps extends jx.Views.ReactProps {
+    product: any
+}
 export class ProductGridItem extends jx.Views.ReactView {
+
+    props: ProductGridItemProps;
 
     get redux_enabled(): boolean {
         return true;
@@ -24,7 +29,7 @@ export class ProductGridItem extends jx.Views.ReactView {
 
 
     get_workflow() {
-        return new GridWorkflow();
+        return new GridItemWorkflow();
     }
 
 
@@ -35,16 +40,18 @@ export class ProductGridItem extends jx.Views.ReactView {
 
                 <div className="productBox">
 
-                    <div className="productImage clearfix">
-
-                        <img src="/img/products/products-01.jpg" alt="products-img"/>
+                    <div className="productImage clearfix im">
+                        
+                        <div style={{ maxHeight: 293.9, minWidth: 271.5 }}>
+                            {this.resolve_image() }
+                        </div>
 
                         <div className="productMasking">
 
                             <ul className="list-inline btn-group" role="group">
-                                <li><a data-toggle="modal" href=".login-modal" className="btn btn-default"><i className="fa fa-heart"></i></a></li>
-                                <li><a href="cart-page.html" className="btn btn-default"><i className="fa fa-shopping-cart"></i></a></li>
-                                <li><a className="btn btn-default" data-toggle="modal" href=".quick-view"><i className="fa fa-eye"></i></a></li>
+                                <li><a href="javascript:void(0)" className="btn btn-default"><i className="fa fa-heart"></i></a></li>
+                                <li><a href="javascript:void(0)" className="btn btn-default btn-cart"><i className="fa fa-shopping-cart"></i></a></li>
+                                <li><a className="btn btn-default btn-quickview" href="javascript:void(0)"><i className="fa fa-eye"></i></a></li>
                             </ul>
 
                         </div>
@@ -54,9 +61,9 @@ export class ProductGridItem extends jx.Views.ReactView {
                     <div className="productCaption clearfix">
 
                         <a href="javascript:void(0)">
-                            <h5>Nike Sportswear</h5>
+                            <h5>{this.props.product['name']}</h5>
                         </a>
-                        <h3>$199</h3>
+                        <h3 data-price={this.props.product['price']}></h3>
                     </div>
                 </div>
                 
@@ -66,14 +73,70 @@ export class ProductGridItem extends jx.Views.ReactView {
         return html;
 
     }
+
+
+    resolve_image() {
+
+        var img = null, prod = this.props.product;
+
+        if (prod.images && prod.images.length > 0) {
+
+            var url = prod.images[0].file.url;
+
+            img = <img style={{ width: '100%', height:'100%' }} src={url} alt="products-img"/>
+
+        }
+        
+        return img;        
+    }
+
+
+    onAfterFlowAction() {
+
+        switch (this.state.flowstate) {
+
+            case Actions.ACTION_START: {
+
+                _.each(this.jget('[data-price]'), el => {
+                    $(el)['autoNumeric']('init', { 'aSign': '€' });
+                    $(el)['autoNumeric']('set', $(el).attr('data-price'));
+                });
+
+
+                this.jget('.btn-cart').click(() => {
+                    carts.flyToElement(this.jget('.btn-cart'), $('.products-cart'), () => {                        
+                    });
+                });
+
+                this.jget('.btn-quickview').click(() => {
+
+                    this.props.owner['modal'].show();
+
+                });
+
+            } break;
+
+
+            case Actions.ACTION_ADD_TO_CART: {
+
+
+
+            } break;
+            
+
+            default:
+                super.onAfterFlowAction();
+        }
+    }
 }
 
 
 
 class Actions extends gn.GenericActions {
+    static ACTION_ADD_TO_CART: fl.FlowActionValue = 'ACTION_ADD_TO_CART'
 }
 
 
-class GridWorkflow extends gn.GenericWorkflow {
+class GridItemWorkflow extends gn.GenericWorkflow {
 
 }

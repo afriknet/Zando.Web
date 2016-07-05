@@ -15,11 +15,6 @@ export class GenericActions extends wk.FlowAction {
     static ACTION_FETCH_FAIL: wk.FlowActionValue = 'ACTION_FETCH_FAIL';
 }
 
-//export class GenericStates extends wk.FlowState {
-//    static STATE_FETCHING: wk.FlowStateValue = 'STATE_FETCHING';
-//    static STATE_FETCH_DONE: wk.FlowStateValue = 'STATE_FETCH_DONE';
-//    static STATE_FETCH_FAIL: wk.FlowStateValue = 'STATE_FETCH_FAIL';
-//}
 
 export class GenericWorkflow extends wk.Workflow {
 
@@ -47,12 +42,13 @@ export class GenericWorkflow extends wk.Workflow {
         this.internal_fetch(params).then((data) => {
 
             this.dispatch(GenericActions.ACTION_FETCH_DONE, {
-                data:data
+                data: data
             });
 
         }).fail((err) => {
-
             this.dispatch(GenericActions.ACTION_FETCH_FAIL, err);
+        }).finally(() => {
+
         });
     }
 

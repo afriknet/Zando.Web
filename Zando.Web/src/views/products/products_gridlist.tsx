@@ -47,6 +47,9 @@ export class ProductsGridList extends jx.Views.ReactView {
             case Actions.ACTION_START: {
                 
             } break;
+
+            default:
+                super.onAfterFlowAction();
         }
     }
 
@@ -68,8 +71,8 @@ export class ProductsGridList extends jx.Views.ReactView {
 
             case Actions.ACTION_START: {
 
-                var items = _.map(this.props.items, itm => {
-                    return <ProductGridItem />
+                var items = _.map(this.props.items, item => {
+                    return <ProductGridItem owner={this.props.owner} key={utils.guid() } product={item} />
                 });
 
                 return items;

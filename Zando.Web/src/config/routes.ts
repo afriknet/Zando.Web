@@ -39,5 +39,9 @@ export var routes: Types.RouteList = {
         url: 'products/products_explore'
     },
 
+     '/explore/:page': {
+        url: 'products/products_explore'
+    },
+
     
 }
