@@ -40,13 +40,16 @@ export class ProductsGridList extends jx.Views.ReactView {
     }
     
 
-    onStateHasChanged() {
+    onAfterFlowAction() {
         
         switch (this.state.flowstate) {
 
-            case States.STATE_STARTED: {
+            case Actions.ACTION_START: {
                 
             } break;
+
+            default:
+                super.onAfterFlowAction();
         }
     }
 
@@ -66,10 +69,10 @@ export class ProductsGridList extends jx.Views.ReactView {
 
         switch (this.state.flowstate) {
 
-            case States.STATE_STARTED: {
+            case Actions.ACTION_START: {
 
-                var items = _.map(this.props.items, itm => {
-                    return <ProductGridItem />
+                var items = _.map(this.props.items, item => {
+                    return <ProductGridItem owner={this.props.owner} key={utils.guid() } product={item} />
                 });
 
                 return items;
@@ -84,9 +87,6 @@ export class ProductsGridList extends jx.Views.ReactView {
 class Actions extends gn.GenericActions {
 }
 
-class States extends gn.GenericStates {
-
-}
 
 class GridWorkflow extends gn.GenericWorkflow {
     

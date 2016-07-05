@@ -161,9 +161,16 @@ export module Views {
 
             this.props = props;
 
-            this.state = {
-                flowid: this.flow.id,
-                flowstate: -1
+            if (this.redux_enabled) {
+
+                this.state = {
+                    flowid: this.flow.id,
+                    flowstate: -1
+                }
+            } else {
+
+                this.state = {};
+
             }
         }
 
@@ -241,7 +248,7 @@ export module Views {
         componentDidUpdate() {
 
             if (this.redux_enabled) {
-                this.onStateHasChanged();
+                this.onAfterFlowAction();
             }
         }
 
@@ -292,7 +299,7 @@ export module Views {
 
 
 
-        onStateHasChanged() {
+        onAfterFlowAction() {
 
         }
 

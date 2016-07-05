@@ -468,6 +468,7 @@ export interface ModalProps extends jx.Views.ReactProps {
     showModal?: boolean,
     bsSize?: string,
     action?: string,
+    hide_footer?: boolean,
     onFinish?: () => Q.Promise<Boolean>
 }
 
@@ -514,6 +515,8 @@ export class Modal extends jx.Views.ReactView {
             props.bsSize = this.props.bsSize;
         }
 
+        var should_hide_footer = this.props.hide_footer ? 'hidden' : null;
+
         var action = this.props.action ? this.props.action : 'Save';
 
         var html = <b.Modal {...props}>
@@ -531,7 +534,7 @@ export class Modal extends jx.Views.ReactView {
 
                         </b.Modal.Body>
 
-                        <b.Modal.Footer>
+                        <b.Modal.Footer class={should_hide_footer}>
                             <b.Button style={{padding: 10}} onClick={() => { that.save() } } className='btn-save' bsStyle="primary">{action}</b.Button>
                         </b.Modal.Footer>
 
