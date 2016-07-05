@@ -261,3 +261,4 @@ ModelManifest.xml
 /Zando.Web/js/config
 /Zando.Web/js/lib
 /Zando.Web/js/views
+/Zando.Web/typings/redux
