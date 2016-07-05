@@ -73,9 +73,6 @@ export class ProductGridItem extends jx.Views.ReactView {
 class Actions extends gn.GenericActions {
 }
 
-class States extends gn.GenericStates {
-
-}
 
 class GridWorkflow extends gn.GenericWorkflow {
 

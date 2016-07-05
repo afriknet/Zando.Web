@@ -241,7 +241,7 @@ export module Views {
         componentDidUpdate() {
 
             if (this.redux_enabled) {
-                this.onStateHasChanged();
+                this.onAfterFlowAction();
             }
         }
 
@@ -292,7 +292,7 @@ export module Views {
 
 
 
-        onStateHasChanged() {
+        onAfterFlowAction() {
 
         }
 

@@ -54,12 +54,6 @@ export function Reduce(state: ReduxState, action: ReduxAction): ReduxState {
                             flowid: action.flowid
                         }, action.payload)
 
-                        //[flow_id]: {
-                        //    flowstate: action.type,
-                        //    flowid: action.flowid,
-                        //    payload: action.payload
-                        //} as ReduxState
-
                     });
             }
 

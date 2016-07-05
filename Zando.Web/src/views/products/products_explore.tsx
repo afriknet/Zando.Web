@@ -113,13 +113,13 @@ export class ProductExplorerPage extends jx.Views.ReactView {
     }
 
 
-    onStateHasChanged() {
+    onAfterFlowAction() {
 
         var count = 0;
 
         switch (this.state.flowstate) {
 
-            case ProdExplStates.STATE_STARTED: {
+            case ProdExplActions.ACTION_START: {
                 
                 this.flow.Exec(gn.GenericActions.ACTION_FETCH, {
                     fn: 'get',
@@ -132,7 +132,7 @@ export class ProductExplorerPage extends jx.Views.ReactView {
             } break;
 
 
-            case ProdExplStates.STATE_FETCH_DONE: {
+            case ProdExplActions.ACTION_FETCH_DONE: {
 
                 var data = this.state.data
 
@@ -150,7 +150,7 @@ export class ProductExplorerPage extends jx.Views.ReactView {
                     
             } break;
 
-            case ProdExplStates.STATE_FETCH_FAIL: {
+            case ProdExplActions.ACTION_FETCH_FAIL: {
                 
             } break;
         }
@@ -164,10 +164,6 @@ class ProdExplActions extends gn.GenericActions {
     static ACTION_PAGE_DATA: fl.FlowActionValue = 'ACTION_PAGE_DATA'
 }
 
-class ProdExplStates extends gn.GenericStates {
-    static STATE_FILTERING: fl.FlowStateValue = 'STATE_FILTERING'
-    static STATE_HAS_PAGED: fl.FlowStateValue = 'STATE_HAS_PAGED'
-}
 
 class ProdExplWorkflow extends gn.GenericWorkflow {
 
@@ -177,7 +173,7 @@ class ProdExplWorkflow extends gn.GenericWorkflow {
 
             case ProdExplActions.ACTION_PAGE_DATA: {
 
-                this.dispatch(ProdExplStates.STATE_HAS_PAGED, params);
+                this.dispatch(ProdExplActions.ACTION_PAGE_DATA, params);
 
             } break;
 
