@@ -1,4 +1,6 @@
-﻿/// <reference path="../../../typings/tsd.d.ts" />
+﻿/// <reference path="products_gridlist.tsx" />
+/// <reference path="../../lib/redux/generic_workflow.tsx" />
+/// <reference path="../../../typings/tsd.d.ts" />
 /// <reference path="../../lib/redux/reducers.tsx" />
 /// <reference path="../../lib/redux/workflow.ts" />
 // A '.tsx' file enables JSX support in the TypeScript compiler, 
@@ -11,15 +13,21 @@ import ReactDOM = require('react-dom');
 import jx = require('../../lib/jx');
 
 import rdx = require('../../lib/redux/reducers');
-import flow = require('../../lib/redux/workflow');
+import fl = require('../../lib/redux/workflow');
+import gn = require('../../lib/redux/generic_workflow');
+import gr = require('./products_gridlist');
+
 
 
 
 interface ProductExplorerPageState extends jx.Views.ReactState {
-    
+    active_page: number
+    data: any
 }
 export interface ProductExplorerPageProps extends jx.Views.ReactProps {
 }
+
+
 export class ProductExplorerPage extends jx.Views.ReactView {
 
     props: ProductExplorerPageProps;
@@ -99,29 +107,85 @@ export class ProductExplorerPage extends jx.Views.ReactView {
         return d.promise;
     }
 
+
     get_workflow() {        
-        return new Workflow();
+        return new ProdExplWorkflow();
     }
 
 
     onStateHasChanged() {
 
+        var count = 0;
+
+        switch (this.state.flowstate) {
+
+            case ProdExplStates.STATE_STARTED: {
+                
+                this.flow.Exec(gn.GenericActions.ACTION_FETCH, {
+                    fn: 'get',
+                    params: ['/products', {
+                        limit: 6,
+                        page: 1
+                    }]
+                } as schema.callParams);
+
+            } break;
+
+
+            case ProdExplStates.STATE_FETCH_DONE: {
+
+                var data = this.state.data
+
+                ReactDOM.render(<gr.ProductsGridList items={data} />, $('.items')[0]);
+
+                var __active_page = this.state.active_page;
+
+                if (!__active_page) {
+                    __active_page = 1;
+                }
+
+                this.flow.Exec(ProdExplActions.ACTION_PAGE_DATA,{
+                    active_page: __active_page
+                });
+                    
+            } break;
+
+            case ProdExplStates.STATE_FETCH_FAIL: {
+                
+            } break;
+        }
     }
 }
 
 
 
-class Actions extends flow.FlowAction {
+class ProdExplActions extends gn.GenericActions {
+    static ACTION_FILTER: fl.FlowActionValue = 'ACTION_FILTER'
+    static ACTION_PAGE_DATA: fl.FlowActionValue = 'ACTION_PAGE_DATA'
 }
 
-class States extends flow.FlowState {
-
+class ProdExplStates extends gn.GenericStates {
+    static STATE_FILTERING: fl.FlowStateValue = 'STATE_FILTERING'
+    static STATE_HAS_PAGED: fl.FlowStateValue = 'STATE_HAS_PAGED'
 }
 
-class Workflow extends flow.Workflow {
+class ProdExplWorkflow extends gn.GenericWorkflow {
 
+    Exec(action: fl.FlowActionValue, params?: any) {
 
-    
+        switch (action) {
+
+            case ProdExplActions.ACTION_PAGE_DATA: {
+
+                this.dispatch(ProdExplStates.STATE_HAS_PAGED, params);
+
+            } break;
+
+            default:
+                super.Exec(action, params);
+        }
+
+    }
 
 }
 

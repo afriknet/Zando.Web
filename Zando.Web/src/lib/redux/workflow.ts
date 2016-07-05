@@ -52,72 +52,66 @@ export class Workflow {
     }
 
 
-    Exec(action: FlowAction, params?: any) {
+    Exec(action: FlowActionValue, params?: any) {
         
     }
 
-
-    //fetch_data(): Q.Promise<any> {
-
-    //    this.dispatch(FlowState.Fetching);
-
-    //    return this.internal_fetch().then((data) => {
-
-    //        this.dispatch(FlowState.Fetch_done, data);
-
-    //        return true;
-
-    //    }).fail((err) => {
-
-    //        this.dispatch(FlowState.Fetch_failed, err);
-
-    //        return false;
-    //    });
-    //}
-
-
-    //private internal_fetch() {
-    //    return Q.resolve(true);
-    //}
-
-
+    
     attach() {
         this.attach_workflow();
     }
 
     start() {
-
-        var attach: rdx.ReduxAction = {
-            type: FlowState.STATE_STARTED,
-            flowid: this.id
-        }
-        this.store.dispatch(attach)
+        this.dispatch(FlowState.STATE_STARTED);        
     }    
 
     private attach_workflow() {
-
-        var attach: rdx.ReduxAction = {
-            type: FlowState.STATE_ATTACHED,
-            flowid: this.id
-        }
-        this.store.dispatch(attach)
+        this.dispatch(FlowState.STATE_ATTACHED);        
     }
 
 
+    get_actions() {
+        return FlowAction;
+    }
+
+    get_states() {
+        return FlowState;
+    }
 
 
+    get_flow_state(): rdx.ReduxState {
+
+        var state = this.store.getState();
+
+        if (!state) {
+            return {} as any;
+        }
+
+        var flow_id = 'flowid-{0}'.format(this.id);
+        
+        if (!state[flow_id]) {
+            return {
+                flowstate: -1,
+                flowid: this.id
+            }
+        }
+
+        return state[flow_id];
+
+    }
 
 
-    private dispatch(next: rdx.ReduxAction, payload?: any) {
+    dispatch(state: FlowStateValue, payload?:any) {
 
-        var action: rdx.ReduxAction = {
-            type: next.type,
+        var next_state: rdx.ReduxAction = {
+            type: state,
             flowid: this.id,
             payload: payload
         }
 
-        this.store.dispatch(action)
+        this.store.dispatch(next_state);
 
     }
+
 
 }
