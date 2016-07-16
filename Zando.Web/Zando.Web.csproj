@@ -87,6 +87,7 @@
     <Content Include="css\waitMe.css" />
     <Content Include="html\account_dashboard.html" />
     <Content Include="html\account_home.html" />
+    <Content Include="html\feature_proditem.html" />
     <Content Include="html\home.html" />
     <Content Include="html\login.html" />
     <Content Include="html\products_explore.html" />
@@ -406,6 +407,7 @@
     <TypeScriptCompile Include="src\views\account\account_profile.tsx" />
     <TypeScriptCompile Include="src\views\home\home.tsx" />
     <TypeScriptCompile Include="src\views\home\login.tsx" />
+    <TypeScriptCompile Include="src\views\products\product_modal.tsx" />
     <TypeScriptCompile Include="src\views\products\products_explore.tsx" />
     <TypeScriptCompile Include="src\views\products\products_griditem.tsx" />
     <TypeScriptCompile Include="src\views\products\products_gridlist.tsx" />

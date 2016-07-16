@@ -50,7 +50,7 @@ export class ProductGridItem extends jx.Views.ReactView {
                         <div className="productMasking">
 
                             <ul className="list-inline btn-group" role="group">
-                                <li><a href="javascript:void(0)" className="btn btn-default"><i className="fa fa-heart"></i></a></li>
+                                <li><a href="javascript:void(0)" className="btn btn-default"><i className="fa fa-search"></i></a></li>
                                 <li><a href="javascript:void(0)" className="btn btn-default btn-cart"><i className="fa fa-shopping-cart"></i></a></li>
                                 <li><a className="btn btn-default btn-quickview" href="javascript:void(0)"><i className="fa fa-eye"></i></a></li>
                             </ul>

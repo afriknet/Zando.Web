@@ -532,7 +532,7 @@ export class Modal extends jx.Views.ReactView {
         
 
         var html =
-            <b.Modal {...props} className={"modal-count-{0} {1}".format(this.modal_count, this.props.classlist) }>
+            <b.Modal {...props} data-dismiss="modal" className={"modal-count-{0} {1}".format(this.modal_count, this.props.classlist) }>
 
                 <b.Modal.Header closeButton>
                     <b.Modal.Title>
@@ -551,6 +551,20 @@ export class Modal extends jx.Views.ReactView {
 
         return html;
 
+    }
+    
+
+    componentDidMount() {
+
+        //var md = $('.modal-count-{0}'.format(this.modal_count));
+
+        //$('.modal-count-{0} .close'.format(this.modal_count)).attr('data-dismiss', 'modal');
+
+        //this.jget('.close').click((e) => {
+        //    e.preventDefault();
+        //    this.close();
+        //});
+        
     }
 
 
