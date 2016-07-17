@@ -70,6 +70,7 @@
     <Content Include="css\colors\orange.css.map" />
     <Content Include="css\colors\pink.css.map" />
     <Content Include="css\colors\purple.css.map" />
+    <Content Include="css\searchbox.css" />
     <Content Include="css\custom.css" />
     <Content Include="css\dropzone.css" />
     <Content Include="css\fa-animate.css" />
@@ -85,12 +86,18 @@
     <Content Include="css\toastr.css" />
     <Content Include="css\umarket.css" />
     <Content Include="css\waitMe.css" />
+    <Content Include="fonts\codropsicons\codropsicons.svg" />
+    <Content Include="fonts\codropsicons\license.txt" />
+    <Content Include="fonts\icomoon\icomoon.dev.svg" />
+    <Content Include="fonts\icomoon\icomoon.svg" />
+    <Content Include="fonts\icomoon\license.txt" />
     <Content Include="html\account_dashboard.html" />
     <Content Include="html\account_home.html" />
     <Content Include="html\feature_proditem.html" />
     <Content Include="html\home.html" />
     <Content Include="html\login.html" />
     <Content Include="html\products_explore.html" />
+    <Content Include="js\classie.js" />
     <Content Include="js\image-scale.js" />
     <Content Include="js\image-scale.min.js" />
     <Content Include="js\imgLiquid.js" />
@@ -98,7 +105,9 @@
     <Content Include="js\jquery.imagefit.js" />
     <Content Include="js\jquery.imagefit.min.js" />
     <Content Include="js\jquery.rippler.js" />
+    <Content Include="js\modernizr.custom.js" />
     <Content Include="js\redux.js" />
+    <Content Include="js\uisearch.js" />
     <Content Include="plugins\bootstrap\css\bootstrap-theme.css.map" />
     <Content Include="plugins\bootstrap\css\bootstrap-theme.min.css.map" />
     <Content Include="plugins\bootstrap\css\bootstrap.css.map" />
@@ -149,6 +158,13 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
+    <Content Include="fonts\codropsicons\.DS_Store" />
+    <Content Include="fonts\codropsicons\codropsicons.eot" />
+    <Content Include="fonts\codropsicons\codropsicons.ttf" />
+    <Content Include="fonts\codropsicons\codropsicons.woff" />
+    <Content Include="fonts\icomoon\icomoon.eot" />
+    <Content Include="fonts\icomoon\icomoon.ttf" />
+    <Content Include="fonts\icomoon\icomoon.woff" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -407,6 +423,7 @@
     <TypeScriptCompile Include="src\views\account\account_profile.tsx" />
     <TypeScriptCompile Include="src\views\home\home.tsx" />
     <TypeScriptCompile Include="src\views\home\login.tsx" />
+    <TypeScriptCompile Include="src\views\products\amazon_explore.tsx" />
     <TypeScriptCompile Include="src\views\products\product_single.tsx" />
     <TypeScriptCompile Include="src\views\products\product_modal.tsx" />
     <TypeScriptCompile Include="src\views\products\products_explore.tsx" />
