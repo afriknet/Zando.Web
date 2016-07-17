@@ -37,7 +37,7 @@ export class ProductGridItem extends jx.Views.ReactView {
     render() {
 
         var html =
-            <div className="col-sm-4 col-xs-12">
+            <div className="col-sm-4 col-xs-12" data-prodid={this.props.product['id']}>
 
                 <div className="productBox">
 
@@ -50,7 +50,7 @@ export class ProductGridItem extends jx.Views.ReactView {
                         <div className="productMasking">
 
                             <ul className="list-inline btn-group" role="group">
-                                <li><a href="javascript:void(0)" className="btn btn-default"><i className="fa fa-search"></i></a></li>
+                                <li><a className="btn btn-default btn-zoom" href="javascript:void(0)"><i className="fa fa-search"></i></a></li>
                                 <li><a href="javascript:void(0)" className="btn btn-default btn-cart"><i className="fa fa-shopping-cart"></i></a></li>
                                 <li><a className="btn btn-default btn-quickview" href="javascript:void(0)"><i className="fa fa-eye"></i></a></li>
                             </ul>
@@ -102,19 +102,21 @@ export class ProductGridItem extends jx.Views.ReactView {
                     $(el)['autoNumeric']('init', { 'aSign': '€' });
                     $(el)['autoNumeric']('set', $(el).attr('data-price'));
                 });
-
-
+                
                 this.jget('.btn-cart').click(() => {
                     carts.flyToElement(this.jget('.btn-cart'), $('.products-cart'), () => {                        
                     });
                 });
-
-                var that = this;
-
+                
                 this.jget('.btn-quickview').click(() => {
-
                     this.props.owner['modal']['showModal'](this.props.product);
+                });
 
+                this.jget('.btn-zoom').click((e) => {
+
+                    var id = $(e.currentTarget).closest('[data-prodid]').attr('data-prodid');
+
+                    this.app.router.navigate('/productitem/{0}'.format(id));
                 });
 
             } break;

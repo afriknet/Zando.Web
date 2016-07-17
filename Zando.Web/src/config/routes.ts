@@ -43,5 +43,9 @@ export var routes: Types.RouteList = {
         url: 'products/products_explore'
     },
 
+     '/productitem/:id': {
+         url: 'products/product_single'
+     }
+
     
 }

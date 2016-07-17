@@ -67,10 +67,11 @@ export class ProdModal extends Modal {
                 </div>
 
                 <div className="media-body">
-                    <h2>Old Skool Navy</h2>
-                    <h3>$149</h3>
-                    <p>Classic sneaker from Vans.Cotton canvas and suede upper.Textile lining with heel stabilizer and ankle support.Contrasting laces.Sits on a classic waffle rubber sole.</p>
-                    <span className="quick-drop">
+                    <h2>{this.product.name}</h2>
+                    <h3>{"€" + this.product.price}</h3>
+                    <p>{this.product.description}</p>
+                    {/*
+                    <span className="quick-drop hidden">
                         <select name="guiest_id3" id="guiest_id3" className="select-drop">
                             <option value={"0"}>Size</option>
                             <option value="1">Size 1</option>
@@ -78,14 +79,14 @@ export class ProdModal extends Modal {
                             <option value="3">Size 3</option>
                         </select>
                     </span>
-                    <span className="quick-drop resizeWidth">
+                    <span className="quick-drop resizeWidth hidden">
                         <select name="guiest_id4" id="guiest_id4" className="select-drop">
                             <option value="0">Qty</option>
                             <option value="1">Qty 1</option>
                             <option value="2">Qty 2</option>
                             <option value="3">Qty 3</option>
                         </select>
-                    </span>
+                    </span> */}
                     <div className="btn-area">
                         <a href="#" className="btn btn-primary btn-block">Add to cart <i className="fa fa-angle-right" aria-hidden="true" /></a>
                     </div>

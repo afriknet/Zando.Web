@@ -61,8 +61,7 @@ export class ProductExplorerPage extends jx.Views.ReactView {
     get root(): JQuery {
         return $('#page-content');
     }
-
-
+    
 
     componentDidMount() {
         
@@ -99,8 +98,7 @@ export class ProductExplorerPage extends jx.Views.ReactView {
             $('.my-account').removeClass('hidden');
         }
     }
-
-
+    
 
     get_workflow() {        
         return new ProdExplWorkflow();
@@ -156,8 +154,7 @@ export class ProductExplorerPage extends jx.Views.ReactView {
                 
         }
     }
-
-
+    
 
     get_page_from_url() {
 

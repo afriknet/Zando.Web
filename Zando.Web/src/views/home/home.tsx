@@ -290,9 +290,7 @@ class FeaturedProductItem extends jx.Views.ReactView {
     }
 
     render() {
-
-        //onClick={this.display_modal.bind(this)}
-
+                
         var that = this;
         
         var html =
@@ -301,11 +299,20 @@ class FeaturedProductItem extends jx.Views.ReactView {
                     {this.fill_in_images()}
                     <div className="productMasking">
                         <ul className="list-inline btn-group" role="group">
-                            <li><a data-toggle="modal" href=".login-modal" className="btn btn-default"><i className="fa fa-heart"></i></a></li>
-                            <li><a href="javascript:void(0)" onClick={(e) => { that.add_to_cart(e) } }
-                                className="btn btn-default rippler rippler-inverse"><i className="fa fa-shopping-cart"></i></a></li>
                             <li>
-                                <a href="javascript:void(0)" className="btn btn-default btn-quickview">
+                                <a data-toggle="modal" href="javascript:void(0)"
+                                    onClick={(e) => { that.zoom_proditem(e) } }
+                                    className="btn btn-default rippler rippler-inverse">
+                                    <i className="fa fa-heart"></i>
+                                </a>
+                            </li>
+                            <li><a href="javascript:void(0)" onClick={(e) => { that.add_to_cart(e) } }
+                                    className="btn btn-default rippler rippler-inverse">
+                                        <i className="fa fa-shopping-cart"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" className="btn btn-default btn-quickview rippler rippler-inverse">
                                     <i className="fa fa-eye"></i>
                                 </a>
                             </li>
@@ -352,6 +359,14 @@ class FeaturedProductItem extends jx.Views.ReactView {
         carts.flyToElement($(ev.currentTarget), $('.products-cart'), () => {
             this.insert_new_cart();
         });        
+    }
+
+
+    zoom_proditem(e: React.MouseEvent) {
+
+        var id = $(e.currentTarget).closest('[data-prodid]').attr('data-prodid');
+
+        this.app.router.navigate('/productitem/{0}'.format(id));
     }
 
 
