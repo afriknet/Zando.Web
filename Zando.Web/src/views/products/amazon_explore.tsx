@@ -197,16 +197,18 @@ class AmazonSearchBox extends jx.Views.ReactView {
     render() {
 
         var html =
-            <div className="col-lg-12" style={{ color: '#eaeaea', background: '#2c3e50' }}>
-
-                <div className="sb-search" id="sb-search" >
-                    <form>
-                        <input type="text" id="search" name="search" defaultValue="" placeholder="Enter your search term..." className="sb-search-input" />
-                        <input type="submit" defaultValue="" className="sb-search-submit" />
-                        <span className="sb-icon-search" />
-                    </form>
+            <div className="row">
+                <h3 style={{ textTransform:'none' }}>Amazon products search</h3>
+                <div id="custom-search-input">
+                    <div className="input-group col-md-12">
+                        <input type="text" className="  search-query form-control" placeholder="Search" />
+                        <span className="input-group-btn">
+                            <button className="btn btn-danger" type="button">
+                                <span className=" glyphicon glyphicon-search" />
+                            </button>
+                        </span>
+                    </div>
                 </div>
-
             </div>
             
         
@@ -216,6 +218,6 @@ class AmazonSearchBox extends jx.Views.ReactView {
 
     componentDidMount() {
 
-        new window['UISearch'](document.getElementById('sb-search'));
+        //new window['UISearch'](document.getElementById('sb-search'));
     }
 }
