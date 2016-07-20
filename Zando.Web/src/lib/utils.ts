@@ -238,9 +238,9 @@ module schema {
 
         var d = Q.defer<callResponse>();
 
-        var srv_url = 'https://umarket-node.herokuapp.com/api';
+        //var srv_url = 'https://umarket-node.herokuapp.com/api';
 
-        //var srv_url = 'http://localhost:1337/api';
+        var srv_url = 'http://localhost:1337/api';
 
         $.ajax(srv_url, { //
 
@@ -261,6 +261,63 @@ module schema {
                     }
                     
                 }
+
+                d.resolve(res);
+
+            },
+            error: (err: any) => {
+
+                d.reject(err);
+
+            }
+        });
+
+        return d.promise;
+
+    }
+}
+
+
+
+module amazon {
+
+    export interface callParams {
+        fn: string,
+        params: any
+    }
+
+    export interface callResponse {
+        results?: any,
+        error?: any
+    }
+
+    export function call(params: callParams): Q.Promise<callResponse> {
+
+        var d = Q.defer<callResponse>();
+
+        //var srv_url = 'https://umarket-node.herokuapp.com/api';
+
+        var srv_url = 'http://localhost:1337/api';
+
+        $.ajax(srv_url, { //
+
+            type: 'POST',
+
+            data: params,
+
+            crossDomain: true,
+
+            "dataType": "json",
+            "cache": false,
+            success: (res: any) => {
+
+                //if (res && res.response) {
+
+                //    if (typeof res.response === 'string') {
+                //        res.response = JSON.parse(res.response);
+                //    }
+
+                //}
 
                 d.resolve(res);
 
