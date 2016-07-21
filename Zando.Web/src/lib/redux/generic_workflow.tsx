@@ -35,7 +35,7 @@ export class GenericWorkflow extends wk.Workflow {
     }
 
 
-    private fetch(params: schema.callParams) {
+    private fetch(params: types.callParams) {
 
         this.dispatch(GenericActions.ACTION_FETCHING);
         
@@ -54,7 +54,7 @@ export class GenericWorkflow extends wk.Workflow {
 
     
 
-    private internal_fetch(params: schema.callParams) {
+    private internal_fetch(params: types.callParams) {
 
         var d = Q.defer();
 

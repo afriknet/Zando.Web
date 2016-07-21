@@ -22,6 +22,10 @@ String.prototype.format = function (...d: any[]): string {
     return formattedString;
 }
 
+var srv_url = 'https://umarket-node.herokuapp.com/api';
+
+//var srv_url = 'http://localhost:1337/api';
+
 
 _.mixin({
     guid: function () {
@@ -31,6 +35,24 @@ _.mixin({
         });
     }
 });
+
+
+
+module types {
+
+    export interface callParams {
+        fn: string,
+        params: any[],
+        domain?: string
+    }
+
+    export interface callResponse {
+        response?: {
+            results?: any[],
+        },
+        error?: any
+    }
+}
 
 
 
@@ -221,27 +243,13 @@ module utils {
 
 
 module schema {
+    
+    export function call(params: types.callParams): Q.Promise<types.callResponse> {
 
-    export interface callParams {
-        fn: string,        
-        params: any[]
-    }
+        var d = Q.defer<types.callResponse>();
 
-    export interface callResponse {
-        response?: {
-            results?: any[],            
-        },
-        error?: any
-    }
-
-    export function call(params: callParams): Q.Promise<callResponse> {
-
-        var d = Q.defer<callResponse>();
-
-        //var srv_url = 'https://umarket-node.herokuapp.com/api';
-
-        var srv_url = 'http://localhost:1337/api';
-
+        params.domain = 'schema';
+        
         $.ajax(srv_url, { //
 
             type: 'POST',
@@ -279,26 +287,14 @@ module schema {
 
 
 
-module amazon {
+module aws {
 
-    export interface callParams {
-        fn: string,
-        params: any
-    }
+    export function call(params: types.callParams): Q.Promise<types.callResponse> {
 
-    export interface callResponse {
-        results?: any,
-        error?: any
-    }
+        var d = Q.defer<types.callResponse>();
 
-    export function call(params: callParams): Q.Promise<callResponse> {
-
-        var d = Q.defer<callResponse>();
-
-        //var srv_url = 'https://umarket-node.herokuapp.com/api';
-
-        var srv_url = 'http://localhost:1337/api';
-
+        params.domain = 'aws';
+        
         $.ajax(srv_url, { //
 
             type: 'POST',
@@ -310,15 +306,7 @@ module amazon {
             "dataType": "json",
             "cache": false,
             success: (res: any) => {
-
-                //if (res && res.response) {
-
-                //    if (typeof res.response === 'string') {
-                //        res.response = JSON.parse(res.response);
-                //    }
-
-                //}
-
+                
                 d.resolve(res);
 
             },

@@ -193,7 +193,7 @@ export class ProductExplorerPage extends jx.Views.ReactView {
                     limit: 6,
                     page: activepage
                 }]
-            } as schema.callParams);
+            } as types.callParams);
         });
                
     }
