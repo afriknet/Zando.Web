@@ -93,14 +93,14 @@ class AmazonSideBar extends jx.Views.ReactView {
                     <div className="panel-body">
                         <div className="collapse navbar-collapse navbar-ex1-collapse navbar-side-collapse">
                             <ul className="nav navbar-nav side-nav">
-                                <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Auto et Moto<i className="fa fa-plus" /></a></li>
+                                <li className="active"><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Vetements et accessoires<i className="fa fa-plus" /></a></li>
+                                <li><a data-target="#target-submenu" data-toggle="collapse" data-nodeid="1571265031" href="javascript:void(0)">Auto et Moto<i className="fa fa-plus" /></a></li>
                                 <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Beaute et parfums<i className="fa fa-plus" /></a></li>
                                 <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Bijoux<i className="fa fa-plus" /></a></li>
                                 <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Chaussures et Sacs<i className="fa fa-plus" /></a></li>
                                 <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Hightech<i className="fa fa-plus" /></a></li>
                                 <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Informatique<i className="fa fa-plus" /></a></li>
-                                <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Montres<i className="fa fa-plus" /></a></li>
-                                <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Vetements et accessoires<i className="fa fa-plus" /></a></li>
+                                <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Montres<i className="fa fa-plus" /></a></li>                                
                             </ul>
                         </div>
                     </div>
@@ -148,84 +148,11 @@ class AmazonSideBar extends jx.Views.ReactView {
         
         return html;
 
-        /*
-        <li>
-                                    <a data-target="#women" data-toggle="collapse" href="javascript:;">Auto et Moto <i className="fa fa-plus" /></a>
-                                    <ul className="collapse collapseItem hidden" id="women">
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Accessories <span>(6) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bag <span>(6) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Cloths <span>(25) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bed &amp; Bath <span>(2) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Swimming costume <span>(5) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Sport Tops &amp; Shoes <span>(3) </span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a data-target="#men" data-toggle="collapse" href="javascript:;">Men <i className="fa fa-plus" /></a>
-                                    <ul className="collapse collapseItem" id="men">
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Accessories <span>(6) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bag <span>(6) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Cloths <span>(25) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bed &amp; Bath <span>(2) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Swimming costume <span>(5) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Sport Tops &amp; Shoes <span>(3) </span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a data-target="#kids" data-toggle="collapse" href="javascript:;">Kids <i className="fa fa-plus" /></a>
-                                    <ul className="collapse collapseItem" id="kids">
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Accessories <span>(6) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bag <span>(6) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Cloths <span>(25) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bed &amp; Bath <span>(2) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Swimming costume <span>(5) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Sport Tops &amp; Shoes <span>(3) </span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a data-target="#accessories" data-toggle="collapse" href="javascript:;">Accessories <i className="fa fa-plus" /></a>
-                                    <ul className="collapse collapseItem" id="accessories">
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Accessories <span>(6) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bag <span>(6) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Cloths <span>(25) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bed &amp; Bath <span>(2) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Swimming costume <span>(5) </span></a></li>
-                                        <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Sport Tops &amp; Shoes <span>(3) </span></a></li>
-                                    </ul>
-                                </li>
-        */
-
     }
 
 
     componentDidMount() {
 
-        //new window['UISearch'](document.getElementById('sb-search'));
-
-        //aws.call({
-        //    fn: 'browseNodeLookup',
-        //    params: [{
-        //        browseNodeId: '549726',
-        //        responseGroup: 'NewReleases'
-        //    }]
-        //}).then(res => {
-
-
-        //}).fail(err => {
-
-
-        //});
-
-        /*
-        client.browseNodeLookup({
-  browseNodeId: '549726',
-  responseGroup: 'NewReleases'
-}).then(function(results) {
-  console.log(results);
-}).catch(function(err) {
-  console.log(err);
-});
-        */
     }
 }
 
@@ -240,9 +167,9 @@ class AmazonSearchBox extends jx.Views.ReactView {
                 <h3 style={{ textTransform:'none' }}>Amazon products search</h3>
                 <div id="custom-search-input">
                     <div className="input-group col-md-12">
-                        <input type="text" className="  search-query form-control" placeholder="Search" />
+                        <input type="text" className="  search-query form-control" placeholder="Search" style={{ padding:10 }} />
                         <span className="input-group-btn">
-                            <button className="btn btn-danger" type="button">
+                            <button className="btn btn-danger btn-search" type="button">
                                 <span className=" glyphicon glyphicon-search" />
                             </button>
                         </span>
@@ -257,6 +184,46 @@ class AmazonSearchBox extends jx.Views.ReactView {
 
     componentDidMount() {
 
-        //new window['UISearch'](document.getElementById('sb-search'));
+        this.jget('input').css('padding', '10px!important');
+
+        this.jget('.btn-search').click(() => {
+
+            this.search_items();
+        });
+        
+    }
+
+
+    search_items() {
+        //
+        aws.call({
+            fn: 'itemSearch',
+            params: [{
+                SearchIndex: 'Apparel',  //Keywords     
+                Keywords: 'chemise',         
+                responseGroup: 'ItemAttributes',
+                sort:'SalesRank',
+                domain: 'webservices.amazon.fr',
+            }]
+        }).then(res => {
+
+
+        }).fail(err => {
+
+
+        });
+
+        /*
+        $params = array(
+    "Service" => "AWSECommerceService",
+    "Operation" => "ItemSearch",
+    "AWSAccessKeyId" => "AKIAJ56TP7JGYQHLA5IA",
+    "AssociateTag" => "afrikne-21",
+    "SearchIndex" => "Music",
+    "ResponseGroup" => "BrowseNodes",
+    "BrowseNode" => "1571265031"
+);
+        */
+
     }
 }
