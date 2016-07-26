@@ -164,16 +164,17 @@ class AmazonSearchBox extends jx.Views.ReactView {
 
         var html =
             <div className="row">
-                <h3 style={{ textTransform:'none' }}>Amazon products search</h3>
+
+                <h3 style={{ textTransform: 'none' }}>Amazon products search</h3>
+
                 <div id="custom-search-input">
-                    <div className="input-group col-md-12">
-                        <input type="text" className="  search-query form-control" placeholder="Search" style={{ padding:10 }} />
-                        <span className="input-group-btn">
-                            <button className="btn btn-danger btn-search" type="button">
-                                <span className=" glyphicon glyphicon-search" />
-                            </button>
-                        </span>
+                    <div className="form-group col-xs-12" style={{ padding:0 }}>                        
+                        <div className="inner-addon right-addon">
+                            <i className="glyphicon glyphicon-search text-primary pointer" style={{ marginTop: 6, fontSize: 18 }}/>
+                            <input type="text" placeholder="Search" className="form-control ie-no-clear search-query" style={{ padding: 10 }} />
+                        </div>
                     </div>
+                    
                 </div>
             </div>
             
@@ -185,9 +186,8 @@ class AmazonSearchBox extends jx.Views.ReactView {
     componentDidMount() {
 
         this.jget('input').css('padding', '10px!important');
-
-        this.jget('.btn-search').click(() => {
-
+        
+        this.jget('.glyphicon-search').click(() => {
             this.search_items();
         });
         
@@ -195,35 +195,22 @@ class AmazonSearchBox extends jx.Views.ReactView {
 
 
     search_items() {
-        //
+        
         aws.call({
             fn: 'itemSearch',
             params: [{
                 SearchIndex: 'Apparel',  //Keywords     
                 Keywords: 'chemise',         
-                responseGroup: 'ItemAttributes',
-                sort:'SalesRank',
+                responseGroup: 'ItemAttributes, Images',
+                sort:'salesrank',
                 domain: 'webservices.amazon.fr',
             }]
         }).then(res => {
-
-
+            
         }).fail(err => {
 
 
         });
-
-        /*
-        $params = array(
-    "Service" => "AWSECommerceService",
-    "Operation" => "ItemSearch",
-    "AWSAccessKeyId" => "AKIAJ56TP7JGYQHLA5IA",
-    "AssociateTag" => "afrikne-21",
-    "SearchIndex" => "Music",
-    "ResponseGroup" => "BrowseNodes",
-    "BrowseNode" => "1571265031"
-);
-        */
-
+        
     }
 }
