@@ -17,6 +17,20 @@ interface AmazonExploreState extends jx.Views.ReactState {
     items: any[]
 }
 
+
+
+interface BrowseNodeItem {
+    Ancestors?: BrowseNodeItem[],
+    BrowseNodeId: number[],
+    Name: string[]
+}
+
+
+interface BrowseNodeInfo {
+    BrowseNode: BrowseNodeItem[]
+}
+
+
 export class AmazonExplore extends jx.Views.ReactView {
 
     constructor(props?: any) {
@@ -82,7 +96,7 @@ export class AmazonExplore extends jx.Views.ReactView {
             params: [{
                 SearchIndex: this.sideBar.get_active_searchIndex(),
                 Keywords: keyword,
-                responseGroup: 'Images,ItemAttributes', //,
+                responseGroup: 'Images,ItemAttributes,BrowseNodes', 
                 //sort: 'salesrank',
                 domain: 'webservices.amazon.fr',
             }]
@@ -101,12 +115,12 @@ export class AmazonExplore extends jx.Views.ReactView {
     populate_with_items(items: any[]) {
 
         var data = _.filter(items, itm => {
-            return itm['MediumImage'] != undefined;
+            return itm['LargeImage'] != undefined;
         });
 
         var images = _.map(data, d => {
             return {
-                img_url: d['MediumImage'][0].URL[0]
+                img_url: d['LargeImage'][0].URL[0]
             }
         })
 
@@ -374,11 +388,18 @@ class AmazonGridList extends jx.Views.ReactView {
 
     render_item(item: any) {
 
+        //className="col-xs-12"
+
         var html =
             <div className="col-sm-4 col-xs-12">
                 <div className="productBox">
-                    <div className="productImage clearfix">
-                        <img alt="products-img" src={item['img_url']} />
+                    <div className="productImage clearfix img-thumbnail" style={{ height: 300 }}>
+                        <div style={{ display: 'table', height: 300 }}>
+                            <div style={{ display: 'table-cell', verticalAlign: 'middle'}}>
+                                <img alt="products-img" className="" src={item['img_url']} style={{ display: 'inline-block', verticalAlign: 'middle' }} /> 
+                            </div>                            
+                        </div>
+                        
                         <div className="productMasking">
                             <ul role="group" className="list-inline btn-group">
                                 <li><a className="btn btn-default" href=".login-modal" data-toggle="modal"><i className="fa fa-heart" /></a></li>
@@ -388,8 +409,8 @@ class AmazonGridList extends jx.Views.ReactView {
                         </div>
                     </div>
                     <div className="productCaption clearfix">
-                        <a href="single-product.html">
-                            <h5>Nike Sportswear</h5>
+                        <a href="#">
+                            <h5 className="item-title">Nike Sportswear</h5>
                         </a>
                         <h3>$199</h3>
                     </div>
@@ -430,6 +451,46 @@ class AmazonGridList extends jx.Views.ReactView {
 
 
         return html;
+    }
+
+
+    componentDidMount() {
+
+        //this.fix_img_vertical_align()
+    }
+
+
+    componentDidUpdate() {
+
+        //this.fix_img_vertical_align()
+        
+    }
+
+
+    fix_img_vertical_align() {
+
+        _.each($('[alt="products-img"]'), img => {
+
+            var img_height = $(img).outerHeight(true);
+
+            var outer_height = $(img).closest('.productImage').outerHeight(true);
+
+            //$(img).closest('.productBox').find('.item-title').html('img_height:{0}, outer_height:{1}'.format(img_height, outer_height))
+
+            //if (img_height < outer_height ) {
+
+            //    var diff = (outer_height - img_height) / 3;
+
+            //    var top = (diff / outer_height) * 100;
+
+            //    $(img).css('position', 'relative');
+
+            //    $(img).css('top', '{0}%'.format(top));
+
+            //    $(img).closest('.productBox').find('.item-title').html('img_height:{0}, outer_height:{1}, diff:{2}, top:{3}'.format(img_height, outer_height, diff, top))
+            //}
+
+        });
     }
 
 }
