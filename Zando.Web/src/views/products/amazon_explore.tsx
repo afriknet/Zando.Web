@@ -13,11 +13,34 @@ import { BigLabel, BigLabelProps, Modal, ModalProps} from '../../lib/controls';
 
 
 
+interface AmazonExploreState extends jx.Views.ReactState {
+    items: any[]
+}
+
 export class AmazonExplore extends jx.Views.ReactView {
 
+    constructor(props?: any) {
+        super(props);
+        this.state.items = [];
+    }
+
+    state: AmazonExploreState;
+
+    get sideBar():AmazonSideBar{
+        return this['__sidebar']
+    }
+
+    get searchBox(): AmazonSearchBox {
+        return this['__searchbar']
+    }
+
+
     render() {
+
         var html =
-            <div>
+
+            <div className="productsContent">
+
                 <LightSection />
 
                 <section className="mainContent clearfix animated fadeInUp">
@@ -26,11 +49,17 @@ export class AmazonExplore extends jx.Views.ReactView {
 
                         <div className="row">
 
-                            <AmazonSideBar />
+                            <AmazonSideBar owner={this} />
 
                             <div className="col-md-9 col-sm-8 col-xs-12">
 
-                                <AmazonSearchBox />
+                                <AmazonSearchBox owner={this} />
+
+                                <br />
+
+                                <div className="col-xs-12 items-list" style={{ padding: 0 }}>
+                                    <AmazonGridList owner={this} items={this.state.items} />
+                                </div>
 
                             </div>
 
@@ -44,6 +73,49 @@ export class AmazonExplore extends jx.Views.ReactView {
 
         return html;
     }
+
+
+    search_item(keyword: string) {
+
+        aws.call({
+            fn: 'itemSearch',
+            params: [{
+                SearchIndex: this.sideBar.get_active_searchIndex(),
+                Keywords: keyword,
+                responseGroup: 'Images,ItemAttributes', //,
+                //sort: 'salesrank',
+                domain: 'webservices.amazon.fr',
+            }]
+        }).then(res => {
+
+            if (res.response && $.isArray(res.response)) {
+                this.populate_with_items(res.response as any);
+            }
+
+        }).fail(err => {
+
+
+        });
+    }
+
+    populate_with_items(items: any[]) {
+
+        var data = _.filter(items, itm => {
+            return itm['MediumImage'] != undefined;
+        });
+
+        var images = _.map(data, d => {
+            return {
+                img_url: d['MediumImage'][0].URL[0]
+            }
+        })
+
+        this.setState(_.extend(this.state, {
+            items: images
+        }));
+
+    }
+
 }
 
 
@@ -84,7 +156,55 @@ class LightSection extends jx.Views.ReactView {
 
 class AmazonSideBar extends jx.Views.ReactView {
 
+    constructor(props?: jx.Views.ReactProps) {
+        super(props);
+        props.owner['__sidebar'] = this;
+    }
+
+
     render() {
+
+        var count: number = 0;
+
+
+        function add_submenus(menu: string) {
+
+            var sub = <ul className="collapse collapseItem" id={menu}>
+                <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Accessories <span>(6) </span></a></li>
+                <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bag <span>(6) </span></a></li>
+                <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Cloths <span>(25) </span></a></li>
+                <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bed &amp; Bath <span>(2) </span></a></li>
+                <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Swimming costume <span>(5) </span></a></li>
+                <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Sport Tops &amp; Shoes <span>(3) </span></a></li>
+            </ul>
+
+            return sub;
+        }
+
+
+        function build_li(values: any[]) {
+
+            var menu_count = count++;
+
+            var menu = 'menu-{0}'.format(menu_count);
+
+            var searchIndex = values.length > 1 ? values[1]: '';
+
+            var li =
+                <li data-menu={menu}>
+
+                    <a className="node-link" data-searchindex={searchIndex} data-menucount={menu_count} data-target={"#submenu-{0}".format(menu_count) } data-toggle="collapse" href="javascript:void(0)">
+                        <span>
+                            <span className="fa fa-hand-o-right arrow-right hidden" style={{ marginRight:10 }} /><span>{values[0]}</span>
+                        </span>
+                        <i className="fa fa-plus" />
+                    </a>
+                    {add_submenus("submenu-{0}".format(menu_count))}
+                </li>
+
+            return li;
+        }
+
 
         var html = 
             <div className="col-md-3 col-sm-4 col-xs-12 sideBar">
@@ -92,15 +212,17 @@ class AmazonSideBar extends jx.Views.ReactView {
                     <div className="panel-heading">Product categories</div>
                     <div className="panel-body">
                         <div className="collapse navbar-collapse navbar-ex1-collapse navbar-side-collapse">
-                            <ul className="nav navbar-nav side-nav">
-                                <li className="active"><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Vetements et accessoires<i className="fa fa-plus" /></a></li>
-                                <li><a data-target="#target-submenu" data-toggle="collapse" data-nodeid="1571265031" href="javascript:void(0)">Auto et Moto<i className="fa fa-plus" /></a></li>
-                                <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Beaute et parfums<i className="fa fa-plus" /></a></li>
-                                <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Bijoux<i className="fa fa-plus" /></a></li>
-                                <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Chaussures et Sacs<i className="fa fa-plus" /></a></li>
-                                <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Hightech<i className="fa fa-plus" /></a></li>
-                                <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Informatique<i className="fa fa-plus" /></a></li>
-                                <li><a data-target="#target-submenu" data-toggle="collapse" href="javascript:void(0)">Montres<i className="fa fa-plus" /></a></li>                                
+                            <ul className="nav navbar-nav side-nav nodes">
+                                {_.map([
+                                    ["Vetements et accessoires", 'Apparel'],
+                                    ["Auto et Moto"],
+                                    ["Bijoux"],
+                                    ["Chaussures et Sacs"],
+                                    ["Hightech"],
+                                    ["Informatique"],
+                                    ["Montres"]], menu => {
+                                    return build_li(menu);
+                                })}                                
                             </ul>
                         </div>
                     </div>
@@ -153,12 +275,46 @@ class AmazonSideBar extends jx.Views.ReactView {
 
     componentDidMount() {
 
+        this.jget('.nodes li').first().addClass('active');
+
+        this.jget('.nodes li .arrow-right').first().removeClass('hidden');
+
+        var that = this;
+
+        this.jget('.node-link').click((e) => {
+
+            this.jget('.nodes li').remove('active');
+
+            $(e.currentTarget).closest('li').addClass('active');
+
+            this.jget('.node-link .arrow-right').addClass('hidden');
+
+            $(e.currentTarget).find('.arrow-right').removeClass('hidden');
+
+            var menucount = $(e.currentTarget).attr('data-menucount');
+
+            that.jget('.collapse.in').removeClass('in');
+
+            $('.submenu-{0}'.format(menucount)).addClass('in');
+
+        });
+    }
+
+
+    get_active_searchIndex() {
+        var index = this.jget('li.active .node-link').attr('data-searchindex')
+        return index;
     }
 }
 
 
 
 class AmazonSearchBox extends jx.Views.ReactView {
+
+    constructor(props?: jx.Views.ReactProps) {
+        super(props);
+        props.owner['__searchbar'] = this;
+    }
 
     render() {
 
@@ -195,22 +351,85 @@ class AmazonSearchBox extends jx.Views.ReactView {
 
 
     search_items() {
-        
-        aws.call({
-            fn: 'itemSearch',
-            params: [{
-                SearchIndex: 'Apparel',  //Keywords     
-                Keywords: 'chemise',         
-                responseGroup: 'ItemAttributes, Images',
-                sort:'salesrank',
-                domain: 'webservices.amazon.fr',
-            }]
-        }).then(res => {
-            
-        }).fail(err => {
 
-
-        });
+        this.props.owner['search_item'](this.jget('.search-query').val());
         
     }
+}
+
+
+
+
+interface AmazonGridListProps extends jx.Views.ReactProps {
+    items:any[]
+}
+class AmazonGridList extends jx.Views.ReactView {
+
+    props: AmazonGridListProps;
+
+    constructor(props: AmazonGridListProps) {
+        super(props);
+    }
+
+
+    render_item(item: any) {
+
+        var html =
+            <div className="col-sm-4 col-xs-12">
+                <div className="productBox">
+                    <div className="productImage clearfix">
+                        <img alt="products-img" src={item['img_url']} />
+                        <div className="productMasking">
+                            <ul role="group" className="list-inline btn-group">
+                                <li><a className="btn btn-default" href=".login-modal" data-toggle="modal"><i className="fa fa-heart" /></a></li>
+                                <li><a className="btn btn-default" href="cart-page.html"><i className="fa fa-shopping-cart" /></a></li>
+                                <li><a href=".quick-view" data-toggle="modal" className="btn btn-default"><i className="fa fa-eye" /></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="productCaption clearfix">
+                        <a href="single-product.html">
+                            <h5>Nike Sportswear</h5>
+                        </a>
+                        <h3>$199</h3>
+                    </div>
+                </div>
+            </div>
+
+        return html;
+    }
+
+
+    render() {
+
+        var html =
+            <div className="col-xs-12" style={{ padding:0 }}>
+                <div className="row filterArea">
+                    <div className="col-xs-6">
+                        <select className="select-drop" id="guiest_id1" name="guiest_id1">
+                            <option value="0">Default sorting</option>
+                            <option value="1">Sort by popularity</option>
+                            <option value="2">Sort by rating</option>
+                            <option value="3">Sort by newness</option>
+                            <option value="4">Sort by price</option>
+                        </select>
+                    </div>
+                    <div className="col-xs-6">
+                        <div role="group" className="btn-group pull-right">
+                            <button className="btn btn-default active" type="button"><i aria-hidden="true" className="fa fa-th" /><span>Grid</span></button>
+                            <button className="btn btn-default" type="button"><i aria-hidden="true" className="fa fa-th-list" /><span>List</span></button>
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
+                    {_.map(this.props.items, itm => {
+                        return this.render_item(itm);
+                    })}
+                </div>
+            </div>
+
+
+        return html;
+    }
+
 }
