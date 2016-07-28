@@ -14,20 +14,30 @@ import { BigLabel, BigLabelProps, Modal, ModalProps} from '../../lib/controls';
 
 
 interface AmazonExploreState extends jx.Views.ReactState {
-    items: any[]
+    item_imgs: any[],
+    items:any[]
 }
 
 
 
-interface BrowseNodeItem {
-    Ancestors?: BrowseNodeItem[],
+interface BrowseNode_Real {
+    Ancestors?: BrowseNode_Fake[],
     BrowseNodeId: number[],
-    Name: string[]
+    Name: string[],
+    IsCategoryRoot?: number[]
 }
 
 
-interface BrowseNodeInfo {
-    BrowseNode: BrowseNodeItem[]
+interface BrowseNode_Fake {
+    BrowseNode: BrowseNode_Real[]
+}
+
+
+interface BrowseNode_Flatten {
+    KeyId: number,
+    ParentId: number,
+    Name: string,
+    IsRoot: boolean
 }
 
 
@@ -35,7 +45,7 @@ export class AmazonExplore extends jx.Views.ReactView {
 
     constructor(props?: any) {
         super(props);
-        this.state.items = [];
+        this.state.item_imgs = [];
     }
 
     state: AmazonExploreState;
@@ -63,7 +73,7 @@ export class AmazonExplore extends jx.Views.ReactView {
 
                         <div className="row">
 
-                            <AmazonSideBar owner={this} />
+                            <AmazonSideBar owner={this} items={this.state.items} />
 
                             <div className="col-md-9 col-sm-8 col-xs-12">
 
@@ -72,7 +82,7 @@ export class AmazonExplore extends jx.Views.ReactView {
                                 <br />
 
                                 <div className="col-xs-12 items-list" style={{ padding: 0 }}>
-                                    <AmazonGridList owner={this} items={this.state.items} />
+                                    <AmazonGridList owner={this} items={this.state.item_imgs} />
                                 </div>
 
                             </div>
@@ -125,7 +135,8 @@ export class AmazonExplore extends jx.Views.ReactView {
         })
 
         this.setState(_.extend(this.state, {
-            items: images
+            item_imgs: images,
+            items: data
         }));
 
     }
@@ -168,57 +179,32 @@ class LightSection extends jx.Views.ReactView {
 
 
 
+interface AmazonSideBarProps extends jx.Views.ReactProps {
+    items:any[]
+}
+
+interface AmazonBarState extends jx.Views.ReactState {
+    flatten_list: BrowseNode_Flatten[],
+    build_menu_hierarchy: boolean
+}
+
 class AmazonSideBar extends jx.Views.ReactView {
+
+    props: AmazonSideBarProps;
+    state: AmazonBarState;
+
+    menus_updating: boolean;
 
     constructor(props?: jx.Views.ReactProps) {
         super(props);
         props.owner['__sidebar'] = this;
+        this.state.flatten_list = [];
     }
 
 
     render() {
 
         var count: number = 0;
-
-
-        function add_submenus(menu: string) {
-
-            var sub = <ul className="collapse collapseItem" id={menu}>
-                <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Accessories <span>(6) </span></a></li>
-                <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bag <span>(6) </span></a></li>
-                <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Cloths <span>(25) </span></a></li>
-                <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bed &amp; Bath <span>(2) </span></a></li>
-                <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Swimming costume <span>(5) </span></a></li>
-                <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Sport Tops &amp; Shoes <span>(3) </span></a></li>
-            </ul>
-
-            return sub;
-        }
-
-
-        function build_li(values: any[]) {
-
-            var menu_count = count++;
-
-            var menu = 'menu-{0}'.format(menu_count);
-
-            var searchIndex = values.length > 1 ? values[1]: '';
-
-            var li =
-                <li data-menu={menu}>
-
-                    <a className="node-link" data-searchindex={searchIndex} data-menucount={menu_count} data-target={"#submenu-{0}".format(menu_count) } data-toggle="collapse" href="javascript:void(0)">
-                        <span>
-                            <span className="fa fa-hand-o-right arrow-right hidden" style={{ marginRight:10 }} /><span>{values[0]}</span>
-                        </span>
-                        <i className="fa fa-plus" />
-                    </a>
-                    {add_submenus("submenu-{0}".format(menu_count))}
-                </li>
-
-            return li;
-        }
-
 
         var html = 
             <div className="col-md-3 col-sm-4 col-xs-12 sideBar">
@@ -227,16 +213,7 @@ class AmazonSideBar extends jx.Views.ReactView {
                     <div className="panel-body">
                         <div className="collapse navbar-collapse navbar-ex1-collapse navbar-side-collapse">
                             <ul className="nav navbar-nav side-nav nodes">
-                                {_.map([
-                                    ["Vetements et accessoires", 'Apparel'],
-                                    ["Auto et Moto"],
-                                    ["Bijoux"],
-                                    ["Chaussures et Sacs"],
-                                    ["Hightech"],
-                                    ["Informatique"],
-                                    ["Montres"]], menu => {
-                                    return build_li(menu);
-                                })}                                
+                                {this.build_menus()}                                
                             </ul>
                         </div>
                     </div>
@@ -287,6 +264,78 @@ class AmazonSideBar extends jx.Views.ReactView {
     }
 
 
+    build_menus() {
+
+        var count: number = 0;
+
+        if (!this.state.flatten_list || this.state.flatten_list.length === 0) {
+
+            return _.map([
+                ["Vetements et accessoires", 'Apparel'],
+                ["Auto et Moto"],
+                ["Bijoux"],
+                ["Chaussures et Sacs"],
+                ["Hightech"],
+                ["Informatique"],
+                ["Montres"]], menu => {
+                    return this.build_li(menu, count++);
+                })
+
+        } else {
+
+            var root_nodes = _.filter(this.state.flatten_list, f => {
+
+                return f.IsRoot;
+            });
+
+            var menus = _.map(root_nodes, root => {
+                return this.build_li([root.Name], count++); 
+            });
+
+
+            return menus;
+
+        }
+    }
+
+
+    add_submenus(menu: string) {
+
+        var sub = <ul className="collapse collapseItem" id={menu}>
+            <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Accessories <span>(6) </span></a></li>
+            <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bag <span>(6) </span></a></li>
+            <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Cloths <span>(25) </span></a></li>
+            <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Bed &amp; Bath <span>(2) </span></a></li>
+            <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Swimming costume <span>(5) </span></a></li>
+            <li><a href="#"><i aria-hidden="true" className="fa fa-caret-right" />Sport Tops &amp; Shoes <span>(3) </span></a></li>
+        </ul>
+
+        return sub;
+    }
+
+
+    build_li(values: any[], menu_count: number) {
+        
+        var menu = 'menu-{0}'.format(menu_count);
+
+        var searchIndex = values.length > 1 ? values[1] : '';
+
+        var li =
+            <li data-menu={menu}>
+
+                <a className="node-link" data-searchindex={searchIndex} data-menucount={menu_count} data-target={"#submenu-{0}".format(menu_count) } data-toggle="collapse" href="javascript:void(0)">
+                    <span>
+                        <span className="fa fa-hand-o-right arrow-right hidden" style={{ marginRight: 10 }} /><span>{values[0]}</span>
+                    </span>
+                    <i className="fa fa-plus" />
+                </a>
+                {this.add_submenus("submenu-{0}".format(menu_count)) }
+            </li>
+
+        return li;
+    }
+
+
     componentDidMount() {
 
         this.jget('.nodes li').first().addClass('active');
@@ -312,13 +361,117 @@ class AmazonSideBar extends jx.Views.ReactView {
             $('.submenu-{0}'.format(menucount)).addClass('in');
 
         });
+
+        this.state.build_menu_hierarchy = false;
+
+        this.store_menus_hierarchy();
+    }
+
+
+    componentDidUpdate() {
+
+        if (this.state.build_menu_hierarchy) {
+
+            this.store_menus_hierarchy();
+
+        } else {
+
+            this.state.build_menu_hierarchy = true;
+        }
     }
 
 
     get_active_searchIndex() {
-        var index = this.jget('li.active .node-link').attr('data-searchindex')
+        var index = 'Apparel'; //this.jget('li.active .node-link').attr('data-searchindex')
         return index;
     }
+
+
+    store_menus_hierarchy() {
+
+        function add_flatten_node(flatten_list: BrowseNode_Flatten[], base_fake_node: BrowseNode_Fake, is_root?: boolean) {
+
+            var base_real_node: BrowseNode_Real = base_fake_node.BrowseNode[0];
+            
+            var node_flatten: BrowseNode_Flatten = {
+                KeyId: base_real_node.BrowseNodeId[0],
+                Name: base_real_node.Name[0],
+                ParentId: undefined,
+                IsRoot: false
+            }
+
+            flatten_list.push(node_flatten);
+
+            if (is_root) {
+
+                node_flatten.IsRoot = true;
+
+                return;
+
+            }
+
+            if ($.isArray(base_real_node.Ancestors) && (base_real_node.Ancestors.length > 0)) {
+
+                var parent_fake_node: BrowseNode_Fake = base_real_node.Ancestors[0];
+
+                var parent_real_node = parent_fake_node.BrowseNode[0];
+
+                node_flatten.ParentId = parent_real_node.BrowseNodeId[0]
+
+                if (!parent_real_node.IsCategoryRoot) {
+
+                    add_flatten_node(flatten_list, parent_fake_node);
+
+                } else {
+
+                    var fake_root_node = parent_real_node.Ancestors[0];
+
+                    add_flatten_node(flatten_list, fake_root_node, true)
+                    
+                }
+                
+            }
+        }
+
+        var tmp_flatten_list: BrowseNode_Flatten[] = [];
+
+        _.each(this.props.items, item => {
+
+            var base_fake_node: BrowseNode_Fake = item.BrowseNodes[0];
+
+            add_flatten_node(tmp_flatten_list, base_fake_node);
+
+        });
+
+
+        var flatten_list: BrowseNode_Flatten[] = [];
+
+        _.each(tmp_flatten_list, node => {
+
+            var found = _.find(flatten_list, _n => {
+
+                return _n.KeyId === node.KeyId
+
+            }) != undefined;
+
+            if (!found) {
+
+                flatten_list.push(node);
+            }
+
+        });
+
+        tmp_flatten_list = undefined;
+
+        this.state.build_menu_hierarchy = false;
+
+        this.setState(_.extend(this.state, {
+
+            flatten_list: flatten_list,
+            
+        } as AmazonBarState));
+    }
+    
 }
 
 

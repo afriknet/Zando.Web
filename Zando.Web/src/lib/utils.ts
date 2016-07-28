@@ -22,9 +22,9 @@ String.prototype.format = function (...d: any[]): string {
     return formattedString;
 }
 
-//var srv_url = 'https://umarket-node.herokuapp.com/api';
+var srv_url = 'https://umarket-node.herokuapp.com/api';
 
-var srv_url = 'http://localhost:1337/api';
+//var srv_url = 'http://localhost:1337/api';
 
 
 _.mixin({
