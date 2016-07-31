@@ -104,7 +104,7 @@ export class AmazonExplore extends jx.Views.ReactView {
         aws.call({
             fn: 'itemSearch',
             params: [{
-                SearchIndex: this.sideBar.get_active_searchIndex(),
+                SearchIndex:'',// this.sideBar.get_active_searchIndex(),
                 Keywords: keyword,
                 responseGroup: 'Images,ItemAttributes,BrowseNodes', 
                 //sort: 'salesrank',
@@ -382,7 +382,7 @@ class AmazonSideBar extends jx.Views.ReactView {
 
 
     get_active_searchIndex() {
-        var index = 'Apparel'; //this.jget('li.active .node-link').attr('data-searchindex')
+        var index = 'Apparel,Books'; //this.jget('li.active .node-link').attr('data-searchindex')
         return index;
     }
 
