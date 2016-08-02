@@ -48,11 +48,17 @@ export class AmazonExplore extends jx.Views.ReactView {
         this.state.item_imgs = [];
     }
 
+
+    selected_search_index: any;
+
+
     state: AmazonExploreState;
+
 
     get sideBar():AmazonSideBar{
         return this['__sidebar']
     }
+
 
     get searchBox(): AmazonSearchBox {
         return this['__searchbar']
@@ -77,6 +83,14 @@ export class AmazonExplore extends jx.Views.ReactView {
 
                             <div className="col-md-9 col-sm-8 col-xs-12">
 
+                                {/*
+                                <div className="row filterArea" style={{ width:'100%' }}>
+
+                                    {this.display_search_indexes()} 
+                                    
+                                </div>
+                                */}
+
                                 <AmazonSearchBox owner={this} />
 
                                 <br />
@@ -99,12 +113,20 @@ export class AmazonExplore extends jx.Views.ReactView {
     }
 
 
+    componentDidMount() {
+
+        super.componentDidMount();
+
+        //this.root.find('.btn-index').css('width','!inherited');
+    }
+
+
     search_item(keyword: string) {
 
         aws.call({
             fn: 'itemSearch',
             params: [{
-                SearchIndex:'',// this.sideBar.get_active_searchIndex(),
+                SearchIndex: this.selected_search_index,
                 Keywords: keyword,
                 responseGroup: 'Images,ItemAttributes,BrowseNodes', 
                 //sort: 'salesrank',
@@ -121,6 +143,7 @@ export class AmazonExplore extends jx.Views.ReactView {
 
         });
     }
+
 
     populate_with_items(items: any[]) {
 
@@ -139,6 +162,64 @@ export class AmazonExplore extends jx.Views.ReactView {
             items: data
         }));
 
+    }
+
+
+    display_search_indexes() {
+
+        var indexes_views = _.map(Object.keys(AmazonExplore.searchIndex), index => {
+
+            var val = AmazonExplore.searchIndex[index];
+
+            return <button className="btn btn-default btn-index" type="button"
+                        onClick={this.onClick.bind(this)}
+                        style={{ paddingLeft: 10, paddingRight: 10, marginBottom: 10, width: 'inherit' }}>
+                            <span data-index-val={val} style={{ textTransform:'none' }} >{index}</span>
+                   </button>
+        });
+
+
+        return <div role="group" className="btn-group">
+                    {indexes_views}        
+               </div> 
+    }
+
+
+    onClick(e: Event) {
+
+        var btn = $(e.currentTarget);
+
+        this.root.find('.btn-index').removeClass('active');
+
+        this.selected_search_index = $(btn).find('[data-index-val]').attr('data-index-val');
+
+        $(btn).addClass('active');
+
+    }
+
+
+
+    static searchIndex = {
+
+        "Vêtements et accessoires": "Apparel",
+
+        'Bagages': 'Luggage',
+
+        'Beauté et Parfum': 'Beauty',
+
+        'Bijoux': 'Jewelry',
+
+        'Bébés': 'Baby',
+
+        'Chaussures et Sacs': 'Shoes',
+
+        'High-Tech': 'Electronics',
+
+        'Informatique': 'PCHardware',
+
+        'Montres': 'Watches',
+
+        'Musique ': 'Music'
     }
 
 }
@@ -486,19 +567,25 @@ class AmazonSearchBox extends jx.Views.ReactView {
     render() {
 
         var html =
+
             <div className="row">
-
-                <h3 style={{ textTransform: 'none' }}>Amazon products search</h3>
-
+                
                 <div id="custom-search-input">
-                    <div className="form-group col-xs-12" style={{ padding:0 }}>                        
+
+                    <div className="form-group col-xs-12" style={{ padding: 0 }}>                        
+
                         <div className="inner-addon right-addon">
+
                             <i className="glyphicon glyphicon-search text-primary pointer" style={{ marginTop: 6, fontSize: 18 }}/>
+
                             <input type="text" placeholder="Search" className="form-control ie-no-clear search-query" style={{ padding: 10 }} />
+
                         </div>
+
                     </div>
                     
                 </div>
+
             </div>
             
         
