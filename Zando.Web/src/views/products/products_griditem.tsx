@@ -80,16 +80,41 @@ export class ProductGridItem extends jx.Views.ReactView {
 
         var img = null, prod = this.props.product;
 
-        if (prod.images && prod.images.length > 0) {
 
-            var url = prod.images[0].file.url;
+        if (prod['amazon'] && parseInt(prod['amazon']) === 1) {
 
-            img = <img style={{ width: '100%', height:'100%' }} src={url} alt="products-img"/>
+            var img_url = aws.retrieve_pict(prod);
+
+            img =
+                <div className="product-imitation" style={{ height: '260' }}>
+                    <img alt="products-img" className="scale img-responsive" data-scale="best-fill" data-align="center" src={img_url} />
+                </div>
+
+        } else {
+
+            if (prod.images && prod.images.length > 0) {
+
+                var url = prod.images[0].file.url;
+
+                img = <img style={{ width: '100%', height: '100%' }} src={url} alt="products-img"/>
+
+            }
 
         }
+
         
         return img;        
     }
+
+
+
+    componentDidUpdate() {
+
+        super.componentDidUpdate();
+
+        this.root.find('img.scale')['imageScale']();
+    }
+
 
 
     onAfterFlowAction() {

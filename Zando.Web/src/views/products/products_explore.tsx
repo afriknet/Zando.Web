@@ -107,7 +107,6 @@ export class ProductExplorerPage extends jx.Views.ReactView {
 
     onAfterFlowAction() {
         
-
         switch (this.state.flowstate) {
 
             case ProdExplActions.ACTION_START: {
@@ -145,6 +144,7 @@ export class ProductExplorerPage extends jx.Views.ReactView {
                 } 
     
             } break;
+
 
             case ProdExplActions.ACTION_PAGE_CHANGED: {
 
