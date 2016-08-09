@@ -250,6 +250,8 @@ export class ProductExplorerPage extends jx.Views.ReactView {
                     this.app.router.update_url('/explore/{0}'.format(pagenumber));
                 }
 
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+
                 this.go_to_page(pagenumber);
             }
         });

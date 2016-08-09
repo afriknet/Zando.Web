@@ -633,31 +633,37 @@ class AmazonGridList extends jx.Views.ReactView {
 
     render_item(item: any) {
 
-        //className="col-xs-12"
 
         var html =
             <div className="col-sm-4 col-xs-12">
+
                 <div className="productBox">
+
                     <div className="productImage clearfix img-thumbnail" style={{ height: 300 }}>
+
                         <div style={{ display: 'table', height: 300 }}>
+
                             <div style={{ display: 'table-cell', verticalAlign: 'middle'}}>
                                 <img alt="products-img" className="" src={item['img_url']} style={{ display: 'inline-block', verticalAlign: 'middle' }} /> 
                             </div>                            
+
                         </div>
                         
                         <div className="productMasking">
+
                             <ul role="group" className="list-inline btn-group">
                                 <li><a className="btn btn-default" href=".login-modal" data-toggle="modal"><i className="fa fa-heart" /></a></li>
                                 <li><a className="btn btn-default" href="cart-page.html"><i className="fa fa-shopping-cart" /></a></li>
                                 <li><a href=".quick-view" data-toggle="modal" className="btn btn-default"><i className="fa fa-eye" /></a></li>
                             </ul>
+
                         </div>
                     </div>
                     <div className="productCaption clearfix">
                         <a href="#">
-                            <h5 className="item-title">Nike Sportswear</h5>
+                            <h5 className="item-title"></h5>
                         </a>
-                        <h3>$199</h3>
+                        <h3></h3>
                     </div>
                 </div>
             </div>

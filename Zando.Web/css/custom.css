@@ -129,3 +129,23 @@ label.error{
 .right-addon input { padding-right: 30px; }
 
 .pointer { cursor: pointer; cursor: hand;}
+
+
+.ellip {
+  display: block;
+  height: 100%;
+}
+
+.ellip-line {
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  max-width: 100%;
+}
+
+.ellip,
+.ellip-line {
+  position: relative;
+  overflow: hidden;
+}

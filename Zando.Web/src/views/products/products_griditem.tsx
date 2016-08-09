@@ -39,7 +39,7 @@ export class ProductGridItem extends jx.Views.ReactView {
         var html =
             <div className="col-sm-4 col-xs-12" data-prodid={this.props.product['id']}>
 
-                <div className="productBox">
+                <div className="productBox img-thumbnail">
 
                     <div className="productImage clearfix im">
                         
@@ -62,7 +62,7 @@ export class ProductGridItem extends jx.Views.ReactView {
                     <div className="productCaption clearfix">
 
                         <a href="javascript:void(0)">
-                            <h5>{this.props.product['name']}</h5>
+                            <h5 className="product-title text-primary">{this.props.product['name']}</h5>
                         </a>
                         <h3 data-price={this.props.product['price']}></h3>
                     </div>
@@ -86,8 +86,10 @@ export class ProductGridItem extends jx.Views.ReactView {
             var img_url = aws.retrieve_pict(prod);
 
             img =
-                <div className="product-imitation" style={{ height: '260' }}>
-                    <img alt="products-img" className="scale img-responsive" data-scale="best-fill" data-align="center" src={img_url} />
+                <div className="">
+                    <div className="product-imitation" style={{ height: '260' }}>
+                        <img alt="products-img" className="scale img-responsive" data-scale="best-fill" data-align="center" src={img_url} />
+                    </div>
                 </div>
 
         } else {
@@ -113,6 +115,12 @@ export class ProductGridItem extends jx.Views.ReactView {
         super.componentDidUpdate();
 
         this.root.find('img.scale')['imageScale']();
+
+        this.root.find('.product-title')['ellipsis']({
+            lines: 2,            
+            responsive: true
+        });
+        
     }
 
 
