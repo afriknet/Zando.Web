@@ -320,6 +320,45 @@ module aws {
         return d.promise;
 
     }
+
+
+    export function retrieve_pict(item: any) {
+
+        var img_tags: string[] = ['LargeImage', 'MediumImage', 'SmallImage', 'SwatchImage', 'TinyImage'];
+
+        var target_obj = item;
+
+        if (item.ImageSets) {
+            target_obj = item.ImageSets[0].ImageSet[0];
+        }
+
+        var index: number = 0;
+
+        var loop: boolean = true;
+
+        var img_url: string = '';
+
+        while (loop) {
+
+            var img_tag = img_tags[index];
+
+            if (target_obj[img_tag]) {
+
+                img_url = target_obj[img_tag][0].URL[0];
+
+                loop = false;
+            }
+
+            index++;
+
+            if (loop) {
+                loop = index < img_tags.length;
+            }
+        }
+
+        return img_url;
+    }
+
 }
 
 
