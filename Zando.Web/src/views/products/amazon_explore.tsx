@@ -9,8 +9,11 @@ import jx = require('../../lib/jx');
 import rdx = require('../../lib/redux/reducers');
 import fl = require('../../lib/redux/workflow');
 import gn = require('../../lib/redux/generic_workflow');
-import { BigLabel, BigLabelProps, Modal, ModalProps} from '../../lib/controls';
+import { BigLabel, BigLabelProps, Modal, ModalProps, CheckBox} from '../../lib/controls';
+//import { BigLabel, BigLabelProps, CheckBox} from '../../lib/controls';
 
+import rb = require('react-bootstrap');
+var b: any = rb;
 
 
 interface AmazonExploreState extends jx.Views.ReactState {
@@ -70,6 +73,8 @@ export class AmazonExplore extends jx.Views.ReactView {
                 <section className="mainContent clearfix animated fadeInUp">
 
                     <div className="container">
+
+                        <AmazonSearchIndexes />
 
                         <div className="row">
 
@@ -645,5 +650,108 @@ class AmazonGridList extends jx.Views.ReactView {
 
         });
     }
+
+}
+
+
+
+class AmazonSearchIndexes extends jx.Views.ReactView {
+    
+    render() {
+
+        var html =
+
+            <div className="row">
+
+                <div className="col-lg-12" style={{ marginBottom:30 }}>
+                    {this.add_search_indexes()}
+                </div>
+
+            </div>
+
+
+        return html;
+    }
+
+
+    componentDidMount() {
+
+        super.componentDidMount();
+
+        //this.root.find(":checkbox")['labelauty']({ label: false });
+    }
+
+
+    add_search_indexes() {
+
+        var views = [];
+
+        var count = 0;
+
+        var search_indexes = this.get_search_indexes();
+
+        ////ReactDOM.render(<CheckBox is_checked={false} onchecked={(row) => { this.on_checked(row) } } />, $(cell)[0]);
+
+        /*
+        <table width="100%" className="search-index-row">
+                        <tr>
+                            <td style={ { width: '10%' } } className="td-checkbox" data-check={++count}>
+                                <input type="checkbox" onChange={() => { } } />
+                            </td>
+                            <td>
+                                <span className="pull-left" style={{ paddingLeft: 10 }} data-search-index={search_indexes[index]} >{index}</span>
+                            </td>
+                        </tr>
+                    </table>
+        */
+
+        _.each(Object.keys(search_indexes), index => {
+
+            var view =
+                <b.Col lg={3}>
+
+
+                    
+                </b.Col>
+
+            views.push(view);
+        });
+
+        return views;
+
+    }
+
+
+
+    get_search_indexes() {
+
+       var searchIndex = {
+
+            "Vêtements et accessoires": "Apparel",
+
+            'Bagages': 'Luggage',
+
+            'Beauté et Parfum': 'Beauty',
+
+            'Bijoux': 'Jewelry',
+
+            'Bébés': 'Baby',
+
+            'Chaussures et Sacs': 'Shoes',
+
+            'High-Tech': 'Electronics',
+
+            'Informatique': 'PCHardware',
+
+            'Montres': 'Watches',
+
+            'Musique ': 'Music'
+        }
+
+       return searchIndex;
+    }
+
+
+    
 
 }

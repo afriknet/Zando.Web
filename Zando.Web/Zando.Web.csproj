@@ -70,6 +70,7 @@
     <Content Include="css\colors\orange.css.map" />
     <Content Include="css\colors\pink.css.map" />
     <Content Include="css\colors\purple.css.map" />
+    <Content Include="css\jquery-labelauty.css" />
     <Content Include="css\searchbox.css" />
     <Content Include="css\custom.css" />
     <Content Include="css\dropzone.css" />
@@ -102,6 +103,7 @@
     <Content Include="js\image-scale.min.js" />
     <Content Include="js\imgLiquid.js" />
     <Content Include="js\jquery-imagefill.js" />
+    <Content Include="js\jquery-labelauty.js" />
     <Content Include="js\jquery.imagefit.js" />
     <Content Include="js\jquery.imagefit.min.js" />
     <Content Include="js\jquery.rippler.js" />
@@ -390,6 +392,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="css\images\" />
     <Folder Include="src\data\" />
     <Folder Include="src\lib\data\" />
     <Folder Include="typings\redux\" />
