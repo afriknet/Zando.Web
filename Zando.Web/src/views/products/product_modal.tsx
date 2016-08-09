@@ -51,11 +51,42 @@ export class ProdModal extends Modal {
         super.show(this.quick_view());
     }
 
+    resolve_image() {
+
+        var img = null, prod = this.product;
+        
+        if (prod['amazon'] && parseInt(prod['amazon']) === 1) {
+
+            img = aws.retrieve_pict(prod);
+
+            //img =
+            //    <div className="">
+            //        <div className="product-imitation" style={{ height: '260' }}>
+            //            <img alt="products-img" className="scale img-responsive" data-scale="best-fill" data-align="center" src={img_url} />
+            //        </div>
+            //    </div>
+
+        } else {
+
+            if (prod.images && prod.images.length > 0) {
+
+                img = prod.images[0].file.url;
+
+                //img = <img style={{ width: '100%', height: '100%' }} src={url} alt="products-img"/>
+
+            }
+
+        }
+
+
+        return img;
+    }
+
 
 
     quick_view() {
 
-        var url = this.product ? this.product.images[0].file.url : '';
+        var url = this.resolve_image(); //this.product ? this.product.images[0].file.url : '';
 
         var img = <img className="media-object" src={url} alt="Image"/>
 
@@ -65,10 +96,11 @@ export class ProdModal extends Modal {
                 <div className="media-left" style={{ maxWidth: 460, maxHeight: 453 }}>
                     {img}
                 </div>
-
+                
                 <div className="media-body">
                     <h2>{this.product.name}</h2>
-                    <h3>{"€" + this.product.price}</h3>
+                    <br />
+                    <h3 style={{ color:'#c5c5c5'}}>{"€" + this.product.price}</h3>
                     <p>{this.product.description}</p>
                     {/*
                     <span className="quick-drop hidden">
