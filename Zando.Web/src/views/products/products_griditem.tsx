@@ -137,7 +137,11 @@ export class ProductGridItem extends jx.Views.ReactView {
                 });
                 
                 this.jget('.btn-cart').click(() => {
-                    carts.flyToElement(this.jget('.btn-cart'), $('.products-cart'), () => {                        
+
+                    carts.flyToElement(this.jget('.btn-cart'), $('.products-cart'), () => {
+
+                        jx.carts.add_product_into_cart(this.props.product);
+
                     });
                 });
                 

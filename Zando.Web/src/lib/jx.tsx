@@ -33,6 +33,7 @@ declare var page;
 declare var Moltin;
 declare var Cookies;
 
+declare var chance;
 
 export module Types {
 
@@ -84,9 +85,18 @@ export module Types {
 
 
     export enum Usertype { admin, contact, guest }
-    
-}
 
+
+    export interface User {
+
+        email: string,
+        password: string,
+        name: string,
+        surname: string,
+        is_guest?: number
+
+    }
+}
 
 
 interface MetadataInfo {
@@ -632,6 +642,10 @@ export module Application {
             cookies.set('current-user', usr);            
         }
 
+        internal_store_account(acc: any) {
+
+            cookies.set('account', acc);
+        }
 
         store_account(__email: string): Q.Promise<Boolean> {
 
@@ -644,8 +658,8 @@ export module Application {
 
                 if (res.response.results.length > 0) {
 
-                    cookies.set('account', res.response.results[0]);
-
+                    this.internal_store_account(res.response.results[0]);
+                    
                     d.resolve(true);
                 } else {
                     d.reject({
@@ -694,14 +708,10 @@ export module Application {
         }
 
 
-        signup(params: { email: string, password: string, name: string, surname: string }): Q.Promise<any> {
+        signup(params: Types.User): Q.Promise<any> {
 
-            var usr = new Backendless.User();
-            usr.email = params.email;
-            usr.password = params.password;
-            usr['name'] = params.name;
-            usr['surname'] = params.surname;
-
+            var usr = _.extend(new Backendless.User(), params);
+            
             var d = Q.defer();
 
             Backendless.UserService.register(usr, new Backendless.Async((data) => {
@@ -711,7 +721,7 @@ export module Application {
             }));
 
             return d.promise;
-    }
+        }
 
 
         get_model(modelname: string): Q.Promise<Backendless.DataStore> {
@@ -767,6 +777,495 @@ export module Application {
         __app = new Application.App();
 
         __app.start();
+    }
+
+}
+
+
+export module carts {
+
+    function add_li(cart_id: any, prod: any, cart_item: any) {
+
+        function format_product_name(name: string) {            
+            return '<span>{0}</span>'.format(name);
+        }
+
+
+        var url_img = null;
+
+
+        if (prod['amazon'] && parseInt(prod['amazon']) === 1) {
+
+            url_img = aws.retrieve_pict(prod);
+
+        } else {
+
+            if (prod.images && prod.images.length > 0) {
+                url_img = prod.images[0].file.url;
+            }
+        }
+        
+
+        var price = cart_item.price; // numeral(cart_item.price).format('€0,0.00');        
+        var qty = cart_item.quantity;
+
+        var width = '20%';
+
+        if (prod['amazon'] && parseInt(prod['amazon']) === 1) {
+            width = '5%';
+        }
+
+
+        //style="{4}; max-height:50px; border-color:red"
+
+
+        var html =
+            `<li>
+                <a href="/account/product/0-1">
+
+                    <div class="media">
+
+                        <img class="media-left media-object" src="{0}" alt="cart-Image" style="{4}; max-height:80px; display:inline-block"/>
+                         
+                        <div class="media-body" style="display:inline-block">
+                            <h5 class="media-heading" style="display:inline-block">{1}<br><span>{2} X €{3}</span></h5>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            `.format(url_img, format_product_name(prod.name), qty, price, width);  
+
+        return html.trim();
+    }
+
+
+    function add_actions() {
+
+        //account/carts
+        //account/checkout
+
+        var html =
+            `<li>
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default btn-cart">Shopping Cart</button>
+                    <button type="button" class="btn btn-default btn-checkout">Checkout</button>
+                </div>
+             </li>
+            `;
+
+        return html.trim();
+    }
+
+
+    function fetch_account(__email: string, store_acc?: boolean) {
+
+        var acc = __app.get_account();
+
+        if (acc) {
+            return Q.resolve(acc);
+        }
+
+        return schema.call({
+            fn: 'get',
+            params: ['/accounts', { email: __email }]
+        }).then(res => {
+
+            if (store_acc) {
+                __app.internal_store_account(res.response.results[0]);
+            }
+            
+            return res.response.results[0];
+        });
+    }
+
+
+    function fetch_items_of_carts(__carts: any[]) {
+
+        var d = Q.defer();
+
+        var item_ids = [];
+        var items: any[] = [];
+
+        _.each(__carts, cart => {
+
+            _.each(cart.items, (item: any) => {
+
+                items.push(item);
+
+                item_ids.push(item.product_id);
+            });
+        });
+
+        if (item_ids.length === 0) {
+            item_ids.push(utils.guid());
+        }
+
+
+        schema.call({
+            fn: 'get',
+            params: ['/products', { 'id': { $in: item_ids } }]
+        }).then(res => {
+
+            var products = [];
+
+            if (res.response && res.response.results) {
+                products = res.response.results;
+            }
+
+            d.resolve({
+                prods: products,
+                items: items
+            });
+
+        }).fail(err => {
+
+            d.reject(false);
+        });
+
+        return d.promise;
+    }
+
+
+    function init_actions(ul: JQuery) {
+
+        ul.find('.btn-checkout').click((e) => {
+            page('/account/checkout');
+        });
+
+        ul.find('.btn-cart').click((e) => {
+            page('/account/cart');
+        });
+    }
+
+
+    export function update_cart_ui(email: string) {
+
+        var d = Q.defer();
+
+        fetch_account(email, true).then(acc => {
+
+            schema.call({
+                fn: 'get',
+                params: ['/carts', {
+                    where: {
+                        account_id: acc['id'],
+                        status: 'active'
+                    }
+                }]
+            }).then(res => {
+
+                var cart_id = utils.guid();
+
+                var cart = res.response.results[0];
+
+                if (res.response.results.length > 0) {
+                    cart_id = res.response.results[0]['id'];
+                }
+
+
+                fetch_items_of_carts(res.response.results).then((data: { prods: any[], items: any[] }) => {
+
+                    var ul = $('.products-cart ul');
+
+                    
+                    var must_empty = ul.find('.media').length > 0;
+
+                    if (must_empty) {
+                        ul.empty();
+                        ul.append($('<li>Item(s) in your cart</li>'));
+                    }
+
+                    _.each(data.prods, prod => {
+
+                        var cart_item = _.find(data.items, itm => {
+                            return itm.product_id === prod.id;
+                        });
+
+                        ul.append(add_li(cart_id, prod, cart_item));
+                    });
+
+                    if (cart) {
+                        $('.products-cart .cart-total').html('€{0}'.format(cart['grand_total']));
+                    }
+
+                    if (data.prods.length > 0) {
+
+                        ul.append(add_actions());
+
+                        init_actions(ul);
+                    }
+
+                    $('.products-cart').removeClass('hidden');
+
+                    d.resolve(data.items);
+
+                });
+
+            });
+
+        });
+
+        return d.promise;
+    }
+
+
+    export function display_cart() {
+
+        var account = cookies.get('account');
+
+        if (!account) {
+
+            //$('.products-cart').addClass('hidden');
+
+        } else {
+
+            update_cart_ui(account['email']).then((list: any) => {
+
+                if (list && list.length > 0) {
+
+                    $('.products-cart').removeClass('hidden');
+
+                }
+            });
+        }
+
+    }
+
+
+    export function flyToElement(flyer, flyingTo, callback) {
+        var $func = $(this);
+        var divider = 3;
+        var flyerClone = $(flyer).clone();
+        $(flyerClone).css({ position: 'absolute', top: $(flyer).offset().top + "px", left: $(flyer).offset().left + "px", opacity: 1, 'z-index': 1000 });
+        $('body').append($(flyerClone));
+
+        var gotoX = $(flyingTo).offset().left + ($(flyingTo).width() / 2) - ($(flyer).width() / divider) / 2;
+        var gotoY = $(flyingTo).offset().top + ($(flyingTo).height() / 2) - ($(flyer).height() / divider) / 2;
+
+        $(flyerClone).animate({
+            opacity: 0.4,
+            left: gotoX,
+            top: gotoY,
+            width: $(flyer).width() / divider,
+            height: $(flyer).height() / divider
+        }, 700,
+            function () {
+                $(flyingTo).fadeOut('fast', function () {
+                    $(flyingTo).fadeIn('fast', function () {
+                        $(flyerClone).fadeOut('fast', function () {
+                            $(flyerClone).remove();
+                            if (callback) {
+                                callback();
+                            }
+                        });
+                    });
+                });
+            });
+    }
+
+
+    function create_account(params: {email: any, name: any}) {
+
+        return schema.call({
+            fn: 'post',
+            params: ['/accounts', {
+                email: params.email,
+                name: params.name
+            }]
+        });
+
+    }
+
+
+    function create_guest_user(): Q.Promise<{ user: any, acc: any }> {
+
+        var d = Q.defer<{user: any,acc: any}>();
+
+
+        var key = chance.word({ length: 5 });
+
+
+        var _email = 'guest_{0}_@guest.com'.format(key);
+
+
+        __app.signup({
+            email: _email,
+            password: 'guest_{0}'.format(key),
+            name: 'guest_{0}'.format(key),
+            surname: 'guest_{0}'.format(key),
+            is_guest: 1
+        } as any).then(usr => {
+
+            __app.store_user(usr);
+
+            create_account({ email: _email, name: 'guest_{0}'.format(key) }).then(acc => {
+
+                var rst = {
+                    user: usr,
+                    acc: acc.response
+                }
+
+                cookies.set('account', rst.acc);
+
+                d.resolve(rst);
+            });
+            
+        }).fail(err => {
+
+            d.reject(err);
+        });
+
+        return d.promise;
+
+    }
+
+
+    function create_cart(product:any) {
+
+        var d = Q.defer();
+
+        schema.call({
+            fn: 'post',
+            params: ['/carts', {
+
+                account: {
+                    email: __app.get_user()['email']
+                },
+
+                items: [
+                    { product_id: product['id'] }
+                ]
+            }]
+        }).then(res => {
+
+            d.resolve(res.response);
+
+        }).fail(err => {
+
+            d.reject(err);
+        });
+
+        return d.promise;
+    }
+
+
+    function fetch_or_create_account(): Q.Promise<{ user: any, acc: any }> {
+
+        var d = Q.defer<{ user: any, acc: any }>();
+
+        var __usr = __app.get_user();
+
+        if (!__usr) {
+
+            create_guest_user().then(obj => {
+
+                d.resolve(obj);
+
+            });
+
+            return d.promise;
+
+        } else {
+
+            return fetch_account(__usr['email'], true).then(acc => {
+
+                return {
+                    user: __usr,
+                    acc: acc
+                }
+
+            });
+
+        }
+        
+    }
+
+
+    function fetch_cart(account: any): Q.Promise<any> {
+
+        var d = Q.defer();
+
+        schema.call({
+            fn: 'get',
+            params: ['/carts', {
+                where: {
+                    account_id: account['id'],
+                    status: 'active'
+                }
+            }]
+        }).then(res => {
+
+            if (res.response.results.length > 0) {
+                d.resolve(res.response.results[0]);
+            } else {
+                d.resolve(null);
+            }
+        });
+
+        return d.promise;
+
+    }
+
+
+    export function add_product_into_cart(product: any) {
+
+        var d = Q.defer();
+        
+        fetch_or_create_account().then(obj => {
+
+            var __usr = obj.user;
+            var __acc = obj.acc;
+
+            fetch_cart(__acc).then(cart => {
+
+                if (!cart) {
+
+                    create_cart(product).then(cart => {
+
+                        update_cart_ui(__app.get_user()['email']);
+
+                        d.resolve(true);
+                    })
+
+                } else {
+
+                    add_product_to_cart_ui(cart['id']).then(() => {
+
+                        d.resolve(true);
+                    })
+                }
+            })
+
+        });
+
+
+        return d.promise;
+        
+    }
+
+
+    function add_product_to_cart_ui(cart_id: any) {
+
+        var d = Q.defer();
+
+        schema.call({
+            fn: 'post',
+            params: ['/carts/{0}/items'.format(cart_id), {
+                product_id: this.props.product['id']
+            }]
+        }).then(prod => {
+
+            update_cart_ui(__app.get_user()['email']);
+            
+            d.resolve(prod);
+
+        }).fail(err => {
+
+            d.reject(err);
+        });
+
+        return d.promise;
+
     }
 
 }

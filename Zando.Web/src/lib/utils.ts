@@ -442,15 +442,15 @@ module carts {
     }
 
 
-    function fetch_account(__email: string) {
+    //function fetch_account(__email: string, store_account?: boolean) {
         
-        return schema.call({
-            fn: 'get',
-            params: ['/accounts', { email: __email }]
-        }).then(res => {
-            return res.response.results[0];            
-        });
-    }
+    //    return schema.call({
+    //        fn: 'get',
+    //        params: ['/accounts', { email: __email }]
+    //    }).then(res => {
+    //        return res.response.results[0];            
+    //    });
+    //}
 
 
     function fetch_items_of_carts(__carts: any[]) {
@@ -516,67 +516,67 @@ module carts {
 
         var d = Q.defer();
 
-        fetch_account(email).then(acc => {
+        //fetch_account(email).then(acc => {
             
-            schema.call({
-                fn: 'get',
-                params: ['/carts', {
-                    where: {
-                        account_id: acc['id'],
-                        status: 'active'
-                    }
-                }]
-            }).then(res => {
+        //    schema.call({
+        //        fn: 'get',
+        //        params: ['/carts', {
+        //            where: {
+        //                account_id: acc['id'],
+        //                status: 'active'
+        //            }
+        //        }]
+        //    }).then(res => {
 
-                var cart_id = utils.guid();
+        //        var cart_id = utils.guid();
 
-                var cart = res.response.results[0];
+        //        var cart = res.response.results[0];
 
-                if (res.response.results.length > 0) {
-                    cart_id = res.response.results[0]['id'];
-                }
+        //        if (res.response.results.length > 0) {
+        //            cart_id = res.response.results[0]['id'];
+        //        }
 
 
-                fetch_items_of_carts(res.response.results).then((data: { prods:any[], items:any[] }) => {
+        //        fetch_items_of_carts(res.response.results).then((data: { prods:any[], items:any[] }) => {
 
-                    var ul = $('.products-cart ul');
+        //            var ul = $('.products-cart ul');
 
-                    var must_empty = ul.find('.media').length > 0;
+        //            var must_empty = ul.find('.media').length > 0;
 
-                    if (must_empty) {                        
-                        ul.empty();
-                        ul.append($('<li>Item(s) in your cart</li>'));
-                    }
+        //            if (must_empty) {                        
+        //                ul.empty();
+        //                ul.append($('<li>Item(s) in your cart</li>'));
+        //            }
                     
-                    _.each(data.prods, prod => {
+        //            _.each(data.prods, prod => {
 
-                        var cart_item = _.find(data.items, itm => {
-                            return itm.product_id === prod.id;
-                        });
+        //                var cart_item = _.find(data.items, itm => {
+        //                    return itm.product_id === prod.id;
+        //                });
 
-                        ul.append(add_li(cart_id, prod, cart_item)); 
-                    });
+        //                ul.append(add_li(cart_id, prod, cart_item)); 
+        //            });
 
-                    if (cart) {
-                        $('.products-cart .cart-total').html('€{0}'.format(cart['grand_total']));
-                    }
+        //            if (cart) {
+        //                $('.products-cart .cart-total').html('€{0}'.format(cart['grand_total']));
+        //            }
                     
-                    if (data.prods.length > 0) {
+        //            if (data.prods.length > 0) {
 
-                        ul.append(add_actions());
+        //                ul.append(add_actions());
 
-                        init_actions(ul);
-                    }
+        //                init_actions(ul);
+        //            }
 
-                    $('.products-cart').removeClass('hidden');
+        //            $('.products-cart').removeClass('hidden');
                     
-                    d.resolve(data.items);
+        //            d.resolve(data.items);
 
-                });
+        //        });
 
-            });
+        //    });
             
-        });
+        //});
 
         return d.promise;
     }
@@ -634,6 +634,12 @@ module carts {
                     });
                 });
             });
+    }
+
+
+    export function insert_product_into_cart() {
+
+        
     }
 }
 

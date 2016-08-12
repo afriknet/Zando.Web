@@ -411,8 +411,8 @@ class FeaturedProductItem extends jx.Views.ReactView {
             });
 
         });
-
     }
+
 
     add_product_to_cart(cart_id: any) {
 
