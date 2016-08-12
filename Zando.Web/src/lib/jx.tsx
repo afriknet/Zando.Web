@@ -514,6 +514,7 @@ export module Application {
 
                     });
                 });
+
             });
             
             page.start();
@@ -964,6 +965,7 @@ export module carts {
 
 
                 fetch_items_of_carts(res.response.results).then((data: { prods: any[], items: any[] }) => {
+
 
                     var ul = $('.products-cart ul');
 
