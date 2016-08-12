@@ -1229,7 +1229,7 @@ export module carts {
 
                 } else {
 
-                    add_product_to_cart_ui(cart['id']).then(() => {
+                    add_product_to_cart_ui(cart['id'], product).then(() => {
 
                         d.resolve(true);
                     })
@@ -1244,14 +1244,14 @@ export module carts {
     }
 
 
-    function add_product_to_cart_ui(cart_id: any) {
+    function add_product_to_cart_ui(cart_id: any, product: any) {
 
         var d = Q.defer();
 
         schema.call({
             fn: 'post',
             params: ['/carts/{0}/items'.format(cart_id), {
-                product_id: this.props.product['id']
+                product_id: product['id']
             }]
         }).then(prod => {
 
