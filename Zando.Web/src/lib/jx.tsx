@@ -1082,7 +1082,7 @@ export module carts {
         var d = Q.defer<{user: any,acc: any}>();
 
 
-        var key = chance.word({ length: 5 });
+        var key = '{0}_{1}'.format(chance.word({ length: 5 }), chance.word({ length: 5 }));
 
 
         var _email = 'guest_{0}_@guest.com'.format(key);
