@@ -2,18 +2,20 @@
 // A '.tsx' file enables JSX support in the TypeScript compiler, 
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
+/// <reference path="modal_signup.tsx" />
 
 
 
 import React = require('react');
 import ReactDOM = require('react-dom');
 import jx = require('../../lib/jx');
-import { BigLabel, BigLabelProps} from '../../lib/controls';
+import { BigLabel, BigLabelProps, Modal, ModalProps} from '../../lib/controls';
 
 import {AccountCheckoutBilling} from './account_checkout_billing';
 import { AccountCheckoutShipments } from './account_checkout_shipments';
 import { AccountCheckoutPayments } from './account_checkout_payment';
 import * as rv from './account_checkout_review';
+import { LightSignUpView } from './modal_signup';
 
 
 declare var chance;
@@ -103,6 +105,9 @@ export class AccountCheckout extends jx.Views.ReactView {
 
                 </div>;
 
+                <div id="signup">
+                    <Modal ref='modal' owner={this} />
+                </div>
             </div>
 
             
@@ -117,6 +122,7 @@ export class AccountCheckout extends jx.Views.ReactView {
             return 'hideContent'
         }
     }
+
 
     go_next() {
 
@@ -195,10 +201,32 @@ export class AccountCheckout extends jx.Views.ReactView {
 
     componentDidMount() {
 
-        this.set_currentpage();
+        this.create_account();
+
+        return;
+
+        //if (!this.app.user_is_verified()) {
+            
+        //    //this.create_account();
+
+        //} else {
+
+        //    this.set_currentpage();
+        //}        
     }
 
 
+    create_account(): Q.Promise<any> {
+
+        var d = Q.defer();
+
+        (this.refs['modal'] as Modal).show(<LightSignUpView owner={this} />);
+
+        return d.promise;
+
+    }
+
+    
     componentDidUpdate() {
         
         this.set_currentpage();
@@ -386,3 +414,5 @@ class ProgressBarItem extends jx.Views.ReactView {
 
     }
 }
+
+

@@ -471,7 +471,7 @@ export interface ModalProps extends jx.Views.ReactProps {
     bsSize?: string,
     action?: string,
     hide_footer?: boolean,
-    classlist?: string,
+    classlist?: string,        
     onFinish?: () => Q.Promise<Boolean>
 }
 
@@ -501,6 +501,7 @@ export class Modal extends jx.Views.ReactView {
     
 
     show(content?: any) {
+
         this.setState({ show: true, content: content });
     }
 

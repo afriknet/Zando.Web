@@ -93,7 +93,7 @@ export module Types {
         password: string,
         name: string,
         surname: string,
-        is_guest?: number
+        is_verified?: number
 
     }
 }
@@ -638,6 +638,15 @@ export module Application {
         }
 
 
+        user_is_verified() {
+
+            var usr = this.get_user();
+
+            return usr && (usr['is_verified'] === 1 );
+
+        }
+
+
         store_user(usr)
         {
             cookies.set('current-user', usr);            
@@ -1095,7 +1104,7 @@ export module carts {
             password: 'guest_{0}'.format(key),
             name: 'guest_{0}'.format(key),
             surname: 'guest_{0}'.format(key),
-            is_guest: 1
+            is_verified: 0
         } as any).then(usr => {
 
             __app.store_user(usr);
