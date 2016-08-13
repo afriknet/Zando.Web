@@ -18,10 +18,12 @@ export class HomePage extends jx.Views.HomePage {
 
     featured: any[]
 
+
     constructor(props?: any) {
         super(props);
         this.featured = [];
     }
+
 
     render() {
 
@@ -65,7 +67,7 @@ export class HomePage extends jx.Views.HomePage {
 
     activate_user() {
 
-        carts.display_cart();
+        jx.carts.display_cart();
 
         if (this.app.get_account()) {
             $('.my-account').removeClass('hidden');
