@@ -2,7 +2,7 @@
 // A '.tsx' file enables JSX support in the TypeScript compiler, 
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
-/// <reference path="modal_signup.tsx" />
+/// <reference path="quick_loginsignup.tsx" />
 
 
 
@@ -15,7 +15,7 @@ import {AccountCheckoutBilling} from './account_checkout_billing';
 import { AccountCheckoutShipments } from './account_checkout_shipments';
 import { AccountCheckoutPayments } from './account_checkout_payment';
 import * as rv from './account_checkout_review';
-import { LightSignUpView } from './modal_signup';
+import { QuickLoginSignUpView, ViewMode } from './quick_loginsignup';
 
 
 declare var chance;
@@ -106,7 +106,10 @@ export class AccountCheckout extends jx.Views.ReactView {
                 </div>;
 
                 <div id="signup">
-                    <Modal ref='modal' owner={this} />
+                    <Modal ref='modal' owner={this}
+                        title="Creez votre compte"
+                        onClosing={this.on_closing_quicklogin.bind(this)}
+                        hide_footer={true} />
                 </div>
             </div>
 
@@ -220,10 +223,14 @@ export class AccountCheckout extends jx.Views.ReactView {
 
         var d = Q.defer();
 
-        (this.refs['modal'] as Modal).show(<LightSignUpView owner={this} />);
+        (this.refs['modal'] as Modal).show(<QuickLoginSignUpView owner={this} mode={ViewMode.signup} />);
 
         return d.promise;
+    }
 
+
+    on_closing_quicklogin(): Q.Promise<Boolean> {
+        return this['quick_signuplogin_view'].onClosing() as any;
     }
 
     

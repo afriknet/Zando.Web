@@ -85,7 +85,7 @@ export class AccountProfilePage extends jx.Views.ReactView {
 
                     </div>
 
-                    <Modal ref='modal' owner={this} onFinish={() => { return this.update_password(); } } />
+                    <Modal ref='modal' owner={this} onClosing={() => { return this.update_password(); } } />
 
                 </div>
             </div>

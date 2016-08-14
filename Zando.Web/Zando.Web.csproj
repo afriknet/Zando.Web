@@ -426,7 +426,7 @@
     <TypeScriptCompile Include="src\views\account\account_home.tsx" />
     <TypeScriptCompile Include="src\views\account\account_orders.tsx" />
     <TypeScriptCompile Include="src\views\account\account_profile.tsx" />
-    <TypeScriptCompile Include="src\views\account\modal_signup.tsx" />
+    <TypeScriptCompile Include="src\views\account\quick_loginsignup.tsx" />
     <TypeScriptCompile Include="src\views\home\home.tsx" />
     <TypeScriptCompile Include="src\views\home\login.tsx" />
     <TypeScriptCompile Include="src\views\products\amazon_explore.tsx" />

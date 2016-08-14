@@ -467,12 +467,14 @@ interface ModalState extends jx.Views.ReactState {
     content: any
 }
 export interface ModalProps extends jx.Views.ReactProps {
+    title?: string,
     showModal?: boolean,
     bsSize?: string,
     action?: string,
     hide_footer?: boolean,
     classlist?: string,        
-    onFinish?: () => Q.Promise<Boolean>
+    onClosing?: () => Q.Promise<Boolean>,
+    onClosed?: () => Q.Promise<any>
 }
 
 export class Modal extends jx.Views.ReactView {
@@ -509,6 +511,11 @@ export class Modal extends jx.Views.ReactView {
     close() {
 
         this.setState({ show: false });
+
+        if (this.props.onClosed) {
+
+            this.props.onClosed();
+        }
     }
 
 
@@ -519,7 +526,21 @@ export class Modal extends jx.Views.ReactView {
         var props: any = {
             show: this.state.show,
             onHide: () => {
-                that.close()
+
+                if (that.props.onClosing) {
+
+                    that.props.onClosing().then(ok => {
+
+                        if (ok) {
+                            that.close()
+                        }
+                    });
+
+                } else {
+
+                    that.close()
+
+                }
             }
         }
 
@@ -537,6 +558,7 @@ export class Modal extends jx.Views.ReactView {
 
                 <b.Modal.Header closeButton>
                     <b.Modal.Title>
+                        {this.props.title}
                     </b.Modal.Title>
                 </b.Modal.Header >
 
@@ -571,13 +593,7 @@ export class Modal extends jx.Views.ReactView {
 
 
     save() {
-
-        if (this.props.onFinish) {
-            this.props.onFinish().then(() => {
-                this.close();
-            });
-        }
-        
+        this.close();        
     }
 
 
