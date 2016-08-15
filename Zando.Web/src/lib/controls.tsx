@@ -474,7 +474,7 @@ export interface ModalProps extends jx.Views.ReactProps {
     hide_footer?: boolean,
     classlist?: string,        
     onClosing?: () => Q.Promise<Boolean>,
-    onClosed?: () => Q.Promise<any>
+    afterClosed?: () => Q.Promise<any>
 }
 
 export class Modal extends jx.Views.ReactView {
@@ -512,9 +512,9 @@ export class Modal extends jx.Views.ReactView {
 
         this.setState({ show: false });
 
-        if (this.props.onClosed) {
+        if (this.props.afterClosed) {
 
-            this.props.onClosed();
+            this.props.afterClosed();
         }
     }
 

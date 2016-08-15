@@ -395,262 +395,253 @@ module lang {
 
 module carts {
 
-    function add_li( cart_id: any, prod: any, cart_item: any) {
+    //function add_li( cart_id: any, prod: any, cart_item: any) {
 
-        var url_img = null;
+    //    var url_img = null;
 
-        if (prod.images && prod.images.length > 0) {
-            url_img = prod.images[0].file.url;
-        }
+    //    if (prod.images && prod.images.length > 0) {
+    //        url_img = prod.images[0].file.url;
+    //    }
 
-        var price = cart_item.price; // numeral(cart_item.price).format('€0,0.00');        
-        var qty = cart_item.quantity;
+    //    var price = cart_item.price; // numeral(cart_item.price).format('€0,0.00');        
+    //    var qty = cart_item.quantity;
 
-        var html =
-            `
-             <li>
-                <a href="/account/product/0-1">
-                    <div class="media">
-                        <img class="media-left media-object" src="{0}" alt="cart-Image" style="width:20%" />
-                        <div class="media-body">
-                            <h5 class="media-heading">{1}<br><span>{2} X €{3}</span></h5>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            `.format(url_img, prod.name, qty, price); //; , cart_item['id'], cart_id
+    //    var html =
+    //        `
+    //         <li>
+    //            <a href="/account/product/0-1">
+    //                <div class="media">
+    //                    <img class="media-left media-object" src="{0}" alt="cart-Image" style="width:20%" />
+    //                    <div class="media-body">
+    //                        <h5 class="media-heading">{1}<br><span>{2} X €{3}</span></h5>
+    //                    </div>
+    //                </div>
+    //            </a>
+    //        </li>
+    //        `.format(url_img, prod.name, qty, price); //; , cart_item['id'], cart_id
         
-        return html.trim();
-    }
+    //    return html.trim();
+    //}
 
 
-    function add_actions() {
+    //function add_actions() {
 
-        //account/carts
-        //account/checkout
+    //    //account/carts
+    //    //account/checkout
 
-        var html =
-            `<li>
-                <div class="btn-group" role="group" aria-label="...">
-                    <button type="button" class="btn btn-default btn-cart">Shopping Cart</button>
-                    <button type="button" class="btn btn-default btn-checkout">Checkout</button>
-                </div>
-             </li>
-            `;
+    //    var html =
+    //        `<li>
+    //            <div class="btn-group" role="group" aria-label="...">
+    //                <button type="button" class="btn btn-default btn-cart">Shopping Cart</button>
+    //                <button type="button" class="btn btn-default btn-checkout">Checkout</button>
+    //            </div>
+    //         </li>
+    //        `;
 
-        return html.trim();
-    }
+    //    return html.trim();
+    //}
 
 
-    //function fetch_account(__email: string, store_account?: boolean) {
-        
-    //    return schema.call({
+    //function fetch_items_of_carts(__carts: any[]) {
+
+    //    var d = Q.defer();
+
+    //    var item_ids = [];
+    //    var items:any[] = [];
+
+    //    _.each(__carts, cart => {
+
+    //        _.each(cart.items, (item: any) => {
+
+    //            items.push(item);
+
+    //            item_ids.push(item.product_id);
+    //        });
+    //    });
+
+    //    if (item_ids.length === 0) {
+    //        item_ids.push(utils.guid());
+    //    }
+
+
+    //    schema.call({
     //        fn: 'get',
-    //        params: ['/accounts', { email: __email }]
+    //        params: ['/products', { 'id': { $in: item_ids } }]
     //    }).then(res => {
-    //        return res.response.results[0];            
+
+    //        var products = [];
+
+    //        if (res.response && res.response.results) {
+    //            products = res.response.results;
+    //        }
+
+    //        d.resolve({
+    //            prods: products,
+    //            items: items
+    //        });
+
+    //    }).fail(err => {
+
+    //        d.reject(false);
+    //    });
+
+    //    return d.promise;
+    //}
+
+
+    //function init_actions(ul: JQuery) {
+
+    //    ul.find('.btn-checkout').click((e) => {
+    //        page('/account/checkout');
+    //    });
+
+    //    ul.find('.btn-cart').click((e) => {
+    //        page('/account/cart');
     //    });
     //}
 
 
-    function fetch_items_of_carts(__carts: any[]) {
+    //export function update_cart(email: string) {
 
-        var d = Q.defer();
+    //    var d = Q.defer();
 
-        var item_ids = [];
-        var items:any[] = [];
-
-        _.each(__carts, cart => {
-
-            _.each(cart.items, (item: any) => {
-
-                items.push(item);
-
-                item_ids.push(item.product_id);
-            });
-        });
-
-        if (item_ids.length === 0) {
-            item_ids.push(utils.guid());
-        }
-
-
-        schema.call({
-            fn: 'get',
-            params: ['/products', { 'id': { $in: item_ids } }]
-        }).then(res => {
-
-            var products = [];
-
-            if (res.response && res.response.results) {
-                products = res.response.results;
-            }
-
-            d.resolve({
-                prods: products,
-                items: items
-            });
-
-        }).fail(err => {
-
-            d.reject(false);
-        });
-
-        return d.promise;
-    }
-
-
-    function init_actions(ul: JQuery) {
-
-        ul.find('.btn-checkout').click((e) => {
-            page('/account/checkout');
-        });
-
-        ul.find('.btn-cart').click((e) => {
-            page('/account/cart');
-        });
-    }
-
-
-    export function update_cart(email: string) {
-
-        var d = Q.defer();
-
-        //fetch_account(email).then(acc => {
+    //    //fetch_account(email).then(acc => {
             
-        //    schema.call({
-        //        fn: 'get',
-        //        params: ['/carts', {
-        //            where: {
-        //                account_id: acc['id'],
-        //                status: 'active'
-        //            }
-        //        }]
-        //    }).then(res => {
+    //    //    schema.call({
+    //    //        fn: 'get',
+    //    //        params: ['/carts', {
+    //    //            where: {
+    //    //                account_id: acc['id'],
+    //    //                status: 'active'
+    //    //            }
+    //    //        }]
+    //    //    }).then(res => {
 
-        //        var cart_id = utils.guid();
+    //    //        var cart_id = utils.guid();
 
-        //        var cart = res.response.results[0];
+    //    //        var cart = res.response.results[0];
 
-        //        if (res.response.results.length > 0) {
-        //            cart_id = res.response.results[0]['id'];
-        //        }
+    //    //        if (res.response.results.length > 0) {
+    //    //            cart_id = res.response.results[0]['id'];
+    //    //        }
 
 
-        //        fetch_items_of_carts(res.response.results).then((data: { prods:any[], items:any[] }) => {
+    //    //        fetch_items_of_carts(res.response.results).then((data: { prods:any[], items:any[] }) => {
 
-        //            var ul = $('.products-cart ul');
+    //    //            var ul = $('.products-cart ul');
 
-        //            var must_empty = ul.find('.media').length > 0;
+    //    //            var must_empty = ul.find('.media').length > 0;
 
-        //            if (must_empty) {                        
-        //                ul.empty();
-        //                ul.append($('<li>Item(s) in your cart</li>'));
-        //            }
+    //    //            if (must_empty) {                        
+    //    //                ul.empty();
+    //    //                ul.append($('<li>Item(s) in your cart</li>'));
+    //    //            }
                     
-        //            _.each(data.prods, prod => {
+    //    //            _.each(data.prods, prod => {
 
-        //                var cart_item = _.find(data.items, itm => {
-        //                    return itm.product_id === prod.id;
-        //                });
+    //    //                var cart_item = _.find(data.items, itm => {
+    //    //                    return itm.product_id === prod.id;
+    //    //                });
 
-        //                ul.append(add_li(cart_id, prod, cart_item)); 
-        //            });
+    //    //                ul.append(add_li(cart_id, prod, cart_item)); 
+    //    //            });
 
-        //            if (cart) {
-        //                $('.products-cart .cart-total').html('€{0}'.format(cart['grand_total']));
-        //            }
+    //    //            if (cart) {
+    //    //                $('.products-cart .cart-total').html('€{0}'.format(cart['grand_total']));
+    //    //            }
                     
-        //            if (data.prods.length > 0) {
+    //    //            if (data.prods.length > 0) {
 
-        //                ul.append(add_actions());
+    //    //                ul.append(add_actions());
 
-        //                init_actions(ul);
-        //            }
+    //    //                init_actions(ul);
+    //    //            }
 
-        //            $('.products-cart').removeClass('hidden');
+    //    //            $('.products-cart').removeClass('hidden');
                     
-        //            d.resolve(data.items);
+    //    //            d.resolve(data.items);
 
-        //        });
+    //    //        });
 
-        //    });
+    //    //    });
             
-        //});
+    //    //});
 
-        return d.promise;
-    }
+    //    return d.promise;
+    //}
 
 
-    export function display_cart() {
+    //export function display_cart() {
 
-        var account = cookies.get('account');
+    //    var account = cookies.get('account');
 
-        if (!account) {
+    //    if (!account) {
 
-            //$('.products-cart').addClass('hidden');
+    //        //$('.products-cart').addClass('hidden');
 
-        } else {
+    //    } else {
             
-            update_cart(account['email']).then((list:any) => {
+    //        update_cart(account['email']).then((list:any) => {
 
-                if (list && list.length > 0) {
+    //            if (list && list.length > 0) {
 
-                    $('.products-cart').removeClass('hidden');
+    //                $('.products-cart').removeClass('hidden');
 
-                }
-            });
-        }
+    //            }
+    //        });
+    //    }
 
-    }
-
-
-    export function flyToElement(flyer, flyingTo, callback) {
-        var $func = $(this);
-        var divider = 3;
-        var flyerClone = $(flyer).clone();
-        $(flyerClone).css({ position: 'absolute', top: $(flyer).offset().top + "px", left: $(flyer).offset().left + "px", opacity: 1, 'z-index': 1000 });
-        $('body').append($(flyerClone));
-
-        var gotoX = $(flyingTo).offset().left + ($(flyingTo).width() / 2) - ($(flyer).width() / divider) / 2;
-        var gotoY = $(flyingTo).offset().top + ($(flyingTo).height() / 2) - ($(flyer).height() / divider) / 2;
-
-        $(flyerClone).animate({
-            opacity: 0.4,
-            left: gotoX,
-            top: gotoY,
-            width: $(flyer).width() / divider,
-            height: $(flyer).height() / divider
-        }, 700,
-            function () {
-                $(flyingTo).fadeOut('fast', function () {
-                    $(flyingTo).fadeIn('fast', function () {
-                        $(flyerClone).fadeOut('fast', function () {
-                            $(flyerClone).remove();
-                            if (callback) {
-                                callback();
-                            }
-                        });
-                    });
-                });
-            });
-    }
+    //}
 
 
-    export function insert_product_into_cart() {
+    //export function flyToElement(flyer, flyingTo, callback) {
+    //    var $func = $(this);
+    //    var divider = 3;
+    //    var flyerClone = $(flyer).clone();
+    //    $(flyerClone).css({ position: 'absolute', top: $(flyer).offset().top + "px", left: $(flyer).offset().left + "px", opacity: 1, 'z-index': 1000 });
+    //    $('body').append($(flyerClone));
+
+    //    var gotoX = $(flyingTo).offset().left + ($(flyingTo).width() / 2) - ($(flyer).width() / divider) / 2;
+    //    var gotoY = $(flyingTo).offset().top + ($(flyingTo).height() / 2) - ($(flyer).height() / divider) / 2;
+
+    //    $(flyerClone).animate({
+    //        opacity: 0.4,
+    //        left: gotoX,
+    //        top: gotoY,
+    //        width: $(flyer).width() / divider,
+    //        height: $(flyer).height() / divider
+    //    }, 700,
+    //        function () {
+    //            $(flyingTo).fadeOut('fast', function () {
+    //                $(flyingTo).fadeIn('fast', function () {
+    //                    $(flyerClone).fadeOut('fast', function () {
+    //                        $(flyerClone).remove();
+    //                        if (callback) {
+    //                            callback();
+    //                        }
+    //                    });
+    //                });
+    //            });
+    //        });
+    //}
+
+
+    //export function insert_product_into_cart() {
 
         
-    }
+    //}
 }
 
 
 
 module cookies {
 
+
     export function set(name: string, obj: any) {
         Cookies.set(name, obj, { expires: 30 });
     }
-    
+
+
     export function get(name: string) {
 
         function isJson(str) {

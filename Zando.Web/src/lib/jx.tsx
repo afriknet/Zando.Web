@@ -52,9 +52,16 @@ export module Types {
     }
 
 
+    export interface AppInfo {
+        last_url?: string,
+        fallback_url?: string
+    }
+
+
     export interface RouteInfo {
         url: string,
-        descr?: string
+        descr?: string,
+        store?: boolean
     }
 
 
@@ -460,13 +467,11 @@ export module Application {
         params: any;
         routes: any;
 
-
-
+        
         init_routes(routes: any) {
 
             this.routes = routes;
-
-
+            
             _.each(Object.keys(routes), (key: string) => {
 
                 var route = routes[key];
@@ -474,6 +479,10 @@ export module Application {
                 page(key, ctx => {
 
                     this.params = ctx.params;
+
+                    this.__app.store_appInfo({
+                        last_url: ctx.path
+                    })
 
                     var url = _.find(Object.keys(this.routes), r => {
                         return r === key;
@@ -525,6 +534,11 @@ export module Application {
 
 
         update_url(url: string): any {
+
+            this.__app.store_appInfo({
+                last_url: url
+            })
+
             return page.show(url, null, false);
         }
 
@@ -652,6 +666,25 @@ export module Application {
         store_user(usr)
         {
             cookies.set('current-user', usr);            
+        }
+
+
+        store_appInfo(app_info: Types.AppInfo) {
+
+            var old_info = this.get_appInfo();
+
+            if (!old_info) {
+                old_info = {};
+            }
+
+            var info = _.extend(old_info, app_info);
+
+            local.set('app_info', info);
+        }
+
+
+        get_appInfo(): Types.AppInfo {
+            return local.get('app_info');
         }
 
 
@@ -942,11 +975,22 @@ export module carts {
 
     function init_actions(ul: JQuery) {
 
+        ul.find('.btn-checkout').off('click');
+
         ul.find('.btn-checkout').click((e) => {
+
+            var appinfo = __app.get_appInfo();
             
+            __app.store_appInfo({
+                fallback_url: appinfo.last_url
+            });
+
             page('/account/checkout');
 
         });
+
+
+        ul.find('.btn-cart').off('click');
 
         ul.find('.btn-cart').click((e) => {
             page('/account/cart');
@@ -1292,13 +1336,44 @@ export module carts {
 
 
 
-export module modals {
+export module local {
 
-    export function show() {
+    var local:any = $['localStorage'];
 
 
-
+    export function set(name: string, obj: any) {
+        local.set(name, obj);
     }
 
 
+    export function get(name: string) {
+
+        function isJson(str) {
+            try {
+                JSON.parse(str);
+            } catch (e) {
+                return false;
+            }
+            return true;
+        }
+
+        var obj: any = local.get(name);
+
+        if (obj) {
+
+            if (isJson(obj)) {
+
+                obj = JSON.parse(obj);
+            }
+        }
+
+        return obj;
+    }
+
+
+    export function remove(name: string) {
+        return local.remove(name);
+    }
 }
+
+

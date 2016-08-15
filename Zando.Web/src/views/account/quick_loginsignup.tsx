@@ -25,11 +25,13 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
         super(props);
         this.props.owner['quick_signuplogin_view'] = this;
         this.state.mode = props.mode ? props.mode : ViewMode.signup;
+        this.cancel_authentication = true;
     }
 
 
     props: QuickLoginSignUpViewProps;
     state: QuickLoginSignUpViewState;
+    cancel_authentication: boolean;
 
 
     render() {
@@ -42,11 +44,19 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
                 return this.signup_view();
         }        
     }
+    
 
 
-    onClosing(): Q.Promise<Boolean> {
+    afterClosed(): Q.Promise<any> {
 
-        return Q.reject<Boolean>(false);
+        if (this.cancel_authentication) {
+
+            var info = this.app.get_appInfo();
+
+            this.app.router.navigate(info.fallback_url);
+        }
+
+        return null;
 
     }
 

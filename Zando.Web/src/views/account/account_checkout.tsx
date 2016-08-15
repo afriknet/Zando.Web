@@ -108,7 +108,8 @@ export class AccountCheckout extends jx.Views.ReactView {
                 <div id="signup">
                     <Modal ref='modal' owner={this}
                         title="Creez votre compte"
-                        onClosing={this.on_closing_quicklogin.bind(this)}
+                        //onClosing={this.on_closing_quicklogin.bind(this)}
+                        afterClosed={this.after_closed_quicklogin.bind(this)}
                         hide_footer={true} />
                 </div>
             </div>
@@ -228,9 +229,9 @@ export class AccountCheckout extends jx.Views.ReactView {
         return d.promise;
     }
 
-
-    on_closing_quicklogin(): Q.Promise<Boolean> {
-        return this['quick_signuplogin_view'].onClosing() as any;
+    
+    after_closed_quicklogin(): Q.Promise<Boolean> {
+        return this['quick_signuplogin_view'].afterClosed() as any;
     }
 
     
