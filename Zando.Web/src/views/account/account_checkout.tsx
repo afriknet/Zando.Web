@@ -13,7 +13,7 @@ import { BigLabel, BigLabelProps, Modal, ModalProps} from '../../lib/controls';
 
 import {AccountCheckoutBilling} from './account_checkout_billing';
 import { AccountCheckoutShipments } from './account_checkout_shipments';
-import { AccountCheckoutPayments } from './account_checkout_payment';
+import { AccountCheckoutPayments, PaymentInfo } from './account_checkout_payment';
 import * as rv from './account_checkout_review';
 import { QuickLoginSignUpView, ViewMode } from './quick_loginsignup';
 
@@ -47,6 +47,7 @@ export class AccountCheckout extends jx.Views.ReactView {
 
     state: AccountCheckoutState;
     pages: PageInfo[];
+    payment_info: PaymentInfo;
     
 
     render() {

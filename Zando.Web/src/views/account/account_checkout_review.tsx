@@ -1,4 +1,5 @@
 ﻿/// <reference path="account_cart.tsx" />
+/// <reference path="account_checkout_payment.tsx" />
 
 // A '.tsx' file enables JSX support in the TypeScript compiler, 
 // for more information see the following page on the TypeScript wiki:
@@ -10,6 +11,7 @@ import ReactDOM = require('react-dom');
 import jx = require('../../lib/jx');
 import { BigLabel, BigLabelProps} from '../../lib/controls';
 import { AccountCart} from './account_cart';
+import pymt = require('./account_checkout_payment');
 
 
 export interface AccountCheckoutReviewProps extends jx.Views.ReactProps {
@@ -28,6 +30,8 @@ export class AccountCheckoutReview extends jx.Views.ReactView {
     
 
     render() {
+
+        var pymt_info: pymt.PaymentInfo = this.props.owner['payment_info'] as any;
 
         var html =
             <div>
@@ -72,6 +76,18 @@ export class AccountCheckoutReview extends jx.Views.ReactView {
 
         return html;
     }    
+
+
+    componentDidMount() {
+
+        super.componentDidMount();
+    }
+
+
+    componentDidUpdate() {
+
+        super.componentDidUpdate();
+    }
 }
 
 

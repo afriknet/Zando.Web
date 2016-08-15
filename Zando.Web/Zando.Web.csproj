@@ -111,6 +111,8 @@
     <Content Include="js\jquery.rippler.js" />
     <Content Include="js\modernizr.custom.js" />
     <Content Include="js\redux.js" />
+    <Content Include="js\schema.js" />
+    <Content Include="js\schema.min.js" />
     <Content Include="js\uisearch.js" />
     <Content Include="plugins\bootstrap\css\bootstrap-theme.css.map" />
     <Content Include="plugins\bootstrap\css\bootstrap-theme.min.css.map" />
