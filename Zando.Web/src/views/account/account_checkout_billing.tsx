@@ -25,6 +25,7 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
     item: any;
     private __account: any;
 
+
     get account(): any {
         if (!this.__account) {
             this.__account = this.props.owner['data'] = ko['mapping'].fromJS(this.item);
@@ -32,12 +33,25 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
         return this.__account;
     }
 
+
     private __address: any;
     get address(): any {
 
         if (!this.__address) {
-            // temprary, this must be properly resolved
-            this.__address = this.props.owner['address'] = ko['mapping'].fromJS(this.item['addresses'].results[0]);
+
+            var address = this.item['addresses'].results[0];
+
+            if (!address) {
+
+                address = {
+                    phone: '',
+                    address1: '',
+                    city: '',
+                    country:''
+                }
+            }
+
+            this.__address = this.props.owner['address'] = ko['mapping'].fromJS(address);
         }
         return this.__address;
     }
@@ -78,19 +92,35 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
     }
 
 
+    
+
+
     fill_with_controls() {
 
         if (!this.state.loading) {
-                       
 
+            var usr = this.app.get_user();
+
+            var reset = !usr || ((usr['surname']) && ((usr['surname'] as string).indexOf('guest_surname_') === 0));
+
+            if (reset) {
+
+                usr['name'] = usr['surname'] = null;
+            }
+
+                       
             var html = [
 
-                <TextControl label="First Name" required={true} field="first_name" obj={this.account} />,
-                <TextControl label="Last Name" field="last_name" obj={this.account}  required={true} />,
-                <TextControl label= "Email" type="email" field= "email" obj= { this.account } required={true}/>,
-                <TextControl label= "Telephone" field= "address2" obj= { this.address} />,
+                <TextControl label="First Name" required={true} field="name" obj={usr} />,
+
+                <TextControl label="Last Name" field="surname" obj={usr}  required={true} />,
+
+                <TextControl label= "Email" type="email" field= "email" obj= {usr} required={true}/>,
+
+                <TextControl label= "Telephone" field= "phone" obj= { this.address} />,
 
                 <TextControl label= "Address" field= "address1" obj= { this.address} required={true}/>,
+
                 <TextControl label= "City" field= "city" obj= { this.address } required={true}/>,
 
                 <CountryControl label= "Country" field= "country" obj= { this.address } required={true}/>
@@ -240,7 +270,7 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
                         city: this.props.owner['address']['city'],
                         country: this.props.owner['address']['country'],
                         name: 'shipment-address-{0}'.format(this.app.get_account()['id']),
-                        phone: this.props.owner['address']['address2'],
+                        phone: this.props.owner['address']['phone'],
 
                     }
                 }]
@@ -324,7 +354,7 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
             fn: 'get',
             params: ['/accounts/{0}'.format(id), { expand: 'addresses' }]
         }).then(res => {
-
+            
             this.item = that.props.owner['data'] = res.response;
             
             d.resolve(true);
@@ -351,6 +381,7 @@ interface TextControlProps extends jx.Views.ReactProps {
 class TextControl extends jx.Views.ReactView {
 
     props: TextControlProps;
+
 
     render() {
 
@@ -380,10 +411,12 @@ class TextControl extends jx.Views.ReactView {
         return html;
     }
 
+
     componentDidMount() {
 
         this.bind();
     }
+
 
     componentDidUpdate() {
 
@@ -394,7 +427,14 @@ class TextControl extends jx.Views.ReactView {
     bind() {
 
         ko.cleanNode(this.root[0]);
-        ko.applyBindings(this.props.obj, this.root[0]);
+
+        try {
+            ko.applyBindings(this.props.obj, this.root[0]);
+        } catch (e) {
+
+            if (e) {
+            }
+        }
 
     }
 }

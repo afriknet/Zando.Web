@@ -127,8 +127,8 @@ export class AccountAddressesPage extends jx.Views.ReactView {
 
                     $(cell).empty();
 
-                    if (data['address2']) {
-                        $(cell).html(data['address2']);
+                    if (data['phone']) {
+                        $(cell).html(data['phone']);
                     }
 
                 }
@@ -362,7 +362,7 @@ class EditAddress extends jx.Views.ReactView {
 
                         <b.FormGroup controlId="txtPhone" className="col-lg-6 col-sm-12">
                             <b.ControlLabel>Phone</b.ControlLabel>
-                            <b.FormControl type="phone" data-bind="textInput:address2"  placeholder="Enter an phone number"/>
+                            <b.FormControl type="phone" data-bind="textInput:phone"  placeholder="Enter an phone number"/>
                         </b.FormGroup>
 
                         <b.FormGroup controlId="txtCity" className="col-lg-6 col-sm-12">
@@ -475,7 +475,7 @@ class EditAddress extends jx.Views.ReactView {
 
         var obj = {
             address1: address,
-            address2: phone,
+            phone: phone,
             city: city,
             country: country
         };

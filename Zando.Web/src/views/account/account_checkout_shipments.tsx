@@ -83,6 +83,26 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
     }
 
 
+    add_checkbox_ctrl(root: JQuery) {
+
+        var html = `
+                    <div class="checkbox-x custom">
+                        <label>
+                            <input type="checkbox" />
+                            <span class="chk-caption" ></span>
+                        </label>
+                    </div>
+                   `; 
+
+        var chk = root.append($(html));
+
+        $(chk)['iCheck']({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio'
+        });
+    }
+
+
     componentDidUpdate() {
 
         if (!this.state.loading) {
@@ -90,6 +110,8 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
             if (this['data']) {
                 (this['data'] as DataTables.DataTable).destroy();
             }
+
+            var count: number = 0;
 
             this['data'] = this.root.find('table').DataTable({
                 data: this.services,
@@ -103,8 +125,13 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
                 columns: [
                     {
                         title: '', data: null, createdCell: (cell, data) => {
+
+                            function after_init(root: JQuery) {
+                                root.find('.iCheck-helper').css('position','relative');
+                            }
+
                             $(cell).empty();
-                            ReactDOM.render(<CheckBox is_checked={false} onchecked={(row) => { this.on_checked(row) } } />, $(cell)[0]);
+                            ReactDOM.render(<CheckBox after_init={(root) => { after_init(root) } } is_checked={false} onchecked={(row) => { this.on_checked(row) } } />, $(cell)[0]);
                         }
                     },
                     {
@@ -161,8 +188,8 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
             params: ['/settings/shipments']
         }).then(res => {
 
-            this.services = _.filter(res.response['services'], (srv:any) => {
-                return srv.price != undefined;
+            this.services = _.filter(res.response['services'], (srv: any) => {
+                return srv.price && ((parseInt(srv.price) > 0) || parseFloat(srv.price) > 0)
             });
 
             
@@ -224,7 +251,7 @@ export class AccountCheckoutShipments extends jx.Views.ReactView {
                     city: this.props.owner['address']['city'],
                     country: this.props.owner['address']['country'],
                     name: 'shipment-address-{0}'.format(this.app.get_account()['id']),
-                    phone: this.props.owner['address']['address2'],
+                    phone: this.props.owner['address']['phone'],
 
                     service: srv_id,
                     service_name: srv_obj['name']

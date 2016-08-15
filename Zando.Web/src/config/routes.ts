@@ -18,6 +18,10 @@ export var routes: Types.RouteList = {
         url: 'home/login'
     },
 
+    '/signup': {
+        url: 'home/signup'
+    },
+
 
     '/dashboard': {
         url: 'account/account_dashboard'

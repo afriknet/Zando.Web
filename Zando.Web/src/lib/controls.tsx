@@ -370,7 +370,8 @@ export class TextNumeric extends jx.Views.ReactView {
 export interface CheckBoxProps extends jx.Views.ReactProps {
     is_checked: boolean,
     onchecked?: (row?: JQuery) => void,
-    onunchecked?: (row?: JQuery) => void 
+    onunchecked?: (row?: JQuery) => void,
+    after_init?: (root?: JQuery) => void 
 }
 export class CheckBox extends jx.Views.ReactView {
 
@@ -385,7 +386,8 @@ export class CheckBox extends jx.Views.ReactView {
 
         var html = <div className="checkbox-x custom" >
                         <label>
-                            <input type="checkbox" /><span className="chk-caption" ></span>
+                            <input type="checkbox" />
+                            <span className="chk-caption" ></span>
                         </label>
                    </div> 
         
@@ -402,6 +404,12 @@ export class CheckBox extends jx.Views.ReactView {
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio'
         });
+
+
+        if (this.props.after_init) {
+            this.props.after_init(this.root);
+        }
+
 
         if (this.props.is_checked) {
             (this.root.find('input') as any).iCheck('check');

@@ -787,9 +787,9 @@ export module Application {
 
             $('.log-out').find('.usr-info').html(usr_info);
 
-            $('.log-out').find('a').off('click');
 
-            $('.log-out').find('a').click(() => {
+            $('.log-out').find('.usr-logout').off('click');
+            $('.log-out').find('.usr-logout').click(() => {
 
                 this.display_loggedout_info();
             });
@@ -942,10 +942,7 @@ export module carts {
             width = '5%';
         }
 
-
-        //style="{4}; max-height:50px; border-color:red"
-
-
+        
         var html =
             `<li>
                 <a href="/account/product/0-1">
@@ -955,7 +952,7 @@ export module carts {
                         <img class="media-left media-object" src="{0}" alt="cart-Image" style="{4}; max-height:80px; display:inline-block"/>
                          
                         <div class="media-body" style="display:inline-block">
-                            <h5 class="media-heading" style="display:inline-block">{1}<br><span>{2} X €{3}</span></h5>
+                            <h5 class="media-heading" style="display:inline-block; text-transform:lowercase">{1}<br><span>{2} X €{3}</span></h5>
                         </div>
                     </div>
                 </a>
@@ -1236,8 +1233,8 @@ export module carts {
         __app.signup({
             email: _email,
             password: __tmp_pws,
-            name: 'guest_{0}'.format(key),
-            surname: 'guest_{0}'.format(key),
+            name: 'guest_name_{0}'.format(key),
+            surname: 'guest_surname_{0}'.format(key),
             is_verified: 0
         } as any).then(usr => {
 

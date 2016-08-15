@@ -23,7 +23,18 @@ export class AccountProfilePage extends jx.Views.ReactView {
     get usr(): any {
 
         if (!this.__usr) {
-            this.__usr = ko['mapping'].fromJS(this.app.get_user())
+
+            var usr_obj = this.app.get_user();
+
+            var reset = !usr_obj || ((usr_obj['surname']) && ((usr_obj['surname'] as string).indexOf('guest_surname_') === 0));
+
+            if (reset) {
+
+                usr_obj['name'] = usr_obj['surname'] = null;
+
+            }
+            
+            this.__usr = ko['mapping'].fromJS(usr_obj)
         }
 
         return this.__usr;
