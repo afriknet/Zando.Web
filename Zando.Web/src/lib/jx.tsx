@@ -30,6 +30,7 @@ var __api = API.moltin;
 var __router_ctx: any;
 var __app: Application.App;
 var __moltin: any;
+var __tmp_pws: any;
 
 declare var page;
 declare var Moltin;
@@ -740,13 +741,19 @@ export module Application {
             Backendless.UserService.login(email, password, true, new Backendless.Async((data) => {
 
                 this.store_user(data);
-
+                        
                 this.store_account(data['email']).then(() => {
+
+                    this.update_authentication_info();
+
                     d.resolve(data);
+
+                }).then(err => {
+
+                    d.reject(err);
+
                 });
-
-                this.update_authentication_info();
-
+                
             }, (err) => {
                 d.reject(err);
             }));
@@ -758,8 +765,12 @@ export module Application {
 
 
         update_authentication_info() {
+
+            if (this.user_is_verified()) {
+
+                this.display_loggedin_info();
+            }
             
-            this.display_loggedin_info();
         }
 
 
@@ -865,6 +876,11 @@ export module Application {
             }));
 
             return d.promise;
+        }
+
+
+        get_guest_pssw() {
+            return __tmp_pws;
         }
 
 
@@ -1212,13 +1228,14 @@ export module carts {
 
         var key = '{0}_{1}'.format(chance.word({ length: 5 }), chance.word({ length: 5 }));
 
+        __tmp_pws = 'guest_{0}'.format(key);
 
         var _email = 'guest_{0}_@guest.com'.format(key);
 
 
         __app.signup({
             email: _email,
-            password: 'guest_{0}'.format(key),
+            password: __tmp_pws,
             name: 'guest_{0}'.format(key),
             surname: 'guest_{0}'.format(key),
             is_verified: 0

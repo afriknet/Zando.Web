@@ -220,7 +220,9 @@ export class AccountCheckout extends jx.Views.ReactView {
 
         var d = Q.defer();
 
-        (this.refs['modal'] as Modal).show(<QuickLoginSignUpView owner={this} mode={ViewMode.signup} />);
+        (this.refs['modal'] as Modal).show(<QuickLoginSignUpView owner={this}
+                                                        container={(this.refs['modal'] as Modal)}
+                                                        mode={ViewMode.signup} />);
 
         return d.promise;
     }

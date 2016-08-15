@@ -126,7 +126,7 @@ export class AccountProfilePage extends jx.Views.ReactView {
             this.state.loading = true;
 
             Backendless.UserService.update(usr, new Backendless.Async(_usr => {
-
+                                
                 this.app.store_user(_usr);
 
                 var account: any = {
@@ -145,6 +145,8 @@ export class AccountProfilePage extends jx.Views.ReactView {
                     this.app.store_account(account['email']).then(() => {
 
                         toastr.info('Profile updated successfully');
+
+                        this.app.update_authentication_info();
 
                         utils.unspin(this.root);
 

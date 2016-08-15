@@ -510,12 +510,31 @@ export class Modal extends jx.Views.ReactView {
 
     close() {
 
-        this.setState({ show: false });
+        var that = this;
 
-        if (this.props.afterClosed) {
+        if (that.props.onClosing) {
 
-            this.props.afterClosed();
+            that.props.onClosing().then(ok => {
+
+                if (ok)
+                {
+                    this.setState({ show: false });
+
+                    if (this.props.afterClosed) {
+                        this.props.afterClosed();
+                    }
+                }
+            });
+
+        } else {
+
+            this.setState({ show: false });
+
+            if (this.props.afterClosed) {
+                this.props.afterClosed();
+            }
         }
+        
     }
 
 
@@ -526,21 +545,7 @@ export class Modal extends jx.Views.ReactView {
         var props: any = {
             show: this.state.show,
             onHide: () => {
-
-                if (that.props.onClosing) {
-
-                    that.props.onClosing().then(ok => {
-
-                        if (ok) {
-                            that.close()
-                        }
-                    });
-
-                } else {
-
-                    that.close()
-
-                }
+                that.close();
             }
         }
 
@@ -590,6 +595,11 @@ export class Modal extends jx.Views.ReactView {
         
     }
 
+
+    onHiding() {
+
+
+    }
 
 
     save() {

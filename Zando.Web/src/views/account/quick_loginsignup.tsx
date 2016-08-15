@@ -13,7 +13,8 @@ import { BigLabel, BigLabelProps, Modal, ModalProps} from '../../lib/controls';
 export enum ViewMode { signup, login }
 
 export interface QuickLoginSignUpViewProps extends jx.Views.ReactProps {
-    mode: ViewMode    
+    mode: ViewMode,
+    container: Modal
 }
 interface QuickLoginSignUpViewState extends jx.Views.ReactState {
     mode: ViewMode
@@ -54,9 +55,109 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
             var info = this.app.get_appInfo();
 
             this.app.router.navigate(info.fallback_url);
+
+        } else {
+
         }
 
         return null;
+
+    }
+
+
+    update_guest_signup() {
+
+        var __email = this.app.get_user()['email'];
+        var pswrd = this.app.get_guest_pssw();
+
+        var d = Q.defer();
+
+        utils.spin(this.root);
+
+        Backendless.UserService.login(__email, pswrd, false, new Backendless.Async((usr: any) => {
+
+            usr['email'] = usr['name'] = this.jget('#signup-email').val();
+            usr['password'] = this.jget('#signup-pws').val();
+            usr['is_verified'] = 1;
+
+            var model = Backendless.Data.of(Backendless.User);
+
+            model.save(usr, new Backendless.Async(succ => {
+
+                this.update_schema_account(__email, usr['email']).then(() => {
+
+                    this.app.login(usr['email'], usr['password']).then(() => {
+
+                        d.resolve(true);
+
+                    }).finally(() => {
+
+                        utils.unspin(this.root);
+
+                    });
+
+                }).fail(err => {
+
+                    toastr.error(err.message, 'error');
+                    utils.unspin(this.root);
+
+                    d.reject(err);
+                });
+                
+                
+            }, (err: any) => {
+
+                toastr.error(err.message, 'error');
+                utils.unspin(this.root);
+
+                d.reject(err);
+            }));
+
+
+        }, (err: any) => {
+
+            toastr.error(err.message, 'error');
+
+            utils.unspin(this.root);
+
+            d.reject(err);
+            
+        }));
+
+
+        return d.promise;
+    }
+
+
+    update_schema_account(old_email: string, new_email: string) {
+
+        var d = Q.defer();
+
+        schema.call({
+            fn: 'get',
+            params: ['/accounts', { email: old_email }]
+        }).then(res => {
+
+            var acc = res.response.results[0];
+
+            acc['email'] = acc['name'] = new_email;
+
+            schema.call({
+                fn: 'put',
+                params: ['/accounts/{0}'.format(acc['id']), { email: new_email }]
+            }).then(rs => {
+
+                d.resolve(true);
+
+            }).fail(err => {
+
+                d.reject(err);
+            });
+
+        });
+
+
+        return d.promise;
 
     }
 
@@ -68,7 +169,7 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
                 <form role="form" className="form-signup">
                     <div className="form-group">
                         <label htmlFor="">Email</label>
-                        <input type="email" id="" name="email" required className="form-control" />
+                        <input type="email" id="signup-email" name="email" required className="form-control" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="">Mot de passe</label>
@@ -76,7 +177,7 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
                     </div>
                     <div className="form-group">
                         <label htmlFor="" className="">Confirmer votre mot de passe</label>
-                        <input type="password" id="" required name="confirm" className="form-control" />
+                        <input type="password" id="signup-confirm" required name="confirm" className="form-control" />
                     </div>
                     <button className="btn btn-primary btn-block btn-signup" onClick={this.do_signup.bind(this)} type="button">Inscrivez-vous</button>
                     <button type="button" className="btn btn-link btn-block" onClick={this.display_login.bind(this)}>Identifiez-vous</button>
@@ -89,12 +190,21 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
     do_signup() {
 
         if (!this.root.find('form').valid()) {
-            return;
+            return Q.reject(false);
         }
 
+        if (!this.app.user_is_verified()) {
+
+            return this.update_guest_signup().then(() => {
+
+                this.props.container.close();
+
+                return true;
+
+            });
+        }
     }
-
-
+    
 
     login_view() {
 
@@ -127,9 +237,7 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
 
         if (!this.root.find('form').valid()) {
             return;
-        }
-
-
+        }        
     }
 
 
