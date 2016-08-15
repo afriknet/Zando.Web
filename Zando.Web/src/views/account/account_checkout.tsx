@@ -204,19 +204,15 @@ export class AccountCheckout extends jx.Views.ReactView {
 
 
     componentDidMount() {
-
-        this.create_account();
-
-        return;
-
-        //if (!this.app.user_is_verified()) {
+        
+        if (!this.app.user_is_verified()) {
             
-        //    //this.create_account();
+            this.create_account();
 
-        //} else {
+        } else {
 
-        //    this.set_currentpage();
-        //}        
+            this.set_currentpage();
+        }        
     }
 
 

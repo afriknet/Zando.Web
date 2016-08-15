@@ -744,7 +744,9 @@ export module Application {
                 this.store_account(data['email']).then(() => {
                     d.resolve(data);
                 });
-                
+
+                this.update_authentication_info();
+
             }, (err) => {
                 d.reject(err);
             }));
@@ -752,6 +754,67 @@ export module Application {
 
             return d.promise;
 
+        }
+
+
+        update_authentication_info() {
+            
+            this.display_loggedin_info();
+        }
+
+
+        private display_loggedin_info() {
+
+            $('.log-in').addClass('hidden');
+            $('.log-out').removeClass('hidden');
+
+            var usr_info = __app.get_user()['name'];
+
+            if (!usr_info) {
+                usr_info = __app.get_user()['email'];
+            }
+
+            $('.log-out').find('.usr-info').html(usr_info);
+
+            $('.log-out').find('a').off('click');
+
+            $('.log-out').find('a').click(() => {
+
+                this.display_loggedout_info();
+            });
+        }
+
+
+        private display_loggedout_info() {
+
+            $('.log-in').removeClass('hidden');
+            $('.log-out').addClass('hidden');
+
+
+            var ul = $('.products-cart ul');
+            ul.empty();
+            ul.append($('<li>Item(s) in your cart</li>'));
+
+
+            $('.my-account').addClass('hidden');
+            $('.my-account').addClass('hidden');
+            $('.products-cart .cart-total').html('€{0}'.format(0));
+
+
+            Backendless.UserService.logout(new Backendless.Async((data) => {
+
+                cookies.remove('current-user');
+                cookies.remove('account');
+
+                __app.router.navigate('/')
+
+            }, (err) => {
+
+                alert(err);
+
+            }));
+
+            
         }
 
 
@@ -830,6 +893,7 @@ export module Application {
 
  
 export module carts {
+
 
     function add_li(cart_id: any, prod: any, cart_item: any) {
 
@@ -1027,11 +1091,9 @@ export module carts {
 
 
                 fetch_items_of_carts(res.response.results).then((data: { prods: any[], items: any[] }) => {
-
-
-                    var ul = $('.products-cart ul');
-
                     
+                    var ul = $('.products-cart ul');
+                                        
                     var must_empty = ul.find('.media').length > 0;
 
                     if (must_empty) {
@@ -1084,6 +1146,8 @@ export module carts {
         } else {
 
             update_cart_ui(account['email']).then((list: any) => {
+
+                __app.update_authentication_info();
 
                 if (list && list.length > 0) {
 
