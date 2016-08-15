@@ -29,11 +29,14 @@ export class AccountProfilePage extends jx.Views.ReactView {
         return this.__usr;
     }
 
+
     private pssw: any;
+
 
     constructor(props: AccountProfilePageProps) {
         super(props);        
     }
+
 
     render() {
 

@@ -32,6 +32,7 @@ interface AccountCheckoutState extends jx.Views.ReactState {
 }
 export class AccountCheckout extends jx.Views.ReactView {
 
+
     constructor(props?: any) {
 
         super(props);
@@ -58,8 +59,7 @@ export class AccountCheckout extends jx.Views.ReactView {
         if (this.state.activepage === 3) {
             str_next = 'Complete';
         }
-
-
+        
 
         var html =
 

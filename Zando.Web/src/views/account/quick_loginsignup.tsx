@@ -54,57 +54,118 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
     signup_view() {
 
         var html =
-            <form role="form" >
-                <div className="form-group">
-                    <label htmlFor="">Email</label>
-                    <input type="email" id="" className="form-control" />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="">Mot de passe</label>
-                    <input type="password" id="" className="form-control" />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="" className="">Confirmer votre mot de passe</label>
-                    <input type="password" id="" className="form-control" />
-                </div>
-                <button className="btn btn-primary btn-block" type="button">Inscrivez-vous</button>
-                <button type="button" className="btn btn-link btn-block" onClick={this.display_login.bind(this)}>Identifiez-vous</button>
-            </form>
-
+            <div>
+                <form role="form" className="form-signup">
+                    <div className="form-group">
+                        <label htmlFor="">Email</label>
+                        <input type="email" id="" name="email" required className="form-control" />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="">Mot de passe</label>
+                        <input type="password" id="signup-pws" required name="password" className="form-control" />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="" className="">Confirmer votre mot de passe</label>
+                        <input type="password" id="" required name="confirm" className="form-control" />
+                    </div>
+                    <button className="btn btn-primary btn-block btn-signup" onClick={this.do_signup.bind(this)} type="button">Inscrivez-vous</button>
+                    <button type="button" className="btn btn-link btn-block" onClick={this.display_login.bind(this)}>Identifiez-vous</button>
+                </form>
+            </div>
         return html;
     }
+
+
+    do_signup() {
+
+        if (!this.root.find('form').valid()) {
+            return;
+        }
+
+    }
+
 
 
     login_view() {
 
         var html =
-            <form role="form" >
-                <div className="form-group">
-                    <label htmlFor="">Email</label>
-                    <input type="email" id="" className="form-control" />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="">Mot de passe</label>
-                    <input type="password" id="" className="form-control" />
-                </div>
-                <div className="checkbox">
-                    <label>
-                        <input type="checkbox" /> Restez connecte
-                    </label>
-                </div>
-                <button className="btn btn-primary btn-block" type="button">Identifiez-vous</button>
-                <button className="btn btn-link btn-block" type="button" style={{ textTransform: 'none' }}>Mot de passe oublie?</button>
-            </form>
+            <div>
+                <form role="form" className="form-login">
+                    <div className="form-group">
+                        <label htmlFor="">Email</label>
+                        <input type="email" id="" name="email" required className="form-control" />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="">Mot de passe</label>
+                        <input type="password" id="login-pws" required name="password" className="form-control" />
+                    </div>
+                    <div className="checkbox">
+                        <label>
+                            <input type="checkbox" /> Restez connecte
+                        </label>
+                    </div>
+                    <button className="btn btn-primary btn-block btn-login" onClick={this.do_login.bind(this) } type="button">Identifiez-vous</button>
+                    <button className="btn btn-link btn-block" type="button" style={{ textTransform: 'none' }}>Mot de passe oublie?</button>
+                </form>
+            </div>
 
         return html;
+    }
+
+
+    do_login() {
+
+        if (!this.root.find('form').valid()) {
+            return;
+        }
+
+
+    }
+
+
+    init_validation() {
+
+        switch (this.state.mode) {
+
+            case ViewMode.login: {
+
+                this.root.find('.form-login').validate({
+                    rules: {                        
+                        confirm: {
+                            equalTo: '#login-pws'
+                        }
+                    }
+
+                });
+
+            } break;
+
+            case ViewMode.signup: {
+
+                this.root.find('.form-signup').validate({
+                    rules: {                        
+                        confirm: {
+                            equalTo: '#signup-pws'
+                        }
+                    }
+
+                });
+
+
+            } break;                
+        }
+        
+        
     }
 
 
     componentDidMount() {
 
         super.componentDidMount();
-
+        
         this.root.closest('.modal').attr('id', 'signup');
+
+        this.init_validation();
     }
 
 
@@ -114,6 +175,7 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
             this.root.closest('.modal').find('.modal-title').html('Identifiez-vous');
         }
 
+        this.init_validation();
     }
 
 

@@ -7,6 +7,7 @@
 // https://github.com/Microsoft/TypeScript/wiki/JSX
 /// <reference path="redux/workflow.ts" />
 /// <reference path="redux/reducers.tsx" />
+/// <reference path="controls.tsx" />
 
 
 
@@ -18,6 +19,7 @@ import { DataSource } from './server';
 import rx = require('redux');
 import flow = require('./redux/workflow');
 import rdx = require('./redux/reducers');
+import ctrls = require('./controls');
 
 
 enum API { default, moltin, schemaIo };
@@ -652,10 +654,12 @@ export module Application {
             cookies.set('current-user', usr);            
         }
 
+
         internal_store_account(acc: any) {
 
             cookies.set('account', acc);
         }
+
 
         store_account(__email: string): Q.Promise<Boolean> {
 
@@ -939,7 +943,9 @@ export module carts {
     function init_actions(ul: JQuery) {
 
         ul.find('.btn-checkout').click((e) => {
+            
             page('/account/checkout');
+
         });
 
         ul.find('.btn-cart').click((e) => {
@@ -950,9 +956,12 @@ export module carts {
 
     export function update_cart_ui(email: string) {
 
+
         var d = Q.defer();
 
+
         fetch_account(email, true).then(acc => {
+
 
             schema.call({
                 fn: 'get',
@@ -1278,5 +1287,18 @@ export module carts {
         return d.promise;
 
     }
+
+}
+
+
+
+export module modals {
+
+    export function show() {
+
+
+
+    }
+
 
 }
