@@ -19,6 +19,7 @@ import { QuickLoginSignUpView, ViewMode } from './quick_loginsignup';
 
 
 declare var chance;
+declare var Schema;
 
 
 interface PageInfo {
@@ -154,12 +155,24 @@ export class AccountCheckout extends jx.Views.ReactView {
 
     post_order() {
 
+        this.internal_post().then(() => {
+            
+        });
+    }
+
+
+
+    internal_post() {
+
         var d = Q.defer();
 
         schema.call({
             fn: 'post',
             params: ['/orders', {
-                cart_id: this['cart']['id']
+                cart_id: this['cart']['id'],
+                billing: {
+                    card: this['card_info']
+                }
             }]
         }).then(res => {
 
