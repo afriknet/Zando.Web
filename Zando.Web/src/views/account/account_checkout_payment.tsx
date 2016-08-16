@@ -11,11 +11,11 @@ import jx = require('../../lib/jx');
 import { BigLabel, BigLabelProps, CheckBox} from '../../lib/controls';
 
 
-export enum PaymentOptions { card, paypal }
+export enum PaymentType { card, paypal }
 
 
 export interface PaymentInfo {
-
+    cart_type: PaymentType,
     card_number: string,
     card_cvc: string,
     exp_month: number,
@@ -198,7 +198,7 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
 
             onChange: (val:any) => {
 
-                if (parseInt(val) === PaymentOptions.paypal) {
+                if (parseInt(val) === PaymentType.paypal) {
 
                     this.jget('.card').hide();
 
@@ -309,6 +309,7 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
     get_payment_info(): PaymentInfo {
 
         return {
+            cart_type: this.string_to_int(this.method_select),
             card_number: this.cardno_txt.val(),
             card_cvc: this.cardcv_txt.val(),
             exp_month: this.string_to_int(this.cardexp_month_select),
@@ -322,7 +323,7 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
 
         var meth = this.string_to_int(this.method_select);
 
-        if (meth === PaymentOptions.card) {
+        if (meth === PaymentType.card) {
 
             var ok = this.jget('form').valid();
 

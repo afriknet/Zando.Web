@@ -133,19 +133,20 @@ export class AccountCheckout extends jx.Views.ReactView {
 
         if (this.state.activepage <= 3) {
 
-            if (this.state.activepage < 3) {
+            this.can_go_next().then(() => {
 
-                this.can_go_next().then(() => {
+                if (this.state.activepage < 3) {
 
                     this.setState({
                         activepage: ++this.state.activepage
                     });
-                });
 
-            } else {
+                } else {
 
-                this.post_order();
-            }
+                    this.post_order();
+                }
+                
+            });
             
         }
     }

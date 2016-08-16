@@ -269,7 +269,7 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
                         address1: this.props.owner['address']['address1'],
                         city: this.props.owner['address']['city'],
                         country: this.props.owner['address']['country'],
-                        name: 'shipment-address-{0}'.format(this.app.get_account()['id']),
+                        name: this.app.get_account()['name'],
                         phone: this.props.owner['address']['phone'],
 
                     }
