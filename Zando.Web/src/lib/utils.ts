@@ -399,9 +399,19 @@ module carts {
 
         var url_img = null;
 
-        if (prod.images && prod.images.length > 0) {
-            url_img = prod.images[0].file.url;
+        if (prod['amazon'] && parseInt(prod['amazon']) === 1) {
+
+            url_img = aws.retrieve_pict(prod);
+
+        } else {
+
+            if (prod.images && prod.images.length > 0) {
+                url_img = prod.images[0].file.url;
+            }
+
         }
+
+        
 
         var price = cart_item.price; // numeral(cart_item.price).format('€0,0.00');        
         var qty = cart_item.quantity;
