@@ -38,6 +38,10 @@ export var routes: Types.RouteList = {
     '/account/:sub': {
         url: 'account/account_dashboard'
     },
+
+    '/checkout/completed': {
+        url: 'account/account_checkout_completed'
+    },
     
     '/explore': {
         url: 'products/products_explore'

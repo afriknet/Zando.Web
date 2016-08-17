@@ -246,7 +246,7 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
                 password: this.root.find('[name="password"]').val()
             }).then((data) => {
 
-                toastr.success('Votre compte a ete cree avec success');
+                toastr.success('Votre compte a ete cree avec succes');
 
                 this.app.router.navigate('/account/profile')
 

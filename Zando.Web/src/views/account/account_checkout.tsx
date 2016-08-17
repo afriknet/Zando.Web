@@ -1,4 +1,6 @@
-﻿/// <reference path="account_checkout_billing.tsx" />
+﻿/// <reference path="account_checkout_completed.tsx" />
+/// <reference path="account_checkout_billing.tsx" />
+
 // A '.tsx' file enables JSX support in the TypeScript compiler, 
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
@@ -16,6 +18,7 @@ import { AccountCheckoutShipments } from './account_checkout_shipments';
 import { AccountCheckoutPayments, PaymentInfo } from './account_checkout_payment';
 import * as rv from './account_checkout_review';
 import { QuickLoginSignUpView, ViewMode } from './quick_loginsignup';
+//import cmpl = require('./account_checkout_completed');
 
 
 declare var chance;
@@ -29,8 +32,10 @@ interface PageInfo {
 
 
 interface AccountCheckoutState extends jx.Views.ReactState {
-    activepage: number
+    activepage: number,
+    //completed?: boolean
 }
+
 export class AccountCheckout extends jx.Views.ReactView {
 
 
@@ -57,6 +62,7 @@ export class AccountCheckout extends jx.Views.ReactView {
             borderBottom: 0
         }
 
+
         var str_next = 'Continue';
         if (this.state.activepage === 3) {
             str_next = 'Complete';
@@ -81,19 +87,19 @@ export class AccountCheckout extends jx.Views.ReactView {
 
                         <div className="page-content" style={{ paddingLeft: 0, paddingRight: 0 }}>
 
+                        </div>
+
+                        <div className="col-xs-12 no-p">
+
+                            <hr />
+
+                            <div className="well well-lg clearfix">
+                                <ul className="pager">
+                                    <li className="previous"><a href="#" onClick={(e) => { e.preventDefault(); this.go_back() } } className={this.display_backBtn() }>back</a></li>
+                                    <li className="next"><a href="#" onClick={(e) => { e.preventDefault(); this.go_next() } }>{str_next}</a></li>
+                                </ul>
                             </div>
-
-                            <div className="col-xs-12 no-p">
-
-                                <hr />
-
-                                <div className="well well-lg clearfix">
-                                    <ul className="pager">
-                                        <li className="previous"><a href="#" onClick={(e) => { e.preventDefault(); this.go_back() } } className={this.display_backBtn() }>back</a></li>
-                                        <li className="next"><a href="#" onClick={(e) => { e.preventDefault(); this.go_next() } }>{str_next}</a></li>
-                                    </ul>
-                                </div>
-                           </div>
+                        </div>
 
 
                         <form>
@@ -155,12 +161,24 @@ export class AccountCheckout extends jx.Views.ReactView {
 
     post_order() {
 
-        this.internal_post().then(() => {
+        utils.spin(this.root);
+
+        this.internal_post().then((res) => {
+
+            jx.local.set('last-order', res);
+            jx.local.set('last-cart', this['cart']);
+
+            this.app.router.navigate('/checkout/completed');
             
+        }).finally(() => {
+
+            utils.unspin(this.root);
+
         });
+
+
     }
-
-
+    
 
     internal_post() {
 
@@ -176,7 +194,7 @@ export class AccountCheckout extends jx.Views.ReactView {
             }]
         }).then(res => {
 
-            d.resolve(true);
+            d.resolve(res.response);
 
         }).fail(err => {
 
@@ -231,6 +249,68 @@ export class AccountCheckout extends jx.Views.ReactView {
     }
 
 
+    componentDidUpdate() {
+
+        this.set_currentpage();
+    }
+
+
+    set_currentpage() {
+
+        this.root.find('[data-page]').hide();
+
+
+        var $page = this.root.find('[data-page="{0}"]'.format(this.state.activepage));
+
+
+        if ($page.length === 0) {
+
+            $page = $('<div data-page="{0}"></div>'.format(this.state.activepage)).appendTo(this.root.find('.page-content'));
+
+            var view: any = null;
+
+            switch (this.state.activepage) {
+
+                case 0:
+
+                    view = <AccountCheckoutBilling owner={this} index={0} />;
+
+                    break;
+
+                case 1:
+
+                    view = <AccountCheckoutShipments owner={this} index={1}  />
+
+                    break;
+
+                case 2:
+
+                    view = <AccountCheckoutPayments owner={this} index={2}/>
+
+                    break;
+
+                case 3:
+
+                    view = <rv.AccountCheckoutReview owner={this}/>
+
+                    break;
+
+            }
+
+            if (view) {
+
+                ReactDOM.render(view, $page[0]);
+            }
+
+        } else {
+
+            $page.show();
+
+        }
+
+    }
+
+
     create_account(): Q.Promise<any> {
 
         var d = Q.defer();
@@ -259,69 +339,7 @@ export class AccountCheckout extends jx.Views.ReactView {
 
     }
 
-    
-    componentDidUpdate() {
-        
-        this.set_currentpage();
-    }
-
-
-    set_currentpage() {
-
-        this.root.find('[data-page]').hide();
-
-
-        var $page = this.root.find('[data-page="{0}"]'.format(this.state.activepage));
-
-
-        if ($page.length === 0) {
-            
-            $page = $('<div data-page="{0}"></div>'.format(this.state.activepage)).appendTo(this.root.find('.page-content'));
-            
-            var view: any = null;
-
-            switch (this.state.activepage) {
-
-                case 0:
-
-                    view = <AccountCheckoutBilling owner={this} index={0} />;
-                    
-                    break;
-
-                case 1:
-
-                    view = <AccountCheckoutShipments owner={this} index={1}  />
-
-                    break;
-
-                case 2:
-
-                    view = <AccountCheckoutPayments owner={this} index={2}/>
-
-                    break;
-
-                case 3:
-
-                    view = <rv.AccountCheckoutReview owner={this}/>
-                    
-                    break;
-                
-            }
-
-            if (view) {
-                
-                ReactDOM.render(view, $page[0]);
-            }
-
-        } else {
-
-            $page.show();
-
-        }
-
-    }
 }
-
 
 
 interface ProgressBarProps extends jx.Views.ReactProps {
@@ -449,3 +467,32 @@ class ProgressBarItem extends jx.Views.ReactView {
 }
 
 
+
+class CompletedView extends jx.Views.ReactView {
+
+    render() {
+
+        var html =
+            <div className="clearfix stepsPage animated fadeInRight">
+
+                <div className="row">
+
+                    <div className="col-lg-12">
+
+                        <BigLabel label="La transaction a ete effectuee avec succes" />
+
+                        <br/>
+
+                        <button className="btn btn-lg btn-warning"><i className="fa fa-reply"></i> Continuez a parcourir nos produits</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+            
+        return html;
+
+    }
+
+}
