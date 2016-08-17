@@ -90,9 +90,7 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
 
         return html;
     }
-
-
-    
+       
 
 
     fill_with_controls() {
@@ -275,7 +273,9 @@ export class AccountCheckoutBilling extends jx.Views.ReactView {
                     }
                 }]
 
-            }).then(() => {
+            }).then((res:any) => {
+
+                this.props.owner['cart'] = res.response;
 
                 d.resolve(true);
 

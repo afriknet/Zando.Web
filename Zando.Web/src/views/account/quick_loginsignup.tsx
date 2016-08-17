@@ -14,7 +14,8 @@ export enum ViewMode { signup, login }
 
 export interface QuickLoginSignUpViewProps extends jx.Views.ReactProps {
     mode: ViewMode,
-    container: Modal
+    fullview?: boolean,
+    container?: Modal
 }
 interface QuickLoginSignUpViewState extends jx.Views.ReactState {
     mode: ViewMode
@@ -55,12 +56,13 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
             var info = this.app.get_appInfo();
 
             this.app.router.navigate(info.fallback_url);
-
+            
         } else {
 
+            return Q.resolve(true);
         }
 
-        return null;
+        return Q.resolve(true);
 
     }
 
@@ -87,6 +89,8 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
                 this.update_schema_account(__email, usr['email']).then(() => {
 
                     this.app.login(usr['email'], usr['password']).then(() => {
+
+                        this.cancel_authentication = false;
 
                         d.resolve(true);
 
@@ -164,9 +168,34 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
 
     signup_view() {
 
+        var that = this;
+
+        function add_fullview_controls(){
+
+            if(!that.props.fullview){
+                return null;
+            }
+            
+                    
+            var views = [
+                    <div className="form-group quick">
+                        <label htmlFor="">Prenom</label>
+                        <input type="text" name="first-name" required className="form-control" />
+                    </div>,
+                    <div className="form-group quick">
+                        <label htmlFor="">Nom</label>
+                        <input type="text" name="last-name" required className="form-control" />
+                    </div>
+                ]
+
+            return views;
+        }
+
+
         var html =
             <div>
                 <form role="form" className="form-signup">
+                    {add_fullview_controls()}
                     <div className="form-group">
                         <label htmlFor="">Email</label>
                         <input type="email" id="signup-email" name="email" required className="form-control" />
@@ -180,7 +209,7 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
                         <input type="password" id="signup-confirm" required name="confirm" className="form-control" />
                     </div>
                     <button className="btn btn-primary btn-block btn-signup" onClick={this.do_signup.bind(this)} type="button">Inscrivez-vous</button>
-                    <button type="button" className="btn btn-link btn-block" onClick={this.display_login.bind(this)}>Identifiez-vous</button>
+                    <button type="button" className="btn btn-link btn-block" onClick={this.display_login.bind(this)}>vous possedez deja un compte?</button>
                 </form>
             </div>
         return html;
@@ -193,16 +222,46 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
             return Q.reject(false);
         }
 
+
         if (!this.app.user_is_verified()) {
 
             return this.update_guest_signup().then(() => {
 
-                this.props.container.close();
+                if (this.props.container) {
+                    this.props.container.close();
+                }
 
                 return true;
 
             });
+        } else {
+
+            utils.spin(this.root);
+
+            this.app.signup({
+                email: this.root.find('[name="email"]').val(),
+                is_verified: 1,
+                name: this.root.find('[name="first-name"]').val(),
+                surname: this.root.find('[name="last-name"]').val(),
+                password: this.root.find('[name="password"]').val()
+            }).then((data) => {
+
+                toastr.success('Votre compte a ete cree avec success');
+
+                this.app.router.navigate('/account/profile')
+
+            }).fail((err: any) => {
+
+                toastr.error(err.message);
+
+            }).finally(() => {
+
+                utils.unspin(this.root);
+
+            });
+
         }
+        
     }
     
 

@@ -836,7 +836,30 @@ export module Application {
             var d = Q.defer();
 
             Backendless.UserService.register(usr, new Backendless.Async((data) => {
-                d.resolve(data);
+
+                this.create_account({
+                    email: params.email,
+                    name: params.name
+                }).then((acc) => {
+
+                    __app.store_user(data);
+
+                    var rst = {
+                        user: data,
+                        acc: acc.response
+                    }
+                    
+                    cookies.set('account', rst.acc);
+
+                    this.update_authentication_info();
+
+                    d.resolve(rst);
+
+                }).fail(err => {
+
+                    d.reject(err)
+                });
+                
             }, (err) => {
                 d.reject(err)
             }));
@@ -844,6 +867,18 @@ export module Application {
             return d.promise;
         }
 
+
+        create_account(params: { email: any, name: any }) {
+
+            return schema.call({
+                fn: 'post',
+                params: ['/accounts', {
+                    email: params.email,
+                    name: params.name
+                }]
+            });
+
+        }
 
         get_model(modelname: string): Q.Promise<Backendless.DataStore> {
         
@@ -1225,7 +1260,9 @@ export module carts {
 
         var key = '{0}_{1}'.format(chance.word({ length: 5 }), chance.word({ length: 5 }));
 
+
         __tmp_pws = 'guest_{0}'.format(key);
+
 
         var _email = 'guest_{0}_@guest.com'.format(key);
 
@@ -1236,21 +1273,9 @@ export module carts {
             name: 'guest_name_{0}'.format(key),
             surname: 'guest_surname_{0}'.format(key),
             is_verified: 0
-        } as any).then(usr => {
+        } as any).then(rst => {
 
-            __app.store_user(usr);
-
-            create_account({ email: _email, name: 'guest_{0}'.format(key) }).then(acc => {
-
-                var rst = {
-                    user: usr,
-                    acc: acc.response
-                }
-
-                cookies.set('account', rst.acc);
-
-                d.resolve(rst);
-            });
+            d.resolve(rst);
             
         }).fail(err => {
 

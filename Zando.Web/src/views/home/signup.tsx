@@ -1,10 +1,12 @@
-﻿// A '.tsx' file enables JSX support in the TypeScript compiler, 
+﻿/// <reference path="../account/quick_loginsignup.tsx" />
+// A '.tsx' file enables JSX support in the TypeScript compiler, 
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
 
 import React = require('react');
 import ReactDOM = require('react-dom');
 import jx = require('../../lib/jx');
+import quick = require('../account/quick_loginsignup');
 
 
 
@@ -38,8 +40,6 @@ export class SignupView extends jx.Views.ReactView {
     }
     
 }
-
-
 
 
 class InternalView extends jx.Views.ReactView {
@@ -77,26 +77,7 @@ class InternalView extends jx.Views.ReactView {
                                 <div className="panel panel-default">
                                     <div className="panel-heading"><h3 style={{ textTransform: 'none' }}>Inscrivez-vous</h3></div>
                                     <div className="panel-body">
-                                        <form role="form">
-                                            <div className="form-group">
-                                                <label htmlFor="">First Name</label>
-                                                <input type="text" className="form-control" />
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="">Last Name</label>
-                                                <input type="text" className="form-control" />
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="">Enter Email</label>
-                                                <input type="email" className="form-control" />
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="">Password</label>
-                                                <input type="password" className="form-control" />
-                                            </div>
-                                            <button className="btn btn-primary btn-block" type="button">Submit</button>
-                                            <button className="btn btn-link btn-block" type="button"><span style={{ textTransform:'none' }}>Vous avez deja un compte?</span> Log in</button>
-                                        </form>
+                                        <quick.QuickLoginSignUpView owner={this} fullview={true} mode={quick.ViewMode.signup} />
                                     </div>
                                 </div>
                             </div>
@@ -107,6 +88,10 @@ class InternalView extends jx.Views.ReactView {
 
             </div>
 
+
         return html;        
     }
+
+
+
 }

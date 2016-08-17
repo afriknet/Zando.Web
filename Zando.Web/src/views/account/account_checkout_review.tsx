@@ -158,9 +158,9 @@ class BillingAddress extends jx.Views.ReactView {
         }
 
         var acc = this.app.get_account();
-        var bill = acc['billing'];
 
-
+        var bill = this.props.owner.props.owner['cart']['billing'];
+        
 
         var html =
             <address>

@@ -244,7 +244,19 @@ export class AccountCheckout extends jx.Views.ReactView {
 
     
     after_closed_quicklogin(): Q.Promise<Boolean> {
-        return this['quick_signuplogin_view'].afterClosed() as any;
+
+        return (this['quick_signuplogin_view'].afterClosed() as Q.Promise<Boolean>).then(ok => {
+
+            if (ok) {
+
+                this.set_currentpage();
+
+            }
+
+            return ok;
+        });
+
+
     }
 
     
