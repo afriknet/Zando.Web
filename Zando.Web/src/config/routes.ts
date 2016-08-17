@@ -11,11 +11,15 @@ import {Types} from '../lib/jx';
 export var routes: Types.RouteList = {
     '/': {
         url: 'home/home',
-        descr:'home'
+        descr: 'home'        
     },
     
     '/login': {
         url: 'home/login'
+    },
+
+    '/signup': {
+        url: 'home/signup'
     },
 
 

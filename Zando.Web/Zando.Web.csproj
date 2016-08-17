@@ -111,6 +111,8 @@
     <Content Include="js\jquery.rippler.js" />
     <Content Include="js\modernizr.custom.js" />
     <Content Include="js\redux.js" />
+    <Content Include="js\schema.js" />
+    <Content Include="js\schema.min.js" />
     <Content Include="js\uisearch.js" />
     <Content Include="plugins\bootstrap\css\bootstrap-theme.css.map" />
     <Content Include="plugins\bootstrap\css\bootstrap-theme.min.css.map" />
@@ -426,8 +428,10 @@
     <TypeScriptCompile Include="src\views\account\account_home.tsx" />
     <TypeScriptCompile Include="src\views\account\account_orders.tsx" />
     <TypeScriptCompile Include="src\views\account\account_profile.tsx" />
+    <TypeScriptCompile Include="src\views\account\quick_loginsignup.tsx" />
     <TypeScriptCompile Include="src\views\home\home.tsx" />
     <TypeScriptCompile Include="src\views\home\login.tsx" />
+    <TypeScriptCompile Include="src\views\home\signup.tsx" />
     <TypeScriptCompile Include="src\views\products\amazon_explore.tsx" />
     <TypeScriptCompile Include="src\views\products\product_single.tsx" />
     <TypeScriptCompile Include="src\views\products\product_modal.tsx" />
@@ -496,7 +500,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2470</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:2478/</IISUrl>
+          <IISUrl>http://localhost:2479/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

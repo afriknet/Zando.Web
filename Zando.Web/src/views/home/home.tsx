@@ -18,10 +18,12 @@ export class HomePage extends jx.Views.HomePage {
 
     featured: any[]
 
+
     constructor(props?: any) {
         super(props);
         this.featured = [];
     }
+
 
     render() {
 
@@ -65,7 +67,7 @@ export class HomePage extends jx.Views.HomePage {
 
     activate_user() {
 
-        carts.display_cart();
+        jx.carts.display_cart();
 
         if (this.app.get_account()) {
             $('.my-account').removeClass('hidden');
@@ -283,11 +285,14 @@ interface FeaturedProductItemProps extends jx.Views.ReactProps {
 }
 class FeaturedProductItem extends jx.Views.ReactView {
 
+
     props: FeaturedProductItemProps;
+
 
     constructor(props: FeaturedProductItemProps) {
         super(props)
     }
+
 
     render() {
                 
@@ -331,8 +336,7 @@ class FeaturedProductItem extends jx.Views.ReactView {
         return html;
 
     }
-
-
+    
 
     componentDidMount() {
 
@@ -355,8 +359,8 @@ class FeaturedProductItem extends jx.Views.ReactView {
     
 
     add_to_cart(ev: React.MouseEvent) {
-
-        carts.flyToElement($(ev.currentTarget), $('.products-cart'), () => {
+        
+        jx.carts.flyToElement($(ev.currentTarget), $('.products-cart'), () => {
             this.insert_new_cart();
         });        
     }
@@ -411,7 +415,6 @@ class FeaturedProductItem extends jx.Views.ReactView {
             });
 
         });
-
     }
 
 
@@ -426,7 +429,7 @@ class FeaturedProductItem extends jx.Views.ReactView {
             }]
         }).then(prod => {
 
-            carts.update_cart(this.app.get_user()['email']);
+            jx.carts.update_cart_ui(this.app.get_user()['email']);
 
             d.resolve(prod);
 
@@ -458,7 +461,7 @@ class FeaturedProductItem extends jx.Views.ReactView {
             }]
         }).then(cart => {
 
-            carts.update_cart(this.app.get_user()['email']);
+            jx.carts.update_cart_ui(this.app.get_user()['email']);
 
             d.resolve(cart);
 

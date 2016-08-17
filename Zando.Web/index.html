@@ -71,14 +71,19 @@
                         <div class="col-md-6 col-xs-12">
 
                             <ul class="list-inline pull-right">
-                                <li class="logged-in">
+                                <li class="log-in">
                                     <span>
-                                        <a href='/login'>Log in</a><small>or</small><a href='/login'>Create an account</a>
+                                        <a href='/login'>identifiez-vous</a><small>or</small><a href='/signup'>inscription</a>
                                     </span>
                                 </li>
-                                <li class="logged-out hidden">
+                                <li class="log-out hidden">
                                     <span>
-                                        <a href='/logout'>Logout</a>
+                                        <a href='/account/profile' class="usr-info"></a>
+                                    </span>
+                                </li>
+                                <li class="log-out hidden">
+                                    <span>
+                                        <a href='#' class="usr-logout">Logout</a>
                                     </span>
                                 </li>
                                 <li class="dropdown searchBox">
@@ -96,7 +101,7 @@
                                     <a href="/account/checkout" class="dropdown-toggle" data-toggle="dropdown disabled">
                                         <i class="fa fa-shopping-cart"></i><span class="cart-total">$0</span>
                                     </a>
-                                    <ul class="dropdown-menu dropdown-menu-right">
+                                    <ul class="dropdown-menu dropdown-menu-right" style="overflow-x:hidden">
                                         <li>Item(s) in your cart</li>
 
                                     </ul>
@@ -276,6 +281,7 @@
                 </div>
             </div>
         </div>
+
         <!-- COPY RIGHT -->
         <div class="copyRight clearfix">
             <div class="container">
@@ -295,106 +301,8 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- LOGIN MODAL -->
-    <div class="modal fade login-modal" id="login" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title">log in</h3>
-                </div>
-                <div class="modal-body">
-                    <form action="" method="POST" role="form">
-                        <div class="form-group">
-                            <label for="">Enter Email</label>
-                            <input type="email" class="form-control" id="">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Password</label>
-                            <input type="password" class="form-control" id="">
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"> Remember Me
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">log in</button>
-                        <button type="button" class="btn btn-link btn-block">Forgot Password?</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- SIGN UP MODAL -->
-    <div class="modal fade" id="signup" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title">Create an account</h3>
-                </div>
-                <div class="modal-body">
-                    <form action="" method="POST" role="form">
-                        <div class="form-group">
-                            <label for="">Enter Email</label>
-                            <input type="email" class="form-control" id="">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Password</label>
-                            <input type="password" class="form-control" id="">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Confirm Password</label>
-                            <input type="password" class="form-control" id="">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Sign up</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PORDUCT QUICK VIEW MODAL -->
-    <div class="modal fade quick-view" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <div class="media">
-                        <div class="media-left">
-                            <img class="media-object" src="/img/products/quick-view/quick-view-01.jpg" alt="Image">
-                        </div>
-                        <div class="media-body">
-                            <h2>Old Skool Navy</h2>
-                            <h3>$149</h3>
-                            <p>Classic sneaker from Vans. Cotton canvas and suede upper. Textile lining with heel stabilizer and ankle support. Contrasting laces. Sits on a classic waffle rubber sole.</p>
-                            <span class="quick-drop">
-                                <select name="guiest_id3" id="guiest_id3" class="select-drop">
-                                    <option value="0">Size</option>
-                                    <option value="1">Size 1</option>
-                                    <option value="2">Size 2</option>
-                                    <option value="3">Size 3</option>
-                                </select>
-                            </span>
-                            <span class="quick-drop resizeWidth">
-                                <select name="guiest_id4" id="guiest_id4" class="select-drop">
-                                    <option value="0">Qty</option>
-                                    <option value="1">Qty 1</option>
-                                    <option value="2">Qty 2</option>
-                                    <option value="3">Qty 3</option>
-                                </select>
-                            </span>
-                            <div class="btn-area">
-                                <a href="#" class="btn btn-primary btn-block">Add to cart <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     
@@ -407,6 +315,7 @@
     <script src="/plugins/countdown/jquery.syotimer.js"></script>
     
     <script src="/js/jquery.validate.js"></script>
+    <script src="/js/jquery.storageapi.js"></script>
     <script src="/js/js.cookie.js"></script>
     <script src="/js/bootstrap-formhelpers.js"></script>
 
@@ -436,6 +345,7 @@
     <script src="/js/uisearch.js"></script>
     <script src="/js/image-scale.min.js"></script>
     <script src="/js/jquery.ellipsis.js"></script>
+    <script src="/js/schema.min.js"></script>
 
 
     <script>

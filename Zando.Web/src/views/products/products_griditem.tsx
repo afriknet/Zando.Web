@@ -62,7 +62,7 @@ export class ProductGridItem extends jx.Views.ReactView {
                     <div className="productCaption clearfix">
 
                         <a href="javascript:void(0)">
-                            <h5 className="product-title text-primary">{this.props.product['name']}</h5>
+                            <h5 className="product-title text-primary" style={{ textTransform:'lowercase' }}>{this.props.product['name']}</h5>
                         </a>
                         <h3 data-price={this.props.product['price']}></h3>
                     </div>
@@ -137,7 +137,11 @@ export class ProductGridItem extends jx.Views.ReactView {
                 });
                 
                 this.jget('.btn-cart').click(() => {
-                    carts.flyToElement(this.jget('.btn-cart'), $('.products-cart'), () => {                        
+
+                    jx.carts.flyToElement(this.jget('.btn-cart'), $('.products-cart'), () => {
+
+                        jx.carts.add_product_into_cart(this.props.product);
+
                     });
                 });
                 

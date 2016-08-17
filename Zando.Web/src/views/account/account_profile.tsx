@@ -23,17 +23,31 @@ export class AccountProfilePage extends jx.Views.ReactView {
     get usr(): any {
 
         if (!this.__usr) {
-            this.__usr = ko['mapping'].fromJS(this.app.get_user())
+
+            var usr_obj = this.app.get_user();
+
+            var reset = !usr_obj || ((usr_obj['surname']) && ((usr_obj['surname'] as string).indexOf('guest_surname_') === 0));
+
+            if (reset) {
+
+                usr_obj['name'] = usr_obj['surname'] = null;
+
+            }
+            
+            this.__usr = ko['mapping'].fromJS(usr_obj)
         }
 
         return this.__usr;
     }
 
+
     private pssw: any;
+
 
     constructor(props: AccountProfilePageProps) {
         super(props);        
     }
+
 
     render() {
 
@@ -85,7 +99,7 @@ export class AccountProfilePage extends jx.Views.ReactView {
 
                     </div>
 
-                    <Modal ref='modal' owner={this} onFinish={() => { return this.update_password(); } } />
+                    <Modal ref='modal' owner={this} onClosing={() => { return this.update_password(); } } />
 
                 </div>
             </div>
@@ -123,7 +137,7 @@ export class AccountProfilePage extends jx.Views.ReactView {
             this.state.loading = true;
 
             Backendless.UserService.update(usr, new Backendless.Async(_usr => {
-
+                                
                 this.app.store_user(_usr);
 
                 var account: any = {
@@ -142,6 +156,8 @@ export class AccountProfilePage extends jx.Views.ReactView {
                     this.app.store_account(account['email']).then(() => {
 
                         toastr.info('Profile updated successfully');
+
+                        this.app.update_authentication_info();
 
                         utils.unspin(this.root);
 

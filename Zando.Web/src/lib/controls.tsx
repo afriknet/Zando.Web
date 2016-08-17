@@ -370,7 +370,8 @@ export class TextNumeric extends jx.Views.ReactView {
 export interface CheckBoxProps extends jx.Views.ReactProps {
     is_checked: boolean,
     onchecked?: (row?: JQuery) => void,
-    onunchecked?: (row?: JQuery) => void 
+    onunchecked?: (row?: JQuery) => void,
+    after_init?: (root?: JQuery) => void 
 }
 export class CheckBox extends jx.Views.ReactView {
 
@@ -385,7 +386,8 @@ export class CheckBox extends jx.Views.ReactView {
 
         var html = <div className="checkbox-x custom" >
                         <label>
-                            <input type="checkbox" /><span className="chk-caption" ></span>
+                            <input type="checkbox" />
+                            <span className="chk-caption" ></span>
                         </label>
                    </div> 
         
@@ -402,6 +404,12 @@ export class CheckBox extends jx.Views.ReactView {
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio'
         });
+
+
+        if (this.props.after_init) {
+            this.props.after_init(this.root);
+        }
+
 
         if (this.props.is_checked) {
             (this.root.find('input') as any).iCheck('check');
@@ -467,12 +475,14 @@ interface ModalState extends jx.Views.ReactState {
     content: any
 }
 export interface ModalProps extends jx.Views.ReactProps {
+    title?: string,
     showModal?: boolean,
     bsSize?: string,
     action?: string,
     hide_footer?: boolean,
-    classlist?: string,
-    onFinish?: () => Q.Promise<Boolean>
+    classlist?: string,        
+    onClosing?: () => Q.Promise<Boolean>,
+    afterClosed?: () => Q.Promise<any>
 }
 
 export class Modal extends jx.Views.ReactView {
@@ -501,13 +511,38 @@ export class Modal extends jx.Views.ReactView {
     
 
     show(content?: any) {
+
         this.setState({ show: true, content: content });
     }
 
 
     close() {
 
-        this.setState({ show: false });
+        var that = this;
+
+        if (that.props.onClosing) {
+
+            that.props.onClosing().then(ok => {
+
+                if (ok)
+                {
+                    this.setState({ show: false });
+
+                    if (this.props.afterClosed) {
+                        this.props.afterClosed();
+                    }
+                }
+            });
+
+        } else {
+
+            this.setState({ show: false });
+
+            if (this.props.afterClosed) {
+                this.props.afterClosed();
+            }
+        }
+        
     }
 
 
@@ -518,7 +553,7 @@ export class Modal extends jx.Views.ReactView {
         var props: any = {
             show: this.state.show,
             onHide: () => {
-                that.close()
+                that.close();
             }
         }
 
@@ -536,6 +571,7 @@ export class Modal extends jx.Views.ReactView {
 
                 <b.Modal.Header closeButton>
                     <b.Modal.Title>
+                        {this.props.title}
                     </b.Modal.Title>
                 </b.Modal.Header >
 
@@ -568,15 +604,14 @@ export class Modal extends jx.Views.ReactView {
     }
 
 
+    onHiding() {
+
+
+    }
+
 
     save() {
-
-        if (this.props.onFinish) {
-            this.props.onFinish().then(() => {
-                this.close();
-            });
-        }
-        
+        this.close();        
     }
 
 

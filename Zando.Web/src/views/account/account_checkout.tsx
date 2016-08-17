@@ -2,18 +2,20 @@
 // A '.tsx' file enables JSX support in the TypeScript compiler, 
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
+/// <reference path="quick_loginsignup.tsx" />
 
 
 
 import React = require('react');
 import ReactDOM = require('react-dom');
 import jx = require('../../lib/jx');
-import { BigLabel, BigLabelProps} from '../../lib/controls';
+import { BigLabel, BigLabelProps, Modal, ModalProps} from '../../lib/controls';
 
 import {AccountCheckoutBilling} from './account_checkout_billing';
 import { AccountCheckoutShipments } from './account_checkout_shipments';
-import { AccountCheckoutPayments } from './account_checkout_payment';
+import { AccountCheckoutPayments, PaymentInfo } from './account_checkout_payment';
 import * as rv from './account_checkout_review';
+import { QuickLoginSignUpView, ViewMode } from './quick_loginsignup';
 
 
 declare var chance;
@@ -30,6 +32,7 @@ interface AccountCheckoutState extends jx.Views.ReactState {
 }
 export class AccountCheckout extends jx.Views.ReactView {
 
+
     constructor(props?: any) {
 
         super(props);
@@ -44,6 +47,7 @@ export class AccountCheckout extends jx.Views.ReactView {
 
     state: AccountCheckoutState;
     pages: PageInfo[];
+    payment_info: PaymentInfo;
     
 
     render() {
@@ -56,8 +60,7 @@ export class AccountCheckout extends jx.Views.ReactView {
         if (this.state.activepage === 3) {
             str_next = 'Complete';
         }
-
-
+        
 
         var html =
 
@@ -103,6 +106,13 @@ export class AccountCheckout extends jx.Views.ReactView {
 
                 </div>;
 
+                <div id="signup">
+                    <Modal ref='modal' owner={this}
+                        title="Creez votre compte"
+                        //onClosing={this.on_closing_quicklogin.bind(this)}
+                        afterClosed={this.after_closed_quicklogin.bind(this)}
+                        hide_footer={true} />
+                </div>
             </div>
 
             
@@ -117,6 +127,7 @@ export class AccountCheckout extends jx.Views.ReactView {
             return 'hideContent'
         }
     }
+
 
     go_next() {
 
@@ -194,11 +205,35 @@ export class AccountCheckout extends jx.Views.ReactView {
 
 
     componentDidMount() {
+        
+        if (!this.app.user_is_verified()) {
+            
+            this.create_account();
 
-        this.set_currentpage();
+        } else {
+
+            this.set_currentpage();
+        }        
     }
 
 
+    create_account(): Q.Promise<any> {
+
+        var d = Q.defer();
+
+        (this.refs['modal'] as Modal).show(<QuickLoginSignUpView owner={this}
+                                                        container={(this.refs['modal'] as Modal)}
+                                                        mode={ViewMode.signup} />);
+
+        return d.promise;
+    }
+
+    
+    after_closed_quicklogin(): Q.Promise<Boolean> {
+        return this['quick_signuplogin_view'].afterClosed() as any;
+    }
+
+    
     componentDidUpdate() {
         
         this.set_currentpage();
@@ -386,3 +421,5 @@ class ProgressBarItem extends jx.Views.ReactView {
 
     }
 }
+
+

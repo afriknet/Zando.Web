@@ -284,21 +284,23 @@ export class AccountCart extends jx.Views.ReactView {
                     });
 
 
-                    var img = null;
+                    var url_img = null;
 
-                    if (prod.images && prod.images.length > 0) {
 
-                        var url = prod.images[0].file.url;
+                    if (prod['amazon'] && parseInt(prod['amazon']) === 1) {
 
-                        $(cell).append($('<div class="cartImage" style="width:100%"><img class="responsive-img" src="{0}" style="width:100%" alt="image"></img></div>'.format(url)));
-
+                        url_img = aws.retrieve_pict(prod);
 
                     } else {
-                        // add empty image
-                        //img = <span className="cartImage"></span>;
+
+                        if (prod.images && prod.images.length > 0) {
+                            url_img = prod.images[0].file.url;
+                        }
                     }
 
-                    //ReactDOM.render(img, $(cell)[0]);
+
+                    $(cell).append($('<div class="cartImage" style="width:100%"><img class="responsive-img" src="{0}" style="width:100%" alt="image"></img></div>'.format(url_img)));
+                                        
                 }
             },
             {
@@ -309,8 +311,8 @@ export class AccountCart extends jx.Views.ReactView {
                     var prod = _.find(this.products, p => {
                         return p['id'] === data['product_id']
                     });
-
-                    $(cell).html(prod.name);
+                    //text-transform: lowercase
+                    $(cell).html(prod.name).css('text-transform', 'lowercase');
                 }
             },
             {

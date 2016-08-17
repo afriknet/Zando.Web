@@ -11,7 +11,17 @@ import jx = require('../../lib/jx');
 import { BigLabel, BigLabelProps, CheckBox} from '../../lib/controls';
 
 
-enum PaymentOptions { card, paypal }
+export enum PaymentOptions { card, paypal }
+
+
+export interface PaymentInfo {
+
+    card_number: string,
+    card_cvc: string,
+    exp_month: number,
+    exp_year: number
+}
+
 
 export interface AccountCheckoutPaymentsProps extends jx.Views.ReactProps {
     index: number
@@ -34,13 +44,16 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
         });
     }
 
+
     get account(): any {
         return this.props.owner['data'];
     }
 
+
     get method_select(): JQuery {
         return this.jget('.method-select');
     }
+
 
     get cardtype_select(): JQuery {
         return this.jget('.card-select');
@@ -65,8 +78,32 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
 
 
     render() {
+
+        function get_exp_years() {
+            
+            var k: number = 0;
+
+            var years: any[] = [];
+
+            while (k <= 20) {
+
+                var val = 2010 + 1 * k;
+
+                years.push(<option value={"{0}".format(val) }>{val}</option>);
+
+                k++;
+            }
+
+            return years;
+        }
+
+
+        var months = ['janvier', 'fevrier', 'mars', 'avril', 'mai', 'juin', 'juillet', 'aout', 'septembre', 'octobre', 'novembre', 'decembre'];
+
+
         var html =
-            <div >
+
+            <div>
 
                 <div className="col-xs-12 no-p">
                     <div className="page-header">
@@ -111,21 +148,19 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
                         <div className="row">
                           <div className="col-xs-6">
                             <span className="step-drop">
-                              <select name="guiest_id3" id="guiest_id3" className="select-drop card-expire">
-                                <option value="0">month</option>
-                                <option value="1">month 1</option>
-                                <option value="2">month 2</option>
-                                <option value="3">month 3</option>
+                                    <select name="guiest_id3" id="guiest_id3" className="select-drop card-expire">
+                                        {_.map([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], k => {
+                                            return <option value={"{0}".format(k) }>{months[k]}</option>
+                                        }) }                                
                               </select>
                             </span>
                           </div>
                           <div className="col-xs-6 card">
                             <span className="step-drop">
                               <select name="guiest_id3" id="guiest_id3" className="select-drop card-year">
-                                <option value="0">2016</option>
-                                <option value="1">2017</option>
-                                <option value="2">2018</option>
-                                <option value="3">2019</option>
+                                        {
+                                            get_exp_years()
+                                        }
                               </select>
                             </span>
                           </div>
@@ -159,7 +194,7 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
 
         this.root.find('select').css('font-size', '18px');
 
-        this.root.find('.select-drop')['selectbox']({
+        this.root.find('.method-select')['selectbox']({
 
             onChange: (val:any) => {
 
@@ -175,11 +210,15 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
 
                     this.jget('.paypal').hide();
                 }
-
             }
         });
 
+
+        this.root.find('.select-drop').not('.method-select')['selectbox']();
+
+
         this.root.find('.step-drop a').css('font-size', '18px');
+
 
         this.set_validations();
         
@@ -261,19 +300,36 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
         return d.promise;
     }
 
-    private sel_val(sel: JQuery) {
+
+    private string_to_int(sel: JQuery) {
         return parseInt(sel.val());
     }
 
+
+    get_payment_info(): PaymentInfo {
+
+        return {
+            card_number: this.cardno_txt.val(),
+            card_cvc: this.cardcv_txt.val(),
+            exp_month: this.string_to_int(this.cardexp_month_select),
+            exp_year: this.string_to_int(this.cardexp_year_select)
+        }
+
+    }
+
+
     can_go_next(): Q.Promise<boolean> {
 
-        var meth = this.sel_val(this.method_select);
+        var meth = this.string_to_int(this.method_select);
 
         if (meth === PaymentOptions.card) {
 
             var ok = this.jget('form').valid();
 
             if (ok) {
+
+                this.props.owner['payment_info'] = this.get_payment_info();
+
                 return Q.resolve(true);
             } else {
                 return Q.reject(false) as any;
