@@ -149,11 +149,16 @@ module utils {
     }
 
 
-    export function can_delete(): Q.Promise<boolean> {
+    export function can_delete(params?: {
+        title?: string,
+        text?: string,
+        confirmButtonText?: string,
+        cancelButtonText?: string        
+    }): Q.Promise<boolean> {
 
         var d = Q.defer<boolean>();
-
-        swal({
+        
+        var opts = _.extend({
             title: "Voulez-vous reellement effacer cet element?",
             text: "Ce changement est definitif et ne peut etre annule",
             type: "warning",
@@ -164,8 +169,10 @@ module utils {
             closeOnConfirm: true,
             closeOnCancel: true,
             //animation: false,
-        }, function (confirmed) {
+        }, params ? params : {});
+        
 
+        swal(opts, function (confirmed) {
             if (confirmed) {
                 d.resolve(true);
             } else {

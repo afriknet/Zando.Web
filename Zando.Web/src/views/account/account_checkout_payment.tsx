@@ -11,11 +11,14 @@ import jx = require('../../lib/jx');
 import { BigLabel, BigLabelProps, CheckBox} from '../../lib/controls';
 
 
-export enum PaymentOptions { card, paypal }
+declare var Schema;
+
+
+export enum PaymentType { card, paypal }
 
 
 export interface PaymentInfo {
-
+    cart_type: PaymentType,
     card_number: string,
     card_cvc: string,
     exp_month: number,
@@ -198,7 +201,7 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
 
             onChange: (val:any) => {
 
-                if (parseInt(val) === PaymentOptions.paypal) {
+                if (parseInt(val) === PaymentType.paypal) {
 
                     this.jget('.card').hide();
 
@@ -309,9 +312,10 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
     get_payment_info(): PaymentInfo {
 
         return {
+            cart_type: this.string_to_int(this.method_select),
             card_number: this.cardno_txt.val(),
             card_cvc: this.cardcv_txt.val(),
-            exp_month: this.string_to_int(this.cardexp_month_select),
+            exp_month: this.string_to_int(this.cardexp_month_select) + 1,
             exp_year: this.string_to_int(this.cardexp_year_select)
         }
 
@@ -322,20 +326,63 @@ export class AccountCheckoutPayments extends jx.Views.ReactView {
 
         var meth = this.string_to_int(this.method_select);
 
-        if (meth === PaymentOptions.card) {
+        if (meth === PaymentType.card) {
 
             var ok = this.jget('form').valid();
 
             if (ok) {
 
-                this.props.owner['payment_info'] = this.get_payment_info();
+                var d:any = Q.defer();
 
-                return Q.resolve(true);
+                this.create_credit_cart_token(this.get_payment_info()).then(card_info => {
+
+                    this.props.owner['payment_info'] = this.get_payment_info();
+
+                    this.props.owner['card_info'] = card_info;
+
+                    d.resolve(true);
+
+                });
+                
+                return d.promise;
+
             } else {
                 return Q.reject(false) as any;
             }
         }
 
         return Q.reject(false) as any;
+    }
+
+
+    create_credit_cart_token(info: PaymentInfo) {
+
+        var card = {
+            number: info.card_number, //4242 4242 4242 4242
+            cvc: info.card_cvc,
+            exp_month: info.exp_month,
+            exp_year: info.exp_year
+        }
+
+        var d = Q.defer();
+
+        Schema.createToken(card, (status, res) => {
+
+            if (status != 200) {
+
+                if (res['error']) {
+                    toastr.error(res['error']['message']);
+                    d.reject(false);
+                }
+
+            } else {
+
+                d.resolve(res);
+            }
+
+        });
+
+        return d.promise;
+
     }
 }

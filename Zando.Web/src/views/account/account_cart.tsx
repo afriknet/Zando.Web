@@ -170,14 +170,12 @@ export class AccountCart extends jx.Views.ReactView {
     }
 
 
-    fetch_items_of_carts() {
+    fetch_products_of_carts() {
 
         var d = Q.defer();
-
-
+        
         var item_ids = [];
-
-
+        
         _.each(this.cart['items'], (item: any) => {
             item_ids.push(item.product_id);
         });
@@ -226,7 +224,7 @@ export class AccountCart extends jx.Views.ReactView {
                 this.cart = res.response.results[0];
             }
 
-            this.fetch_items_of_carts().finally(() => {
+            this.fetch_products_of_carts().finally(() => {
 
                 d.resolve(true);
             });
@@ -353,7 +351,7 @@ export class AccountCart extends jx.Views.ReactView {
 
                     $(cell).empty().css('text-align','right');
 
-                    var btn = <button type="button" className="btn btn-info btn-sm" style={{ padding: 10 }}>
+                    var btn = <button type="button" className="btn btn-info btn-sm" onClick={this.on_delete.bind(this)} style={{ padding: 10 }}>
                                     <i className="fa fa-times"></i> Delete
                               </button>  
 
@@ -363,6 +361,48 @@ export class AccountCart extends jx.Views.ReactView {
         ];
 
         return cols;
+    }
+
+
+    on_delete(e: Event) {
+
+        var itemid = $(e.currentTarget).closest('tr').attr('data-rowid');
+        
+        utils.can_delete({
+            title: 'Voulez-vous reellement retirer cet article?',
+            text:''
+        }).then(ok => {
+
+            utils.spin(this.root);
+
+            schema.call({
+                fn: 'delete',
+                params: ['/carts/{0}/items/{1}'.format(this.cart['id'], itemid)]
+            }).then((res) => {
+
+                this.state.loading = true;
+
+                jx.carts.update_cart_ui(this.app.get_account()['email']);
+
+                this.load_items().then(() => {
+
+                    this.setState({
+                        loading: false
+                    });
+                });
+
+            }).fail(err => {
+
+                alert(err);
+
+            }).finally(() => {
+
+                utils.unspin(this.root);
+
+            })
+            
+        });
+
     }
     
 }

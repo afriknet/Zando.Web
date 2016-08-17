@@ -4,6 +4,8 @@
 
 import { Application } from "../lib/jx";
 
+declare var Schema;
+
 export function start() {
 
     Application.InitApplication();
