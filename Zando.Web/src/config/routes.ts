@@ -10,7 +10,7 @@ import {Types} from '../lib/jx';
 
 export var routes: Types.RouteList = {
     '/': {
-        url: 'home/home',
+        url: 'mstore/home/home',
         descr: 'home'        
     },
     
