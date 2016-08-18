@@ -20,7 +20,7 @@ export class BasePage extends jx.Views.ReactView {
 
                 <PageNavigationBar />
 
-                <div className="container">
+                <div className="container" style={{ minHeight: 400 }}>
 
                     {this.get_pagecontent()}
                     
@@ -77,7 +77,21 @@ class PageHeader extends jx.Views.ReactView {
                             </div>
                             <div className="pull-left hidden-xs"><a href="#"><i className="fa fa-phone" /> +123-456-789</a></div>
                             <div className="pull-left hidden-xs"><a href="mailto:cs@domain.tld"><i className="fa fa-envelope" /> cs @domain.tld</a></div>
-                            <div className="pull-right header-account">
+
+                            <div className="pull-right logged-out">
+                                <a href="/login" className="">
+                                    <span><i className="fa fa-user" /> connectez-vous</span>
+                                </a>
+                            </div>
+
+
+                            <div className="pull-right logged-out">
+                                <a href="/signup" className="">
+                                    <span><i className="fa fa-star" /> creer un compte</span>
+                                </a>
+                            </div>
+                            
+                            <div className="pull-right header-account logged-in hidden">
                                 <div className="dropdown">
                                     <a href="#" className="dropdown-toggle" id="dropdownAccount" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span><i className="fa fa-user" /> My Account <i className="fa fa-caret-down" /></span>
@@ -91,7 +105,7 @@ class PageHeader extends jx.Views.ReactView {
                                 </div>
                             </div>
                             <div className="pull-right hidden-xs"><a href="compare.html"><i className="fa fa-align-left" /> Compare (4) </a></div>
-                            <div className="pull-right hidden-xs"><a href="wishlist.html"><i className="fa fa-heart" /> Wishlist (3) </a></div>
+                            <div className="pull-right hidden-xs logged-in hidden"><a href="wishlist.html"><i className="fa fa-heart" /> Wishlist (3) </a></div>
                         </div>
                     </div>
                 </div>

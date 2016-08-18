@@ -19,11 +19,11 @@ export var routes: Types.RouteList = {
     },
     
     '/login': {
-        url: 'home/login'
+        url: 'mstore/home/login'
     },
 
     '/signup': {
-        url: 'home/signup'
+        url: 'mstore/home/signup'
     },
 
 

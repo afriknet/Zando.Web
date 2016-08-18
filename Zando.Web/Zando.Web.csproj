@@ -579,6 +579,8 @@
     <TypeScriptCompile Include="src\views\home\home.tsx" />
     <TypeScriptCompile Include="src\views\home\login.tsx" />
     <TypeScriptCompile Include="src\views\home\signup.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\home\login.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\home\signup.tsx" />
     <TypeScriptCompile Include="src\views\mstore\lib\basepage.tsx" />
     <TypeScriptCompile Include="src\views\mstore\lib\pageheader.tsx" />
     <TypeScriptCompile Include="src\views\mstore\products\productgrid.tsx" />
