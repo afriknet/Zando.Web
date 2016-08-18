@@ -230,10 +230,10 @@ class PageNavigationBar extends jx.Views.ReactView {
                         </div>
                         <div className="collapse navbar-collapse" id="navbar-ex1-collapse">
                             <ul className="nav navbar-nav">
-                                <li className="active"><a href="index.html">Home</a></li>
+                                <li className="active"><a href="/">Home</a></li>
                                 <li><a href="/products">Products</a></li>
-                                <li><a href="cart.html">Shopping Cart</a></li>
-                                <li><a href="checkout.html">Checkout</a></li>
+                                <li><a href="/">Shopping Cart</a></li>
+                                <li><a href="/">Checkout</a></li>
                                 <li className="dropdown">
                                     <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         Pages <span className="caret" />

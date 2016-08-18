@@ -1,4 +1,5 @@
-﻿// A '.tsx' file enables JSX support in the TypeScript compiler, 
+﻿/// <reference path="productgrid_boxview.tsx" />
+// A '.tsx' file enables JSX support in the TypeScript compiler, 
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
 
@@ -8,7 +9,7 @@ import React = require('react');
 import ReactDOM = require('react-dom');
 import jx = require('../../../lib/jx');
 import gn = require('../../lib/redux/generic_workflow');
-
+import box = require('./productgrid_boxview');
 
 
 export interface ProductGridListViewProps extends jx.Views.ReactProps{
@@ -114,7 +115,7 @@ export class ProductGridListView extends jx.Views.ReactView{
             }
 
             var products = _.map(that.state.items, item => {
-                                return <ProductBoxView />
+                return <box.ProductGridBoxView product={item} />
             })
 
             return [products, <GridPagination />]
@@ -174,48 +175,3 @@ class GridPagination extends jx.Views.ReactView {
         return html;
     }
 }
-
-
-
-class ProductBoxView extends jx.Views.ReactView{
-
-    render(){
-    
-        var html =
-        <div className="col-sm-4 col-md-3 box-product-outer">
-            <div className="box-product">
-              <div className="img-wrapper">
-                <a href="detail.html">
-                  <img alt="Product" src="/mstore/images/demo/polo1.jpg" />
-                </a>
-                <div className="tags">
-                  <span className="label-tags"><span className="label label-danger">Hot Item</span></span>
-                </div>
-                <div className="option">
-                  <a href="#" data-toggle="tooltip" data-placement="bottom" title="Add to Cart"><i className="ace-icon fa fa-shopping-cart" /></a>
-                  <a href="#" data-toggle="tooltip" data-placement="bottom" title="Compare"><i className="ace-icon fa fa-align-left" /></a>
-                  <a href="#" data-toggle="tooltip" data-placement="bottom" title="Wishlist"><i className="ace-icon fa fa-heart" /></a>
-                </div>
-              </div>
-              <h5><a href="detail.html">IncultGeo Print Polo T-Shirt</a></h5>
-              <div className="price">
-                <div>$16.59<span className="price-down">-10%</span></div>
-                <span className="price-old">$15.00</span>
-              </div>
-              <div className="rating">
-                <i className="ace-icon fa fa-star" />
-                <i className="ace-icon fa fa-star" />
-                <i className="ace-icon fa fa-star" />
-                <i className="ace-icon fa fa-star-half-o" />
-                <i className="ace-icon fa fa-star-o" />
-                <a href="#">(5 reviews)</a>
-              </div>
-            </div>
-          </div>
-        
-        
-        return html;    
-        
-    }    
-    
-} 
