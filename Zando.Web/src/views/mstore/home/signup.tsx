@@ -180,7 +180,7 @@ export class SignUpPage extends base.BasePage {
 
         this.app.login(this.root.find('#emailInputLogin').val(), this.root.find('#passwordInputLogin').val()).then(obj => {
 
-            toastr.info('Connection effectuee avec succes');
+            toastr.info('Bienvenu sur AfriknetMarket');
 
             this.app.router.navigate('/products')
 

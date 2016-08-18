@@ -26,6 +26,18 @@ enum API { default, moltin, schemaIo };
 
 var __api = API.moltin;
 
+interface viewAccessInfo {
+    key: string,
+    view: Views.ReactView
+}
+
+interface Accessors {
+    ['name']: viewAccessInfo
+}
+
+var __accessors: Accessors = {} as any;
+
+
 
 var __router_ctx: any;
 var __app: Application.App;
@@ -776,23 +788,36 @@ export module Application {
 
         private display_loggedin_info() {
 
-            $('.log-in').addClass('hidden');
-            $('.log-out').removeClass('hidden');
+            var view = this.get_view('page-header');
 
-            var usr_info = __app.get_user()['name'];
+            if (view) {
 
-            if (!usr_info) {
-                usr_info = __app.get_user()['email'];
+                view['update_loggin_info']();
+
+            } else {
+
+                $('.log-in').addClass('hidden');
+                $('.log-out').removeClass('hidden');
+
+                var usr_info = __app.get_user()['name'];
+
+                if (!usr_info) {
+                    usr_info = __app.get_user()['email'];
+                }
+
+                $('.log-out').find('.usr-info').html(usr_info);
+
+
+                $('.log-out').find('.usr-logout').off('click');
+                $('.log-out').find('.usr-logout').click(() => {
+
+                    this.display_loggedout_info();
+                });
+
             }
 
-            $('.log-out').find('.usr-info').html(usr_info);
 
-
-            $('.log-out').find('.usr-logout').off('click');
-            $('.log-out').find('.usr-logout').click(() => {
-
-                this.display_loggedout_info();
-            });
+            
         }
 
 
@@ -916,6 +941,21 @@ export module Application {
 
         get_guest_pssw() {
             return __tmp_pws;
+        }
+
+        
+        register_view(key: string, view: Views.ReactView) {
+
+            __accessors[key] = view;
+        }
+
+        get_view(key: string): Views.ReactView {
+
+            return __accessors[key];
+        }
+
+        remove_view(key: string) {
+            delete __accessors[key];
         }
 
 

@@ -42,9 +42,17 @@ export class BasePage extends jx.Views.ReactView {
 }
 
 
+interface PageHeaderState extends jx.Views.ReactState {
+    is_logged: boolean;
+}
 class PageHeader extends jx.Views.ReactView {
 
+    state: PageHeaderState;
+    
     render() {
+
+        var logged_in_visible = this.is_connected() ? '' : 'hidden';
+        var logged_out_visible = !this.is_connected() ? '' : 'hidden';
 
         var html =
 
@@ -78,20 +86,20 @@ class PageHeader extends jx.Views.ReactView {
                             <div className="pull-left hidden-xs"><a href="#"><i className="fa fa-phone" /> +123-456-789</a></div>
                             <div className="pull-left hidden-xs"><a href="mailto:cs@domain.tld"><i className="fa fa-envelope" /> cs @domain.tld</a></div>
 
-                            <div className="pull-right logged-out">
+                            <div className={"pull-right logged-out {0}".format(logged_out_visible) }>
                                 <a href="/login" className="">
                                     <span><i className="fa fa-user" /> connectez-vous</span>
                                 </a>
                             </div>
 
 
-                            <div className="pull-right logged-out">
+                            <div className={"pull-right logged-out {0}".format(logged_out_visible)}>
                                 <a href="/signup" className="">
                                     <span><i className="fa fa-star" /> creer un compte</span>
                                 </a>
                             </div>
                             
-                            <div className="pull-right header-account logged-in hidden">
+                            <div className={"pull-right header-account logged-in {0}".format(logged_in_visible)}>
                                 <div className="dropdown">
                                     <a href="#" className="dropdown-toggle" id="dropdownAccount" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span><i className="fa fa-user" /> My Account <i className="fa fa-caret-down" /></span>
@@ -105,7 +113,7 @@ class PageHeader extends jx.Views.ReactView {
                                 </div>
                             </div>
                             <div className="pull-right hidden-xs"><a href="compare.html"><i className="fa fa-align-left" /> Compare (4) </a></div>
-                            <div className="pull-right hidden-xs logged-in hidden"><a href="wishlist.html"><i className="fa fa-heart" /> Wishlist (3) </a></div>
+                            <div className={"pull-right hidden-xs logged-in {0}".format(logged_in_visible)}><a href="wishlist.html"><i className="fa fa-heart" /> Wishlist (3) </a></div>
                         </div>
                     </div>
                 </div>
@@ -113,6 +121,56 @@ class PageHeader extends jx.Views.ReactView {
 
 
         return html;
+
+    }
+
+
+    componentDidMount() {
+
+        super.componentDidMount();
+
+        this.app.register_view('page-header', this);
+    }
+
+    componentWillUnmount() {
+
+        this.app.remove_view('page-header');
+    }
+
+    is_connected(): boolean {
+
+        var usr = this.app.get_user();
+
+        if (!usr) {
+            return false;
+        }
+
+        if (!this.app.user_is_verified()) {
+            return false;
+        }
+
+        return true;
+
+    }
+
+
+    update_loggin_info() {
+
+        if (!this.app.get_user()) {
+            return;
+        }
+
+        var usr_info = this.app.get_user()['name'];
+
+        if (!usr_info) {
+            usr_info = this.app.get_user()['email'];
+        }
+
+        this.forceUpdate();
+
+        //this.setState(_.extend(this.state, {
+        //    is_logged: true
+        //}));
 
     }
 }
