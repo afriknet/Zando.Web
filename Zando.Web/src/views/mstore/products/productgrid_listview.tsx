@@ -125,22 +125,22 @@ export class ProductGridListView extends jx.Views.ReactView{
         var html =
 
             <div className="col-sm-9" style={{ minHeight:350 }}>
-          <div className="title"><span>T-Shirts</span></div>
-          <div className="product-sorting-bar">
-            <div>Sort By
-              <select name="sortby" className="select2">
-                <option value="">Recomended</option>
-                <option value="">Low Price » High Price</option>
-                <option value="">High Price » High Price</option>
-              </select>
-            </div>
-            <div>Show
-              <select name="show" className="select2">
-                <option value="">8</option>
-                <option value="">12</option>
-                <option value="">16</option>
-              </select> per page
-            </div>
+              <div className="title"><span>T-Shirts</span></div>
+              <div className="product-sorting-bar">
+                <div>Sort By
+                  <select name="sortby" className="select2">
+                    <option value="">Recomended</option>
+                    <option value="">Low Price » High Price</option>
+                    <option value="">High Price » High Price</option>
+                  </select>
+                </div>
+                <div>Show
+                  <select name="show" className="select2">
+                    <option value="">8</option>
+                    <option value="">12</option>
+                    <option value="">16</option>
+                  </select> per page
+                </div>
           </div>
 
           { resolve_content() }

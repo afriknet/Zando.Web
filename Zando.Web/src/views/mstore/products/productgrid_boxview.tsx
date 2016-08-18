@@ -27,7 +27,7 @@ export class ProductGridBoxView extends jx.Views.ReactView {
                             <img alt="Product" src={this.resolve_image()} />
                         </a>
                         <div className="tags">
-                            <span className="label-tags"><span className="label label-danger">Hot Item</span></span>
+                            <span className="label-tags hidden"><span className="label label-danger">Hot Item</span></span>
                         </div>
                         <div className="option">
                             <a href="#" data-toggle="tooltip" data-placement="bottom" title="Add to Cart"><i className="ace-icon fa fa-shopping-cart" /></a>

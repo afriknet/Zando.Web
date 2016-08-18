@@ -754,3 +754,10 @@ input.active { outline: 0 }
     background: #373939
 }
 /* -------------------------------------------------------------- End Back to Top -------------------------------------------------------------- */
+
+
+/* -----  customs */
+
+.filter-sidebar input[type="checkbox"]{
+    padding-left:20px
+}
