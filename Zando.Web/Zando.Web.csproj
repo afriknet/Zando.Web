@@ -579,6 +579,9 @@
     <TypeScriptCompile Include="src\views\home\home.tsx" />
     <TypeScriptCompile Include="src\views\home\login.tsx" />
     <TypeScriptCompile Include="src\views\home\signup.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\lib\basepage.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\lib\pageheader.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\products\productgrid.tsx" />
     <TypeScriptCompile Include="src\views\products\amazon_explore.tsx" />
     <TypeScriptCompile Include="src\views\products\product_single.tsx" />
     <TypeScriptCompile Include="src\views\products\product_modal.tsx" />

@@ -13,6 +13,10 @@ export var routes: Types.RouteList = {
         url: 'mstore/home/home',
         descr: 'home'        
     },
+
+    '/products': {
+        url: 'mstore/products/productgrid',
+    },
     
     '/login': {
         url: 'home/login'
