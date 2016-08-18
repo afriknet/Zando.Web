@@ -582,6 +582,7 @@
     <TypeScriptCompile Include="src\views\mstore\lib\basepage.tsx" />
     <TypeScriptCompile Include="src\views\mstore\lib\pageheader.tsx" />
     <TypeScriptCompile Include="src\views\mstore\products\productgrid.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\products\productgrid_listview.tsx" />
     <TypeScriptCompile Include="src\views\products\amazon_explore.tsx" />
     <TypeScriptCompile Include="src\views\products\product_single.tsx" />
     <TypeScriptCompile Include="src\views\products\product_modal.tsx" />
