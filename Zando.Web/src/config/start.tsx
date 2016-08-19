@@ -2,13 +2,13 @@
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
 
-import { Application } from "../lib/jx";
+import { application } from "../lib/jx";
 
 declare var Schema;
 
 export function start() {
 
-    Application.InitApplication();
+    application.InitApplication();
 
 }
 

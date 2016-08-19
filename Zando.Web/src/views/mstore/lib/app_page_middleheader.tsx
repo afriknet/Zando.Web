@@ -202,7 +202,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
         var _cart_actions = 
             <div className="text-center chart-checkout-btn">
                 <div className="btn-group" role="group" aria-label="View Cart and Checkout Button">
-                    <button className="btn btn-default btn-sm" type="button"><i className="fa fa-shopping-cart"></i> View Cart</button>
+                    <button className="btn btn-default btn-sm" type="button" onClick={this.display_cart.bind(this)}><i className="fa fa-shopping-cart"></i> View Cart</button>
                     <button className="btn btn-default btn-sm" type="button"><i className="fa fa-check"></i> Checkout</button>
                 </div>
             </div>
@@ -211,6 +211,14 @@ export class PageMiddleHeader extends jx.Views.ReactView {
 
         return views;
     }
+
+
+    display_cart() {
+
+
+
+    }
+    
 
 
     currencyfy() {

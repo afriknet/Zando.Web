@@ -40,7 +40,7 @@ var __accessors: Accessors = {} as any;
 
 
 var __router_ctx: any;
-var __app: Application.App;
+var __app: application.App;
 var __moltin: any;
 var __tmp_pws: any;
 
@@ -236,7 +236,7 @@ export module Views {
 
 
 
-        get app(): Application.App {
+        get app(): application.App {
             return __app;
         }
 
@@ -467,7 +467,7 @@ export module Views {
 }
 
 
-export module Application {
+export module application {
 
 
     export class Router {
@@ -481,7 +481,7 @@ export module Application {
         routes: any;
 
         
-        init_routes(routes: any) {
+        start_routing(routes: any) {
 
             this.routes = routes;
             
@@ -569,7 +569,7 @@ export module Application {
         get router(): Router {
 
             if (!this.__router) {
-                this.__router = new Application.Router(this);
+                this.__router = new application.Router(this);
             }
 
             return this.__router;
@@ -637,7 +637,7 @@ export module Application {
 
                 var routes = fn['routes'];
 
-                this.router.init_routes(routes);
+                this.router.start_routing(routes);
 
                 d.resolve(fn);
 
@@ -978,7 +978,7 @@ export module Application {
 
     export function InitApplication() {
 
-        __app = new Application.App();
+        __app = new application.App();
 
         __app.start();
     }

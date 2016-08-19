@@ -18,6 +18,7 @@ export interface ProductGridListViewProps extends jx.Views.ReactProps{
 interface ProductGridListViewState extends jx.Views.ReactState{
     items: any[];
     items_on_page: number;
+    activepage: number;
 }
 
 export class ProductGridListView extends jx.Views.ReactView{
@@ -25,6 +26,7 @@ export class ProductGridListView extends jx.Views.ReactView{
     props:ProductGridListViewProps;
     state:ProductGridListViewState;
     unfiltered_count: number;
+    skip_pageclick: boolean;
     
 
     constructor(props:ProductGridListViewProps){
@@ -37,28 +39,12 @@ export class ProductGridListView extends jx.Views.ReactView{
 
     componentDidMount(){
 
-        if(this.state.loading){
-
-            utils.spin(this.root);
-
-            this.fetch_page(1).then((data)=>{
-
-                this.setState(_.extend(this.state, {
-                    items: data,
-                    loading: false
-                }));
-
-            }).finally(()=>{
-
-                utils.unspin(this.root);
-
-            });
-            
-        }
+        // by default we dont load data. We wait to be triggered by our parent which will also
+        // pass in the active page by calling load_page
     }
-
     
-    query_count(): Q.Promise<number> {
+
+    private query_count(): Q.Promise<number> {
 
         var d = Q.defer<number>();
 
@@ -78,7 +64,7 @@ export class ProductGridListView extends jx.Views.ReactView{
     }
 
 
-    fetch_page(activepage: number) {
+    private fetch_page(activepage: number) {
         
         var d = Q.defer();
 
@@ -162,13 +148,30 @@ export class ProductGridListView extends jx.Views.ReactView{
     load_page(page: number) {
 
         utils.spin(this.root);
-
+        
         this.fetch_page(page).then((data) => {
 
             this.setState(_.extend(this.state, {
                 items: data,
-                loading: false
-            }));
+                loading: false,
+                activepage: page
+            }), () => {
+
+                var old_val = this.skip_pageclick;
+
+                this.skip_pageclick = true;
+
+                try {
+
+                    this.jget('.paging')['pagination']('selectPage', page);
+
+                } finally {
+
+                    this.skip_pageclick = old_val;
+
+                }
+
+            });
 
         }).finally(() => {
 
@@ -194,7 +197,7 @@ class GridPagination extends jx.Views.ReactView {
 
         var html =
 
-            <div className="row paging">
+            <div className="row">
 
                 <div className="col-xs-12 text-center">
                     <div className="paging" style={{ display:'inline-block' }}>
@@ -226,12 +229,19 @@ class GridPagination extends jx.Views.ReactView {
 
             onPageClick: (pagenumber, ev: Event) => {
 
-                if (ev) { ev.preventDefault() }
+                if (ev)
+                {
+                    ev.preventDefault()
+                }
 
+                if (that.props.owner['skip_pageclick']) {
+                    return;
+                }
+                
                 if (pagenumber === 1) {
                     this.app.router.update_url('/products');
                 } else {
-                    this.app.router.update_url('/products/{0}'.format(pagenumber));
+                    this.app.router.update_url('/products/pages/{0}'.format(pagenumber));
                 }
 
                 $("html, body").animate({ scrollTop: 0 }, "slow");

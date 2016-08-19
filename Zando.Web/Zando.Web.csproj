@@ -563,6 +563,7 @@
     <TypeScriptCompile Include="src\lib\redux\reducers.tsx" />
     <TypeScriptCompile Include="src\lib\server.ts" />
     <TypeScriptCompile Include="src\lib\utils.ts" />
+    <TypeScriptCompile Include="src\views\mstore\cart\cart_checkout.tsx" />
     <TypeScriptCompile Include="src\views\mstore\home\home.tsx" />
     <TypeScriptCompile Include="src\views\account\account_addresses.tsx" />
     <TypeScriptCompile Include="src\views\account\account_cart.tsx" />

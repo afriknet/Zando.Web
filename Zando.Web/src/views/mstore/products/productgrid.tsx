@@ -22,11 +22,15 @@ export class ProductGridPage extends base.BasePage {
 
                 <GridFilters />
 
-                <list.ProductGridListView />
+                <list.ProductGridListView owner={this} ref='gridlist' />
 
             </div>
 
         return html;
+    }
+
+    get gridlist(): list.ProductGridListView {
+        return (this.refs['gridlist'] as list.ProductGridListView);
     }
 
 
@@ -38,8 +42,29 @@ export class ProductGridPage extends base.BasePage {
 
             jx.carts.display_cart();
 
-        });
+            this.resolve_routing();
 
+        });
+    }
+
+
+    componentDidUpdate() {
+
+        super.componentDidUpdate();
+
+        this.resolve_routing();
+    }
+
+
+    resolve_routing() {
+
+        var page = 1;
+
+        if (this.app.router.params && this.app.router.params.page) {
+            var page = parseInt(this.app.router.params.page);            
+        }
+        
+        this.gridlist.load_page(page);
     }
 
 }
