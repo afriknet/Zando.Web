@@ -1156,11 +1156,9 @@ export module carts {
     export function update_cart_ui(email: string) {
 
         var d = Q.defer();
-
-
+        
         fetch_account(email, true).then(acc => {
-
-
+            
             schema.call({
                 fn: 'get',
                 params: ['/carts', {
@@ -1184,39 +1182,10 @@ export module carts {
 
                     var view = __app.get_view('page-subheader');
 
+                    data['cart'] = cart;
+
                     view['update_cart_ui'](data);
-
-                    //var ul = $('.products-cart ul');
-
-                    //var must_empty = ul.find('.media').length > 0;
-
-                    //if (must_empty) {
-                    //    ul.empty();
-                    //    ul.append($('<li>Item(s) in your cart</li>'));
-                    //}
-
-                    //_.each(data.prods, prod => {
-
-                    //    var cart_item = _.find(data.items, itm => {
-                    //        return itm.product_id === prod.id;
-                    //    });
-
-                    //    ul.append(add_li(cart_id, prod, cart_item));
-                    //});
-
-                    //if (cart) {
-                    //    $('.products-cart .cart-total').html('€{0}'.format(cart['grand_total']));
-                    //}
-
-                    //if (data.prods.length > 0) {
-
-                    //    ul.append(add_actions());
-
-                    //    init_actions(ul);
-                    //}
-
-                    //$('.products-cart').removeClass('hidden');
-
+                    
                     d.resolve(data.items);
 
                 });
@@ -1227,11 +1196,6 @@ export module carts {
 
         return d.promise;
 
-        //var view = __app.get_view('page-subheader');
-
-        //view['update_cart_ui'](email);
-
-        //return Q.resolve(true);
     }
 
 
@@ -1243,16 +1207,7 @@ export module carts {
             
         } else {
 
-            update_cart_ui(account['email']).then(() => {
-
-                //__app.update_login_info();
-
-                //if (list && list.length > 0) {
-
-                //    $('.products-cart').removeClass('hidden');
-
-                //}
-            });
+            update_cart_ui(account['email'])
         }
 
     }

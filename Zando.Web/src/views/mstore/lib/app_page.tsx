@@ -8,8 +8,8 @@ import ReactDOM = require('react-dom');
 import jx = require('../../../lib/jx');
 
 
-import { PageHeader } from './app_page_topheader';
-import { PageSubHeader } from './app_page_subheader';
+import { PageTopHeader } from './app_page_topheader';
+import { PageMiddleHeader } from './app_page_middleheader';
 import { PageNavigationBar } from './app_page_navigationbar';
 import { PageFooter } from './app_page_footer';
 
@@ -23,9 +23,9 @@ export class BasePage extends jx.Views.ReactView {
 
             <div>
 
-                <PageHeader />
+                <PageTopHeader />
 
-                <PageSubHeader />
+                <PageMiddleHeader />
 
                 <PageNavigationBar />
 

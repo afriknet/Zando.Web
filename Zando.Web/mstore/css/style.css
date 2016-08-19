@@ -264,7 +264,7 @@ input.active { outline: 0 }
 .cart-btn .dropdown-menu {
     right: 15px;
     overflow-y: auto;
-    max-height: 400px;
+    /*max-height: 400px;*/
     padding: 10px 10px 0
 }
 .cart-btn .media-right a { color: #aaa }

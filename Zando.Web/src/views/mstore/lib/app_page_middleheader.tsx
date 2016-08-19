@@ -10,12 +10,19 @@ import jx = require('../../../lib/jx');
 
 
 
-interface PageSubHeaderState extends jx.Views.ReactState {
-    data: { prods: any[], items: any[] }
+interface PageMiddelHeaderState extends jx.Views.ReactState {
+    data: { prods: any[], items: any[] },
+    cart_anim: string
 }
-export class PageSubHeader extends jx.Views.ReactView {
+export class PageMiddleHeader extends jx.Views.ReactView {
 
-    state: PageSubHeaderState;
+    state: PageMiddelHeaderState;
+    cart: any;
+
+    constructor(props?: any) {
+        super(props);
+        this.state.cart_anim = 'fa fa-shopping-cart';
+    }
     
     render() {
 
@@ -24,10 +31,7 @@ export class PageSubHeader extends jx.Views.ReactView {
         if (this.state.data && this.state.data) {
             __count = this.state.data.prods.length ? 'Shopping Cart: {0} items'.format(this.state.data.prods.length) : '';
         }
-
-
-        var fa = this.state.loading ? 'fa fa-spin fa-spinner' : 'fa fa-shopping-cart';
-
+        
         var html =
 
             <div className="middle-header">
@@ -75,9 +79,9 @@ export class PageSubHeader extends jx.Views.ReactView {
                             </div>
                             <div className="col-sm-4 col-md-3 cart-btn hidden-xs">
                                 <button type="button" className="btn btn-default dropdown-toggle" id="dropdown-cart" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <i className={fa} /> {'{0}'.format(__count)} <i className="fa fa-caret-down" />
+                                    <i className={this.state.cart_anim} /> {'{0}'.format(__count)} <i className="fa fa-caret-down" />
                                 </button>
-                                <div className="dropdown-menu dropdown-menu-right cart-items" aria-labelledby="dropdown-cart">
+                                <div className="dropdown-menu dropdown-menu-right cart-items" style={{ maxWidth:'300px!important' }} aria-labelledby="dropdown-cart">
                                     {this.fill_with_items()}
                                 </div>
                             </div>
@@ -107,19 +111,19 @@ export class PageSubHeader extends jx.Views.ReactView {
             return;
         }
 
-        //this.root.find('.product-title')['ellipsis']({
-        //    lines: 2,
-        //    responsive: true
-        //});
-
-        this.root.find('.product-title')['dotdotdot']({
-            //	configuration goes here
+        this.root.find('.product-title')['ellipsis']({
+            lines: 2,        
         });
-
+        
+        this.root.find('.ellip').css('max-width', '200px');
+        
         _.each(this.jget('[data-price]'), el => {
             $(el)['autoNumeric']('init', { 'aSign': '€' });
             $(el)['autoNumeric']('set', $(el).attr('data-price'));
         });
+
+
+        this.currencyfy();
     }
 
 
@@ -136,8 +140,8 @@ export class PageSubHeader extends jx.Views.ReactView {
             return null;
         }
 
-        var views =            
-            _.map(this.state.data.prods, prod => {
+
+        var views =  _.map(this.state.data.prods, prod => {
 
             var cart_item = _.find(this.state.data.items, itm => {
                 return itm.product_id === prod.id;
@@ -177,7 +181,7 @@ export class PageSubHeader extends jx.Views.ReactView {
                     <div className="media-left">
                         <a href="#"><img className="media-object" src={url_img} width={50} alt="product" /></a>
                     </div>
-                    <div className="media-body">
+                    <div className="media-body" style={{ height:5 }}>
                         <a href="#" className="media-heading" style={{ textTransform: 'lower' }}>
                             <span className="product-title">{prod.name}</span>
                         </a>
@@ -190,16 +194,61 @@ export class PageSubHeader extends jx.Views.ReactView {
         });
 
 
+        var sub_total = <div className="subtotal-cart">Subtotal: <span data-curr="sub_total"></span></div>
+
+        views.push(sub_total);
+
+
+        var _cart_actions = 
+            <div className="text-center chart-checkout-btn">
+                <div className="btn-group" role="group" aria-label="View Cart and Checkout Button">
+                    <button className="btn btn-default btn-sm" type="button"><i className="fa fa-shopping-cart"></i> View Cart</button>
+                    <button className="btn btn-default btn-sm" type="button"><i className="fa fa-check"></i> Checkout</button>
+                </div>
+            </div>
+
+        views.push(_cart_actions);
+
         return views;
     }
 
 
+    currencyfy() {
+
+        var that = this;
+
+        this.jget('[data-curr]').each((i, el) => {
+
+            $(el)['autoNumeric']('init', { 'aSign': '€' });
+
+            var field = $(el).attr('data-curr');
+
+            $(el)['autoNumeric']('set', that.cart[field]);
+
+        });
+    }
+
+    
+
 
     update_cart_ui(data: any) {
 
-        this.setState({            
-            data: data
+        this.setState(_.extend(this.state, {
+            cart_anim: 'fa fa-spin fa-spinner'
+        }), () => {
+
+            this.cart = data['cart'];
+
+            this.setState({
+                data: data,
+                cart_anim: 'fa fa-shopping-cart'
+            })
+
         })
+
+        //this.root.find('.cart-anim').removeClass('fa-shopping-cart').addClass('fa-spin fa-spinner');
+
+        
     }
 
 
@@ -236,7 +285,7 @@ export class PageSubHeader extends jx.Views.ReactView {
 
             var cart_id = utils.guid();
 
-            var cart = res.response.results[0];
+            this.cart = res.response.results[0];
 
             if (res.response.results.length > 0) {
                 cart_id = res.response.results[0]['id'];

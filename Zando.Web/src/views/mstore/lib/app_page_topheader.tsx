@@ -9,12 +9,12 @@ import jx = require('../../../lib/jx');
 
 
 
-export interface PageHeaderState extends jx.Views.ReactState {
+export interface PageTopHeaderState extends jx.Views.ReactState {
     is_logged: boolean;
 }
-export class PageHeader extends jx.Views.ReactView {
+export class PageTopHeader extends jx.Views.ReactView {
 
-    state: PageHeaderState;
+    state: PageTopHeaderState;
 
     render() {
 
