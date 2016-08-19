@@ -564,6 +564,7 @@
     <TypeScriptCompile Include="src\lib\server.ts" />
     <TypeScriptCompile Include="src\lib\utils.ts" />
     <TypeScriptCompile Include="src\views\mstore\cart\cart_checkout.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\cart\cart_itemlist.tsx" />
     <TypeScriptCompile Include="src\views\mstore\home\home.tsx" />
     <TypeScriptCompile Include="src\views\account\account_addresses.tsx" />
     <TypeScriptCompile Include="src\views\account\account_cart.tsx" />
@@ -583,7 +584,6 @@
     <TypeScriptCompile Include="src\views\home\signup.tsx" />
     <TypeScriptCompile Include="src\views\mstore\home\login.tsx" />
     <TypeScriptCompile Include="src\views\mstore\home\signup.tsx" />
-    <TypeScriptCompile Include="src\views\mstore\lib\app_page_cartview.tsx" />
     <TypeScriptCompile Include="src\views\mstore\lib\app_page.tsx" />
     <TypeScriptCompile Include="src\views\mstore\lib\app_page_footer.tsx" />
     <TypeScriptCompile Include="src\views\mstore\lib\app_page_navigationbar.tsx" />

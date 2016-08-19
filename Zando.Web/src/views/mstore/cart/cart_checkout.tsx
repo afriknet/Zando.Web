@@ -18,4 +18,16 @@ export class CartCheckoutPage extends base.BasePage {
         return <div>Cart checkout</div>
     }
 
+
+    componentDidMount() {
+
+        super.componentDidMount();
+
+        $.getScript('/mstore/js/mimity.js', () => {
+
+            jx.carts.display_cart();
+            
+        });
+    }
+
 }

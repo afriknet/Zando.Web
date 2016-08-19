@@ -194,7 +194,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
         });
 
 
-        var sub_total = <div className="subtotal-cart">Subtotal: <span data-curr="sub_total"></span></div>
+        var sub_total = <div className="subtotal-cart"><span style={{ color:'gray' }}>Subtotal: </span> <span data-curr="sub_total"></span></div>
 
         views.push(sub_total);
 
@@ -215,7 +215,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
 
     display_cart() {
 
-
+        this.app.router.navigate('/cart');
 
     }
     

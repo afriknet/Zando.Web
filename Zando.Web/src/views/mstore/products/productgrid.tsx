@@ -33,20 +33,18 @@ export class ProductGridPage extends base.BasePage {
         return (this.refs['gridlist'] as list.ProductGridListView);
     }
 
-
     componentDidMount() {
 
         super.componentDidMount();
-        
+
         $.getScript('/mstore/js/mimity.js', () => {
 
             jx.carts.display_cart();
 
             this.resolve_routing();
-
         });
     }
-
+    
 
     componentDidUpdate() {
 

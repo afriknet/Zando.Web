@@ -23,7 +23,7 @@ export var routes: Types.RouteList = {
     },
 
     '/cart': {
-        url: 'mstore/cart/cart_checkout',
+        url: 'mstore/cart/cart_itemlist',
     },
     
     '/login': {

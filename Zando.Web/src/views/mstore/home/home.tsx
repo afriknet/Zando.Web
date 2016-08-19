@@ -17,6 +17,7 @@ export class HomePage extends base.BasePage {
         return [<HomeMainContentSlider />, <HomeMainContentFeatures />]
     }
 
+
     componentDidMount() {
 
         super.componentDidMount();

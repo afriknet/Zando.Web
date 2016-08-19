@@ -48,5 +48,7 @@ export class BasePage extends jx.Views.ReactView {
         return null;
     }
 
+    
+
 }
 

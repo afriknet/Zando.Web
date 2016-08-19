@@ -10,10 +10,9 @@ import jx = require('../../../lib/jx');
 
 
 export class PageNavigationBar extends jx.Views.ReactView {
-
-
+    
     render() {
-
+        
         var html =
             <nav className="navbar navbar-default" role="navigation">
                 <div className="container">
@@ -30,13 +29,13 @@ export class PageNavigationBar extends jx.Views.ReactView {
                             </a>
                         </div>
                         <div className="collapse navbar-collapse" id="navbar-ex1-collapse">
-                            <ul className="nav navbar-nav">
-                                <li className="active"><a href="/">Home</a></li>
+                            <ul className="nav navbar-nav navigation">
+                                <li><a href="/">Home</a></li>
                                 <li><a href="/products">Products</a></li>
-                                <li><a href="/">Shopping Cart</a></li>
-                                <li><a href="/">Checkout</a></li>
+                                <li><a href="/cart">Shopping Cart</a></li>
+                                <li><a href="/checkout">Checkout</a></li>
                                 <li className="dropdown">
-                                    <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <a href="/account" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         Pages <span className="caret" />
                                     </a>
                                     <ul className="dropdown-menu">
@@ -62,4 +61,52 @@ export class PageNavigationBar extends jx.Views.ReactView {
 
         return html;
     }
+
+
+    assign_active_menu() {
+
+        var active = jx.local.get('active-nav-menu');
+
+        if (active) {
+
+            this.root.find('.navigation > li').removeClass('active');
+
+            this.root.find('a[href="{0}"]'.format(active)).closest('li').addClass('active');
+
+        } else {
+
+            this.root.find('.navigation > li').first().addClass('active');
+        }
+
+
+        if (active) {
+            jx.local.remove('active-nav-menu');
+        }
+    }
+
+
+    componentDidMount() {
+
+        super.componentDidMount();
+
+        this.root.on('click', '.navigation > li', (e: Event) => {
+
+            var li = $(e.currentTarget);
+
+            jx.local.set('active-nav-menu', li.find('a').first().attr('href'));
+            
+        });
+
+        this.assign_active_menu();
+        
+    }
+
+
+    componentDidUpdate() {
+
+        super.componentDidUpdate();
+
+        this.assign_active_menu();
+    }
+
 }
