@@ -30,15 +30,15 @@ export class ProductGridBoxView extends jx.Views.ReactView {
                             <span className="label-tags hidden"><span className="label label-danger">Hot Item</span></span>
                         </div>
                         <div className="option">
-                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Add to Cart"><i className="ace-icon fa fa-shopping-cart" /></a>
+                            <a href="javascript:void(0)" className="btn-cart" onClick={this.add_to_cart.bind(this) } data-toggle="tooltip" data-placement="bottom" title="Add to Cart"><i className="ace-icon fa fa-shopping-cart" /></a>
                             <a href="#" data-toggle="tooltip" data-placement="bottom" title="Compare"><i className="ace-icon fa fa-align-left" /></a>
                             <a href="#" data-toggle="tooltip" data-placement="bottom" title="Wishlist"><i className="ace-icon fa fa-heart" /></a>
                         </div>
                     </div>
-                    <h5><a href="detail.html">IncultGeo Print Polo T-Shirt</a></h5>
+                    <h5><a href="#" className="product-title" style={{ textTransform: 'lowercase' }}>{this.props.product['name']}</a></h5>
                     <div className="price">
-                        <div>$16.59<span className="price-down">-10%</span></div>
-                        <span className="price-old">$15.00</span>
+                        <div data-price={this.props.product['price']}></div>{/*<span className="price-down">-10%</span>*/}
+                        <span className="price-old hidden">$15.00</span>
                     </div>
                     <div className="rating">
                         <i className="ace-icon fa fa-star" />
@@ -57,6 +57,17 @@ export class ProductGridBoxView extends jx.Views.ReactView {
     } 
 
 
+    add_to_cart() {
+
+        jx.carts.flyToElement(this.jget('[alt="Product"]'), $('.middle-header .cart-btn'), () => {
+
+            jx.carts.add_product_into_cart(this.props.product);
+
+        });
+
+    }
+
+
     resolve_image() {
 
         var img = null, prod = this.props.product;
@@ -65,28 +76,33 @@ export class ProductGridBoxView extends jx.Views.ReactView {
         if (prod['amazon'] && parseInt(prod['amazon']) === 1) {
 
             var img_url = img = aws.retrieve_pict(prod);
-            
-            //img =
-            //    <div className="">
-            //        <div className="product-imitation" style={{ height: '260' }}>
-            //            <img alt="products-img" className="scale img-responsive" data-scale="best-fill" data-align="center" src={img_url} />
-            //        </div>
-            //    </div>
 
         } else {
 
             if (prod.images && prod.images.length > 0) {
 
                 var url = img = prod.images[0].file.url;
-
-                //img = <img style={{ width: '100%', height: '100%' }} src={url} alt="products-img"/>
-                //return url;
             }
 
         }
 
 
         return img;
+    }
+
+
+    componentDidMount() {
+
+        this.root.find('.product-title')['ellipsis']({
+            lines: 2,
+            responsive: true
+        });
+
+
+        _.each(this.jget('[data-price]'), el => {
+            $(el)['autoNumeric']('init', { 'aSign': '€' });
+            $(el)['autoNumeric']('set', $(el).attr('data-price'));
+        });
     }
 
 }

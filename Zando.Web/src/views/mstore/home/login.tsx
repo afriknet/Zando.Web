@@ -6,7 +6,7 @@
 import React = require('react');
 import ReactDOM = require('react-dom');
 import jx = require('../../../lib/jx');
-import base = require('../lib/basepage');
+import base = require('../lib/app_page');
 
 
 
@@ -18,23 +18,23 @@ export class LoginPage extends base.BasePage {
             <div className="row">
                 <div className="col-sm-6 col-xs-12 login-register-form">
                     <div className="title"><span>Please Enter Your Information</span></div>
-                    <form>
+                    <form className="form-login">
                         <div className="form-group">
                             <label htmlFor="emailInputLogin">Email address</label>
-                            <input type="email" className="form-control" id="emailInputLogin" placeholder="Email" />
+                            <input type="email" className="form-control" required id="emailInputLogin" placeholder="Email" />
                         </div>
                         <div className="form-group">
                             <label htmlFor="passwordInputLogin">Password</label>
-                            <input type="password" className="form-control" id="passwordInputLogin" placeholder="Password" />
+                            <input type="password" className="form-control" required id="passwordInputLogin" placeholder="Password" />
                         </div>
-                        <div className="checkbox">
+                        <div className="checkbox" style={{ paddingLeft:20 }}>
                             <input type="checkbox" id="rememberMe" />
                             <label htmlFor="rememberMe">
                                 Remember Me
                             </label>
                         </div>
-                        <button type="submit" className="btn btn-sm pull-left"><i className="fa fa-long-arrow-right" /> Login</button>
-                        <button type="submit" className="btn btn-sm pull-right">Forgot your password?</button>
+                        <button type="button" onClick={this.login.bind(this)} className="btn btn-sm pull-left"><i className="fa fa-long-arrow-right" /> Login</button>
+                        <button type="button" className="btn btn-sm pull-right">Forgot your password?</button>
                     </form>
                 </div>
                 <div className="col-sm-6 col-xs-12">
@@ -59,6 +59,41 @@ export class LoginPage extends base.BasePage {
 
         });
 
+    }
+
+
+    init_view() {
+        
+        this.root.find('.form-login').validate();
+    }
+
+
+    login() {
+
+        if (!this.root.find('.form-login').valid()) {
+            return;
+        }
+
+        var email = this.root.find('#emailInputLogin').val();
+        var psswrd = this.root.find('#passwordInputLogin').val();
+
+        utils.spin(this.root);
+
+        this.app.login(email, psswrd).then(usr => {
+
+            toastr.info('Bienvenu sur AfriknetMarket');
+
+            this.app.router.navigate('/');
+
+        }).fail(err => {
+
+            toastr.error(err.message)
+
+        }).finally(() => {
+
+            utils.unspin(this.root);
+
+        });
     }
 }
 

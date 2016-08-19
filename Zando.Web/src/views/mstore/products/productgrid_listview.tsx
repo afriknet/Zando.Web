@@ -13,16 +13,18 @@ import box = require('./productgrid_boxview');
 
 
 export interface ProductGridListViewProps extends jx.Views.ReactProps{
+    
 }
 interface ProductGridListViewState extends jx.Views.ReactState{
     items: any[];
+    items_on_page: number;
 }
 
 export class ProductGridListView extends jx.Views.ReactView{
 
     props:ProductGridListViewProps;
     state:ProductGridListViewState;
-    unfiltered_count:number;
+    unfiltered_count: number;
     
 
     constructor(props:ProductGridListViewProps){
@@ -30,7 +32,7 @@ export class ProductGridListView extends jx.Views.ReactView{
         super(props);
         
         this.state.loading = true;
-
+        this.state.items_on_page = 8;
     }
 
     componentDidMount(){
@@ -87,7 +89,7 @@ export class ProductGridListView extends jx.Views.ReactView{
             schema.call({
                 fn: 'get',
                 params: ['/products', {
-                    limit: 8,
+                    limit: this.state.items_on_page,
                     page: activepage
                 }]
             }).then((res) => {
@@ -114,11 +116,15 @@ export class ProductGridListView extends jx.Views.ReactView{
                 return <div style={{ minHeight: 350 }}></div>
             }
 
-            var products = _.map(that.state.items, item => {
-                return <box.ProductGridBoxView product={item} />
-            })
+            var products =
+                <div style={{ minHeight: 350}}>
+                    {
+                        _.map(that.state.items, item => {
+                            return <box.ProductGridBoxView product={item} />
+                        }) }
+                </div>
 
-            return [products, <GridPagination />]
+            return [products, <GridPagination owner={that} totalcount={that.unfiltered_count} itemsOnPage={that.state.items_on_page} />]
         }
         
 
@@ -144,34 +150,99 @@ export class ProductGridListView extends jx.Views.ReactView{
           </div>
 
           { resolve_content() }
+
                 
         </div>
 
 
         return html;
     }    
+
+
+    load_page(page: number) {
+
+        utils.spin(this.root);
+
+        this.fetch_page(page).then((data) => {
+
+            this.setState(_.extend(this.state, {
+                items: data,
+                loading: false
+            }));
+
+        }).finally(() => {
+
+            utils.unspin(this.root);
+
+        });
+        
+    }
 }
 
 
+
+interface GridPaginationProps extends jx.Views.ReactProps {
+    totalcount: number,
+    itemsOnPage: number
+}
 class GridPagination extends jx.Views.ReactView {
+
+    props: GridPaginationProps;
+
 
     render() {
 
         var html =
 
-            <div className="col-xs-12 text-center">
-                <ul className="pagination">
-                    <li className="disabled"><a href="#">«</a></li>
-                    <li className="disabled"><a href="#">‹</a></li>
-                    <li className="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">›</a></li>
-                    <li><a href="#">»</a></li>
-                </ul>
+            <div className="row paging">
+
+                <div className="col-xs-12 text-center">
+                    <div className="paging" style={{ display:'inline-block' }}>
+                    </div>
+                </div>
+                
+
             </div>
-
-
+    
         return html;
     }
+
+
+    componentDidMount() {
+
+        var that = this;
+
+        this.root.find('.paging')['pagination']({
+
+            items: that.props.totalcount,
+
+            itemsOnPage: that.props.itemsOnPage,
+
+            listStyle: 'pagination',
+
+            prevText: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>',
+
+            nextText: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+
+            onPageClick: (pagenumber, ev: Event) => {
+
+                if (ev) { ev.preventDefault() }
+
+                if (pagenumber === 1) {
+                    this.app.router.update_url('/products');
+                } else {
+                    this.app.router.update_url('/products/{0}'.format(pagenumber));
+                }
+
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+
+                that.props.owner['load_page'](pagenumber);
+                
+            }
+        });
+
+    }
+
+
+
 }

@@ -10,7 +10,7 @@
 import React = require('react');
 import ReactDOM = require('react-dom');
 import jx = require('../../../lib/jx');
-import base = require('../lib/basepage');
+import base = require('../lib/app_page');
 
 
 

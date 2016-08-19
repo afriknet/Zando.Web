@@ -157,7 +157,7 @@ export class AccountProfilePage extends jx.Views.ReactView {
 
                         toastr.info('Profile updated successfully');
 
-                        this.app.update_authentication_info();
+                        this.app.update_login_info();
 
                         utils.unspin(this.root);
 

@@ -756,7 +756,9 @@ export module Application {
                         
                 this.store_account(data['email']).then(() => {
 
-                    this.update_authentication_info();
+                    this.update_login_info();
+
+                    carts.display_cart();
 
                     d.resolve(data);
 
@@ -776,12 +778,9 @@ export module Application {
         }
 
 
-        update_authentication_info() {
+        update_login_info() {
 
-            if (this.user_is_verified()) {
-
-                this.display_loggedin_info();
-            }
+            this.display_loggedin_info();
             
         }
 
@@ -795,6 +794,10 @@ export module Application {
                 view['update_loggin_info']();
 
             } else {
+
+                if (!this.user_is_verified()) {
+                    return;
+                }
 
                 $('.log-in').addClass('hidden');
                 $('.log-out').removeClass('hidden');
@@ -876,7 +879,7 @@ export module Application {
                     
                     cookies.set('account', rst.acc);
 
-                    this.update_authentication_info();
+                    this.update_login_info();
 
                     d.resolve(rst);
 
@@ -1152,7 +1155,6 @@ export module carts {
 
     export function update_cart_ui(email: string) {
 
-
         var d = Q.defer();
 
 
@@ -1179,37 +1181,41 @@ export module carts {
 
 
                 fetch_items_of_carts(res.response.results).then((data: { prods: any[], items: any[] }) => {
-                    
-                    var ul = $('.products-cart ul');
-                                        
-                    var must_empty = ul.find('.media').length > 0;
 
-                    if (must_empty) {
-                        ul.empty();
-                        ul.append($('<li>Item(s) in your cart</li>'));
-                    }
+                    var view = __app.get_view('page-subheader');
 
-                    _.each(data.prods, prod => {
+                    view['update_cart_ui'](data);
 
-                        var cart_item = _.find(data.items, itm => {
-                            return itm.product_id === prod.id;
-                        });
+                    //var ul = $('.products-cart ul');
 
-                        ul.append(add_li(cart_id, prod, cart_item));
-                    });
+                    //var must_empty = ul.find('.media').length > 0;
 
-                    if (cart) {
-                        $('.products-cart .cart-total').html('€{0}'.format(cart['grand_total']));
-                    }
+                    //if (must_empty) {
+                    //    ul.empty();
+                    //    ul.append($('<li>Item(s) in your cart</li>'));
+                    //}
 
-                    if (data.prods.length > 0) {
+                    //_.each(data.prods, prod => {
 
-                        ul.append(add_actions());
+                    //    var cart_item = _.find(data.items, itm => {
+                    //        return itm.product_id === prod.id;
+                    //    });
 
-                        init_actions(ul);
-                    }
+                    //    ul.append(add_li(cart_id, prod, cart_item));
+                    //});
 
-                    $('.products-cart').removeClass('hidden');
+                    //if (cart) {
+                    //    $('.products-cart .cart-total').html('€{0}'.format(cart['grand_total']));
+                    //}
+
+                    //if (data.prods.length > 0) {
+
+                    //    ul.append(add_actions());
+
+                    //    init_actions(ul);
+                    //}
+
+                    //$('.products-cart').removeClass('hidden');
 
                     d.resolve(data.items);
 
@@ -1220,6 +1226,12 @@ export module carts {
         });
 
         return d.promise;
+
+        //var view = __app.get_view('page-subheader');
+
+        //view['update_cart_ui'](email);
+
+        //return Q.resolve(true);
     }
 
 
@@ -1228,20 +1240,18 @@ export module carts {
         var account = cookies.get('account');
 
         if (!account) {
-
-            //$('.products-cart').addClass('hidden');
-
+            
         } else {
 
-            update_cart_ui(account['email']).then((list: any) => {
+            update_cart_ui(account['email']).then(() => {
 
-                __app.update_authentication_info();
+                //__app.update_login_info();
 
-                if (list && list.length > 0) {
+                //if (list && list.length > 0) {
 
-                    $('.products-cart').removeClass('hidden');
+                //    $('.products-cart').removeClass('hidden');
 
-                }
+                //}
             });
         }
 
@@ -1438,8 +1448,12 @@ export module carts {
 
                     add_product_to_cart_ui(cart['id'], product).then(() => {
 
+                        update_cart_ui(__app.get_user()['email']);
+
                         d.resolve(true);
-                    })
+
+                    });
+                    
                 }
             })
 
@@ -1461,9 +1475,7 @@ export module carts {
                 product_id: product['id']
             }]
         }).then(prod => {
-
-            update_cart_ui(__app.get_user()['email']);
-            
+                        
             d.resolve(prod);
 
         }).fail(err => {

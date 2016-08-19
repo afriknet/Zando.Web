@@ -8,7 +8,7 @@
 import React = require('react');
 import ReactDOM = require('react-dom');
 import jx = require('../../../lib/jx');
-import base = require('../lib/basepage');
+import base = require('../lib/app_page');
 import list = require('./productgrid_listview');
 
 
@@ -36,6 +36,8 @@ export class ProductGridPage extends base.BasePage {
         
         $.getScript('/mstore/js/mimity.js', () => {
 
+            jx.carts.display_cart();
+
         });
 
     }
@@ -45,7 +47,9 @@ export class ProductGridPage extends base.BasePage {
 
 
 class GridFilters extends jx.Views.ReactView{
-    render(){
+    render() {
+
+        var pl20 = { paddingLeft: 20};
 
         var html =
 
@@ -62,10 +66,10 @@ class GridFilters extends jx.Views.ReactView{
             <div className="title"><span>Categories</span></div>
             <ul>
               <li>
-                <div className="checkbox"><input type="checkbox" id="DressCheckbox" defaultValue="checked" /><label htmlFor="DressCheckbox">T-Shirts (10)</label></div>
+                <div className="checkbox" style={pl20}><input type="checkbox" id="DressCheckbox" defaultValue="checked" /><label htmlFor="DressCheckbox">T-Shirts (10) </label></div>
               </li>
               <li>
-                <div className="checkbox"><input type="checkbox" id="SweaterCheckbox" /><label htmlFor="SweaterCheckbox">Polo T-Shirts (11)</label></div>
+                <div className="checkbox" style={pl20}><input type="checkbox" id="SweaterCheckbox" /><label htmlFor="SweaterCheckbox">Polo T-Shirts (11)</label></div>
               </li>
             </ul>
           </div>
@@ -73,7 +77,7 @@ class GridFilters extends jx.Views.ReactView{
             <div className="title"><span>Availability</span></div>
             <ul>
               <li>
-                <div className="checkbox"><input type="checkbox" id="InStockCheckbox" defaultValue="checked" /><label htmlFor="InStockCheckbox">In Stock (20)</label></div>
+                <div className="checkbox" style={pl20}><input type="checkbox" id="InStockCheckbox" defaultValue="checked" /><label htmlFor="InStockCheckbox">In Stock (20)</label></div>
               </li>
             </ul>
           </div>
@@ -81,16 +85,16 @@ class GridFilters extends jx.Views.ReactView{
             <div className="title"><span>Brand</span></div>
             <ul>
               <li>
-                <div className="checkbox"><input type="checkbox" id="BrandName1Checkbox" defaultValue="checked" /><label htmlFor="BrandName1Checkbox">Brand Name 1 (11)</label></div>
+                <div className="checkbox" style={pl20}><input type="checkbox" id="BrandName1Checkbox" defaultValue="checked" /><label htmlFor="BrandName1Checkbox">Brand Name 1 (11)</label></div>
               </li>
               <li>
-                <div className="checkbox"><input type="checkbox" id="BrandName2Checkbox" /><label htmlFor="BrandName2Checkbox">Brand Name 2 (12)</label></div>
+                <div className="checkbox" style={pl20}><input type="checkbox" id="BrandName2Checkbox" /><label htmlFor="BrandName2Checkbox">Brand Name 2 (12)</label></div>
               </li>
               <li>
-                <div className="checkbox"><input type="checkbox" id="BrandName3Checkbox" /><label htmlFor="BrandName3Checkbox">Brand Name 3 (13)</label></div>
+                <div className="checkbox" style={pl20}><input type="checkbox" id="BrandName3Checkbox" /><label htmlFor="BrandName3Checkbox">Brand Name 3 (13)</label></div>
               </li>
               <li>
-                <div className="checkbox"><input type="checkbox" id="BrandName4Checkbox" /><label htmlFor="BrandName4Checkbox">Brand Name 4 (14)</label></div>
+                <div className="checkbox" style={pl20}><input type="checkbox" id="BrandName4Checkbox" /><label htmlFor="BrandName4Checkbox">Brand Name 4 (14)</label></div>
               </li>
             </ul>
           </div>
@@ -107,16 +111,16 @@ class GridFilters extends jx.Views.ReactView{
             <div className="title"><span>Size</span></div>
             <ul>
               <li>
-                <div className="checkbox"><input type="checkbox" id="SCheckbox" /><label htmlFor="SCheckbox">S (11)</label></div>
+                <div className="checkbox" style={pl20}><input type="checkbox" id="SCheckbox" /><label htmlFor="SCheckbox">S (11)</label></div>
               </li>
               <li>
-                <div className="checkbox"><input type="checkbox" id="MCheckbox" /><label htmlFor="MCheckbox">M (12)</label></div>
+                <div className="checkbox" style={pl20}><input type="checkbox" id="MCheckbox" /><label htmlFor="MCheckbox">M (12)</label></div>
               </li>
               <li>
-                <div className="checkbox"><input type="checkbox" id="LCheckbox" /><label htmlFor="LCheckbox">L (13)</label></div>
+                <div className="checkbox" style={pl20}><input type="checkbox" id="LCheckbox" /><label htmlFor="LCheckbox">L (13)</label></div>
               </li>
               <li>
-                <div className="checkbox"><input type="checkbox" id="XLCheckbox" /><label htmlFor="XLCheckbox">XL (14)</label></div>
+                <div className="checkbox" style={pl20}><input type="checkbox" id="XLCheckbox" /><label htmlFor="XLCheckbox">XL (14)</label></div>
               </li>
             </ul>
           </div>

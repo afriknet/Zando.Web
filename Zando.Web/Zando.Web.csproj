@@ -105,6 +105,7 @@
     <Content Include="js\imgLiquid.js" />
     <Content Include="js\jquery-imagefill.js" />
     <Content Include="js\jquery-labelauty.js" />
+    <Content Include="js\jquery.dotdotdot.js" />
     <Content Include="js\jquery.ellipsis.js" />
     <Content Include="js\jquery.ellipsis.min.js" />
     <Content Include="js\jquery.imagefit.js" />
@@ -581,8 +582,12 @@
     <TypeScriptCompile Include="src\views\home\signup.tsx" />
     <TypeScriptCompile Include="src\views\mstore\home\login.tsx" />
     <TypeScriptCompile Include="src\views\mstore\home\signup.tsx" />
-    <TypeScriptCompile Include="src\views\mstore\lib\basepage.tsx" />
-    <TypeScriptCompile Include="src\views\mstore\lib\pageheader.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\lib\app_page_cartview.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\lib\app_page.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\lib\app_page_footer.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\lib\app_page_navigationbar.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\lib\app_page_subheader.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\lib\app_page_topheader.tsx" />
     <TypeScriptCompile Include="src\views\mstore\products\productgrid.tsx" />
     <TypeScriptCompile Include="src\views\mstore\products\productgrid_boxview.tsx" />
     <TypeScriptCompile Include="src\views\mstore\products\productgrid_listview.tsx" />
