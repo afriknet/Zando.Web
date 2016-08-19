@@ -29,7 +29,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
         var __count = 'Shopping Cart';
 
         if (this.state.data && this.state.data) {
-            __count = this.state.data.prods.length ? 'Shopping Cart: {0} items'.format(this.state.data.prods.length) : '';
+            __count = this.state.data.items.length ? 'Shopping Cart: {0} items'.format(this.state.data.items.length) : '';
         }
         
         var html =
