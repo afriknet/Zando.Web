@@ -761,3 +761,7 @@ input.active { outline: 0 }
 .filter-sidebar input[type="checkbox"]{
     padding-left:20px
 }
+
+ input[type="checkbox"] {
+    outline:none!important
+}

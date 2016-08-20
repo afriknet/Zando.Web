@@ -29,7 +29,7 @@ export class BasePage extends jx.Views.ReactView {
 
                 <PageNavigationBar />
 
-                <div className="container" style={{ minHeight: 400 }}>
+                <div className="container page-container" style={{ minHeight: 400 }}>
 
                     {this.get_pagecontent()}
                     

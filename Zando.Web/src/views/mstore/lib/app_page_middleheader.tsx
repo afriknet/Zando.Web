@@ -26,6 +26,8 @@ export class PageMiddleHeader extends jx.Views.ReactView {
     
     render() {
 
+        var teal = '#009688';
+
         var __count = 'Shopping Cart';
 
         if (this.state.data && this.state.data) {
@@ -40,15 +42,15 @@ export class PageMiddleHeader extends jx.Views.ReactView {
                         <div className="row">
                             <div className="col-md-3 logo">
                                 <a href="/">
-                                    {/*<img alt="Logo" src="/mstore/images/logo-blue.png" />*/}
+                                    {/*<img alt="Logo" src="/mstore/images/logo-blue.png" /> color: '#47bac1', { color: '#47bac1' }*/}
                                     <table cellSpacing={2}>
                                         <tbody><tr>
                                             <td>
-                                                <i className="fa fa-shopping-bag fa-2x" style={{ color: '#47bac1', marginRight: 5, marginTop: 3 }} />
+                                                <i className="fa fa-shopping-bag fa-2x" style={{ color: teal,  marginRight: 5, marginTop: 10 }} />
                                             </td>
                                             <td style={{ paddingTop: 10 }}>
                                                 <span style={{ fontFamily: '"Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif', fontSize: 30, fontWeight: 300 }}>
-                                                    <span style={{ color: 'gray' }}>Afriknet</span><span style={{ color: '#47bac1' }}>Market</span>
+                                                    <span style={{ color: 'gray' }}>Afriknet</span><span className="" style={{ color: teal }}>Market</span>
                                                 </span>
                                             </td>
                                         </tr>

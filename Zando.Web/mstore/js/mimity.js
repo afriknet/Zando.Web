@@ -6,7 +6,7 @@ function get_width() {
 
 // Function to set color
 function set_color() {
-	var color = localStorage.getItem('color');
+    var color = 'teal'; //localStorage.getItem('color');
 	$('#color-chooser').val(color);
 	$('#color-style').attr('href','/mstore/css/style-'+color+'.css');
 	$('.logo img').attr('src', '/mstore/images/logo-' + color + '.png');

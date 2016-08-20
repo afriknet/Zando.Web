@@ -153,7 +153,8 @@ module utils {
         title?: string,
         text?: string,
         confirmButtonText?: string,
-        cancelButtonText?: string        
+        cancelButtonText?: string,
+        animation?: boolean
     }): Q.Promise<boolean> {
 
         var d = Q.defer<boolean>();
@@ -168,7 +169,7 @@ module utils {
             cancelButtonText: "Annuler",
             closeOnConfirm: true,
             closeOnCancel: true,
-            //animation: false,
+            animation: false,
         }, params ? params : {});
         
 
@@ -199,7 +200,7 @@ module utils {
             cancelButtonText: "Annuler",
             closeOnConfirm: true,
             closeOnCancel: true,
-            //animation: false,
+            animation: false,
         }, function (confirmed) {
 
             if (confirmed) {
