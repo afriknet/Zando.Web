@@ -36,7 +36,7 @@ export class LoginPage extends jx.Views.HomePage {
                 var _email = this.root.find('[type="email"]').val();
                 var _pass = this.root.find('[type="password"]').val();
 
-                this.app.login(_email, _pass).then((usr) => {
+                this.app.login(_email, _pass, false).then((usr) => {
 
                     toastr.success('Logged in successfully');
 

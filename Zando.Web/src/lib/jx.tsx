@@ -8,6 +8,7 @@
 /// <reference path="redux/workflow.ts" />
 /// <reference path="redux/reducers.tsx" />
 /// <reference path="controls.tsx" />
+/// <reference path="../views/mstore/lib/app_page_middleheader.tsx" />
 
 
 
@@ -20,6 +21,7 @@ import rx = require('redux');
 import flow = require('./redux/workflow');
 import rdx = require('./redux/reducers');
 import ctrls = require('./controls');
+import mdl = require('../views/mstore/lib/app_page_middleheader');
 
 
 enum API { default, moltin, schemaIo };
@@ -118,6 +120,14 @@ export module Types {
         is_verified?: number
 
     }
+}
+
+
+export module constants {
+
+    export const pageheader: string = 'pageheader'
+    export const middleheader: string = 'middleheader'
+
 }
 
 
@@ -746,7 +756,7 @@ export module application {
         }
         
 
-        login(email: string, password: string): Q.Promise<any> {
+        login(email: string, password: string, update_cart_ui: boolean): Q.Promise<any> {
 
             var d = Q.defer();
 
@@ -758,7 +768,9 @@ export module application {
 
                     this.update_login_info();
 
-                    carts.display_cart();
+                    if (update_cart_ui) {
+                        carts.display_cart(true);
+                    }
 
                     d.resolve(data);
 
@@ -787,7 +799,7 @@ export module application {
 
         private display_loggedin_info() {
 
-            var view = this.get_view('page-header');
+            var view = this.get_view(constants.pageheader);
 
             if (view) {
 
@@ -818,8 +830,6 @@ export module application {
                 });
 
             }
-
-
             
         }
 
@@ -1153,12 +1163,18 @@ export module carts {
     }
 
 
-    export function update_cart_ui(email: string) {
-
-        var d = Q.defer();
+    export function update_cart_ui(email: string, animate: boolean) {
         
+        var d = Q.defer<any>();
+        
+        var view: mdl.PageMiddleHeader = __app.get_view(constants.middleheader) as any;
+
+        if (animate) {
+            view.begin_updating_cart_ui();
+        }
+
         fetch_account(email, true).then(acc => {
-            
+
             schema.call({
                 fn: 'get',
                 params: ['/carts', {
@@ -1180,12 +1196,8 @@ export module carts {
 
                 fetch_items_of_carts(res.response.results).then((data: { prods: any[], items: any[] }) => {
 
-                    var view = __app.get_view('page-subheader');
+                    view.end_updating_cart_ui(data);
 
-                    data['cart'] = cart;
-
-                    view['update_cart_ui'](data);
-                    
                     d.resolve(data.items);
 
                 });
@@ -1195,11 +1207,11 @@ export module carts {
         });
 
         return d.promise;
-
+        
     }
 
 
-    export function display_cart() {
+    export function display_cart(animate: boolean) {
 
         var account = cookies.get('account');
 
@@ -1207,7 +1219,7 @@ export module carts {
             
         } else {
 
-            update_cart_ui(account['email'])
+            update_cart_ui(account['email'], animate)
         }
 
     }
@@ -1394,7 +1406,7 @@ export module carts {
 
                     create_cart(product).then(cart => {
 
-                        update_cart_ui(__app.get_user()['email']);
+                        update_cart_ui(__app.get_user()['email'], true);
 
                         d.resolve(true);
                     })
@@ -1403,7 +1415,7 @@ export module carts {
 
                     add_product_to_cart_ui(cart['id'], product).then(() => {
 
-                        update_cart_ui(__app.get_user()['email']);
+                        update_cart_ui(__app.get_user()['email'], true);
 
                         d.resolve(true);
 

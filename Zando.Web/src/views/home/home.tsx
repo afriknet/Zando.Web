@@ -67,7 +67,7 @@ export class HomePage extends jx.Views.HomePage {
 
     activate_user() {
 
-        jx.carts.display_cart();
+        jx.carts.display_cart(true);
 
         if (this.app.get_account()) {
             $('.my-account').removeClass('hidden');
@@ -429,7 +429,7 @@ class FeaturedProductItem extends jx.Views.ReactView {
             }]
         }).then(prod => {
 
-            jx.carts.update_cart_ui(this.app.get_user()['email']);
+            jx.carts.update_cart_ui(this.app.get_user()['email'], true);
 
             d.resolve(prod);
 
@@ -461,7 +461,7 @@ class FeaturedProductItem extends jx.Views.ReactView {
             }]
         }).then(cart => {
 
-            jx.carts.update_cart_ui(this.app.get_user()['email']);
+            jx.carts.update_cart_ui(this.app.get_user()['email'], true);
 
             d.resolve(cart);
 

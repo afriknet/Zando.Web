@@ -27,7 +27,7 @@ export var routes: Types.RouteList = {
     },
 
     '/checkout': {
-        url: 'mstore/home/home'
+        url: 'mstore/cart/cart_checkout'
     },
 
     '/login': {

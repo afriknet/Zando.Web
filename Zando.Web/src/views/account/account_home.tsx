@@ -16,7 +16,7 @@ export class AccountHomePage extends jx.Views.ReactView {
 
     componentDidMount() {
 
-        jx.carts.display_cart();
+        jx.carts.display_cart(true);
 
         $('.innerWrapper').load('/html/account_home.html', () => {
             this.init_view();

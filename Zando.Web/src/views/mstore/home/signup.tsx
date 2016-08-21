@@ -178,7 +178,8 @@ export class SignUpPage extends base.BasePage {
 
         utils.spin(this.root);
 
-        this.app.login(this.root.find('#emailInputLogin').val(), this.root.find('#passwordInputLogin').val()).then(obj => {
+        this.app.login( this.root.find('#emailInputLogin').val(),
+                        this.root.find('#passwordInputLogin').val(), false).then(obj => {
 
             toastr.info('Bienvenu sur AfriknetMarket');
 

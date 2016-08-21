@@ -13,7 +13,7 @@ export class CartItemListPage extends base.BasePage {
     
     get_pagecontent() {
 
-        var html = <InternalView />
+        var html = <CartItemsDatalist is_embedded={false} />
         
         return html;
     }
@@ -22,10 +22,15 @@ export class CartItemListPage extends base.BasePage {
 
 
 
-class InternalView extends jx.Views.ReactView {
+export interface CartItemsDatalistProps extends jx.Views.ReactProps{
+    is_embedded: boolean
+}
+export class CartItemsDatalist extends jx.Views.ReactView {
 
+    props:CartItemsDatalistProps;
     cart: any;
     products: any;
+
 
     constructor(props: any) {
         super(props);
@@ -41,10 +46,22 @@ class InternalView extends jx.Views.ReactView {
 
     render() {
 
+        var col = 'col-md-10';
+        var st_col = {};
+
+        if(this.props.is_embedded){
+            col = 'col-md-12';
+            st_col = { paddingLeft: 0, paddingRight: 0 };
+        }
+
+        var hide_checkout = this.props.is_embedded ? 'hidden' : null;
+        var hide_confirm_order = this.props.is_embedded ? '' : 'hidden';
+
+
         var html =
             <div className="root-view">
                 
-                <div className="col-md-10">
+                <div className={col} style={st_col}>
                     <div className="title"><span>My Shopping Cart</span></div>
                     <div className="table-responsive">
                         <table className="table table-bordered table-cart">
@@ -65,17 +82,31 @@ class InternalView extends jx.Views.ReactView {
                             </tbody>
                         </table>
                     </div>
+                
                     <button className="btn btn-sm pull-left" type="button"><i className="fa fa-arrow-circle-left" /> Continue Shopping</button>
-                    <button className="btn btn-sm pull-right" type="button">Proceed to Checkout <i className="fa fa-arrow-circle-right" /></button>
+                
+                    <button className={"btn btn-sm pull-right {0}".format(hide_checkout)} type="button">Proceed to Checkout <i className="fa fa-arrow-circle-right" /></button>
+
+                    <button className={"btn btn-sm pull-right {0}".format(hide_confirm_order)} type="button">Pay now <i className="fa fa-arrow-circle-right" /></button>
+    
                 </div>
-
-
-                <NewArrivals />
+                
+                {this.add_new_arrivals()}
                 
             </div>
 
 
         return html;
+    }
+
+
+    add_new_arrivals(){
+
+        if(this.props.is_embedded){
+            return null;
+        }
+
+        return <NewArrivals />;
     }
 
 
@@ -127,7 +158,7 @@ class InternalView extends jx.Views.ReactView {
 
         $.getScript('/mstore/js/mimity.js', () => {
 
-            jx.carts.display_cart();
+            jx.carts.display_cart(false);
             
             this.forceUpdate();
 
@@ -187,7 +218,7 @@ class InternalView extends jx.Views.ReactView {
                     loading: true
                 }), () => {
 
-                    jx.carts.update_cart_ui(this.app.get_account()['email'])
+                    jx.carts.update_cart_ui(this.app.get_account()['email'], true)
 
                 });
 
@@ -200,7 +231,6 @@ class InternalView extends jx.Views.ReactView {
         });
     }
     
-
 
     do_delete_cart_item(d: Q.Deferred<any>, itemid: string, items: any[], index: number) {
         
@@ -230,8 +260,7 @@ class InternalView extends jx.Views.ReactView {
 
         return d.promise;
     }
-
-
+    
 
     load_data() {
 
@@ -367,10 +396,8 @@ class InternalView extends jx.Views.ReactView {
 }
 
 
-
-class NewArrivals extends jx.Views.ReactView {
-
-
+export class NewArrivals extends jx.Views.ReactView {
+    
     render() {
 
         var html =

@@ -382,7 +382,7 @@ export class AccountCart extends jx.Views.ReactView {
 
                 this.state.loading = true;
 
-                jx.carts.update_cart_ui(this.app.get_account()['email']);
+                jx.carts.update_cart_ui(this.app.get_account()['email'], true);
 
                 this.load_items().then(() => {
 

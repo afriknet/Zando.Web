@@ -88,7 +88,7 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
 
                 this.update_schema_account(__email, usr['email']).then(() => {
 
-                    this.app.login(usr['email'], usr['password']).then(() => {
+                    this.app.login(usr['email'], usr['password'], true).then(() => {
 
                         this.cancel_authentication = false;
 

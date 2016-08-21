@@ -12,7 +12,7 @@ import jx = require('../../../lib/jx');
 
 interface PageMiddelHeaderState extends jx.Views.ReactState {
     data: { prods: any[], items: any[] },
-    cart_anim: string
+    spin: boolean
 }
 export class PageMiddleHeader extends jx.Views.ReactView {
 
@@ -20,20 +20,19 @@ export class PageMiddleHeader extends jx.Views.ReactView {
     cart: any;
 
     constructor(props?: any) {
-        super(props);
-        this.state.cart_anim = 'fa fa-shopping-cart';
+        super(props);        
     }
     
     render() {
 
         var teal = '#009688';
 
-        var __count = 'Shopping Cart';
+        var __count = 'Shopping cart';
 
         if (this.state.data && this.state.data) {
-            __count = this.state.data.items.length ? 'Shopping Cart: {0} items'.format(this.state.data.items.length) : '';
+            __count = this.state.data.items.length ? 'Shopping cart: {0}'.format(this.state.data.items.length) : '';
         }
-        
+                
         var html =
 
             <div className="middle-header">
@@ -80,12 +79,21 @@ export class PageMiddleHeader extends jx.Views.ReactView {
                                 </form>
                             </div>
                             <div className="col-sm-4 col-md-3 cart-btn hidden-xs">
-                                <button type="button" className="btn btn-default dropdown-toggle" id="dropdown-cart" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <i className={this.state.cart_anim} /> {'{0}'.format(__count)} <i className="fa fa-caret-down" />
+
+                                <button className={"btn btn-default dropdown-toggle {0}".format(this.state.spin ? '' : 'hidden') }>
+                                    <i className="fa fa-spin fa-spinner" style={{ marginRight:5 }} /> <span>Shopping cart</span>
                                 </button>
-                                <div className="dropdown-menu dropdown-menu-right cart-items" style={{ maxWidth:'300px!important' }} aria-labelledby="dropdown-cart">
+
+
+                                <button type="button" className={"btn btn-default dropdown-toggle {0}".format(this.state.spin ? 'hidden' : '')}
+                                    id="dropdown-cart" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <i className="fa fa-shopping-cart" /> {'{0}'.format(__count)} <i className="fa fa-caret-down" />
+                                </button>
+
+                                <div className="dropdown-menu dropdown-menu-right cart-items" style={{ maxWidth: '300px!important' }} aria-labelledby="dropdown-cart">
                                     {this.fill_with_items()}
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -101,7 +109,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
 
         super.componentDidMount();
 
-        this.app.register_view('page-subheader', this);
+        this.app.register_view(jx.constants.middleheader, this);
     }
 
 
@@ -132,7 +140,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
 
     componentWillUnmount() {
 
-        this.app.remove_view('page-subheader');
+        this.app.remove_view(jx.constants.middleheader);
     }
 
 
@@ -205,7 +213,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
             <div className="text-center chart-checkout-btn">
                 <div className="btn-group" role="group" aria-label="View Cart and Checkout Button">
                     <button className="btn btn-default btn-sm" type="button" onClick={this.display_cart.bind(this)}><i className="fa fa-shopping-cart"></i> View Cart</button>
-                    <button className="btn btn-default btn-sm" type="button"><i className="fa fa-check"></i> Checkout</button>
+                    <button className="btn btn-default btn-sm" type="button" onClick={this.checkout_cart.bind(this) }><i className="fa fa-check"></i> Checkout</button>
                 </div>
             </div>
 
@@ -217,49 +225,80 @@ export class PageMiddleHeader extends jx.Views.ReactView {
 
     display_cart() {
 
-        this.app.router.navigate('/cart');
+        jx.local.set('active-nav-menu', '/cart');
 
+        this.app.router.navigate('/cart');
     }
     
+
+    checkout_cart() {
+
+        jx.local.set('active-nav-menu', '/checkout');
+
+        this.app.router.navigate('/checkout');
+    }
 
 
     currencyfy() {
 
-        var that = this;
+        if (this.cart) {
 
-        this.jget('[data-curr]').each((i, el) => {
+            this.jget('[data-curr]').each((i, el) => {
 
-            $(el)['autoNumeric']('init', { 'aSign': '€' });
+                $(el)['autoNumeric']('init', { 'aSign': '€' });
 
-            var field = $(el).attr('data-curr');
+                var field = $(el).attr('data-curr');
 
-            $(el)['autoNumeric']('set', that.cart[field]);
+                $(el)['autoNumeric']('set', this.cart[field]);
 
-        });
-    }
+            });
 
-    
-
-
-    update_cart_ui(data: any) {
-
-        this.setState(_.extend(this.state, {
-            cart_anim: 'fa fa-spin fa-spinner'
-        }), () => {
-
-            this.cart = data['cart'];
-
-            this.setState({
-                data: data,
-                cart_anim: 'fa fa-shopping-cart'
-            })
-
-        })
-
-        //this.root.find('.cart-anim').removeClass('fa-shopping-cart').addClass('fa-spin fa-spinner');
-
+        }
         
     }
+
+
+    begin_updating_cart_ui() {
+
+        this.setState(_.extend(this.state, {
+            spin: true
+        }))
+    }
+
+
+    end_updating_cart_ui(data:any) {
+
+        this.cart = data['cart'];
+
+        this.setState({
+            data: data,
+            spin: false
+        })
+
+    }
+
+
+    //update_cart_ui(callback: () => Q.Promise<any>) {
+
+    //    this.setState(_.extend(this.state, {
+    //        spin: true
+    //    }), () => {
+
+    //        callback().then(data => {
+
+    //            this.cart = data['cart'];
+
+    //            this.setState({
+    //                data: data,
+    //                spin: false
+    //            })
+
+    //        });
+            
+    //    })
+
+    //}
+
 
 
     fetch_data_for_account(email: string) {

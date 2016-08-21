@@ -366,6 +366,123 @@ export class TextNumeric extends jx.Views.ReactView {
 
 
 
+export interface TextControlProps extends jx.Views.ReactProps {
+    label: string,
+    obj: any,
+    field: string,
+    property?: string,
+    type?: string,
+    required?: boolean
+}
+export class TextControl extends jx.Views.ReactView {
+
+    props: TextControlProps;
+
+
+    render() {
+
+        var property = this.props.property ? this.props.property : 'textInput';
+
+        var type = this.props.type ? this.props.type : 'text';
+
+        var _props: any = {
+        }
+
+        if (this.props.required) {
+            _props.required = true;
+        }
+
+
+        var html =
+
+            <div className="form-group col-sm-6 col-xs-12">
+
+                <label htmlFor="">{this.props.label}</label>
+
+                <input type="text" {..._props} name={this.props.field} data-bind={"{0}:{1}".format(property, this.props.field) }
+                    className="form-control" id="" style={{ fontSize: 18 }}/>
+            </div>
+
+
+        return html;
+    }
+
+
+    componentDidMount() {
+
+        this.bind();
+    }
+
+
+    componentDidUpdate() {
+
+        this.bind();
+    }
+
+
+    bind() {
+
+        ko.cleanNode(this.root[0]);
+
+        try {
+            ko.applyBindings(this.props.obj, this.root[0]);
+        } catch (e) {
+
+            if (e) {
+            }
+        }
+
+    }
+}
+
+
+
+export class CountryControl extends TextControl {
+
+
+    render() {
+
+        var _props: any = {
+        }
+
+        if (this.props.required) {
+            _props.required = true;
+        }
+
+        var html =
+            <div className="form-group col-sm-6 col-xs-12">
+                <label htmlFor="">{this.props.label}</label>
+                <select  id="" type="text" {..._props} name="country" className="form-control bfh-countries"/>
+            </div>
+
+        return html;
+    }
+
+    componentDidMount() {
+
+        this.root.find('.bfh-countries')['bfhcountries']();
+
+        var that = this;
+
+        this.root.find('.bfh-countries').change(() => {
+            that.props.obj['country'](this.root.find('.bfh-countries').val());
+        });
+
+        this.bind();
+    }
+
+
+    bind() {
+
+        if (this.props.obj['country']()) {
+            this.root.find('.bfh-countries').val(this.props.obj['country']());
+        }
+    }
+
+}
+
+
+
 
 export interface CheckBoxProps extends jx.Views.ReactProps {
     is_checked: boolean,

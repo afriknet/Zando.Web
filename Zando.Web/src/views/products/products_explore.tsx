@@ -91,7 +91,7 @@ export class ProductExplorerPage extends jx.Views.ReactView {
 
     activate_user() {
 
-        jx.carts.display_cart();
+        jx.carts.display_cart(true);
 
         if (this.app.get_account()) {
             $('.my-account').removeClass('hidden');

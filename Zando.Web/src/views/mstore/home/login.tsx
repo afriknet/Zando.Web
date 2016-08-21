@@ -79,7 +79,7 @@ export class LoginPage extends base.BasePage {
 
         utils.spin(this.root);
 
-        this.app.login(email, psswrd).then(usr => {
+        this.app.login(email, psswrd, false).then(usr => {
 
             toastr.info('Bienvenu sur AfriknetMarket');
 

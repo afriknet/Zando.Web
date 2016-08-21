@@ -27,7 +27,7 @@ export class HomePage extends base.BasePage {
 
             $.getScript('/mstore/js/mimity.js', () => {
 
-                jx.carts.display_cart();
+                jx.carts.display_cart(false);
             });
 
         });
