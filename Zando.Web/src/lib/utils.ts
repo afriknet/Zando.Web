@@ -104,6 +104,11 @@ module utils {
     }
 
 
+    export function jump_up() {
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+    }
+
+
     export function loadfile(file: string): Q.Promise<any> {
 
         var d = Q.defer();

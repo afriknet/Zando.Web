@@ -87,7 +87,9 @@ export class CartItemsDatalist extends jx.Views.ReactView {
                 
                     <button className={"btn btn-sm pull-right {0}".format(hide_checkout)} type="button">Proceed to Checkout <i className="fa fa-arrow-circle-right" /></button>
 
-                    <button className={"btn btn-sm pull-right {0}".format(hide_confirm_order)} type="button">Pay now <i className="fa fa-arrow-circle-right" /></button>
+                    <button className={"btn btn-sm pull-right {0}".format(hide_confirm_order) }
+                        onClick={this.pay_cart.bind(this)}
+                        type="button">Pay now <i className="fa fa-arrow-circle-right" /></button>
     
                 </div>
                 
@@ -97,6 +99,12 @@ export class CartItemsDatalist extends jx.Views.ReactView {
 
 
         return html;
+    }
+
+
+    pay_cart() {
+
+        this.props.owner['pay_cart']()
     }
 
 

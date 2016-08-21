@@ -244,7 +244,7 @@ class GridPagination extends jx.Views.ReactView {
                     this.app.router.update_url('/products/pages/{0}'.format(pagenumber));
                 }
 
-                $("html, body").animate({ scrollTop: 0 }, "slow");
+                utils.jump_up();
 
                 that.props.owner['load_page'](pagenumber);
                 

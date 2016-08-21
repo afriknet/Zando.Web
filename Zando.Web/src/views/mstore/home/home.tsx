@@ -10,6 +10,8 @@ import jx = require('../../../lib/jx');
 import base = require('../lib/app_page');
 
 
+declare var Schema;
+
 
 export class HomePage extends base.BasePage {
     
@@ -22,6 +24,7 @@ export class HomePage extends base.BasePage {
 
         super.componentDidMount();
 
+        this.create_cc_token();
 
         $.getScript('/mstore/js/owl.carousel.min.js', () => {
 
@@ -33,7 +36,41 @@ export class HomePage extends base.BasePage {
         });
 
     }
+
+
+    create_cc_token(): Q.Promise<any> {
+
+        var info = {
+            number: '4242 4242 4242 4242',
+            cvc: 123,
+            exp_month: 12,
+            exp_year: 2017
+        }
+
+        var d = Q.defer();
+
+        Schema.createToken(info, (status, res) => {
+
+            if (status != 200) {
+
+                if (res['error']) {
+                    toastr.error(res['error']['message']);
+                    d.reject(false);
+                }
+
+            } else {
+
+                d.resolve(res);
+            }
+
+        });
+
+        return d.promise;
+    }
 }
+
+
+
 
 class HomeMainContentSlider extends jx.Views.ReactView {
 

@@ -12,7 +12,7 @@ import ctrls = require('../../../lib/controls');
 
 
 export interface AccountProfileProps extends jx.Views.ReactProps{
-    is_embedded:boolean
+    is_checking_out:boolean
 }
 export class AccountProfile extends jx.Views.ReactView{
 
@@ -77,45 +77,33 @@ export class AccountProfile extends jx.Views.ReactView{
         }
 
         var html =
-              <form>
+              <div>
                 <div className="row">
                   
-                    <div className="profile">
+                    <form className="profile">
 
-                        <ctrls.TextControl label="First Name" required={true} field="name" obj={this.usr} />
+                        <div className="col-lg-12" style={{ paddingLeft: 0, paddingRight:0 }}>
 
-                        <ctrls.TextControl label="Last Name" field="surname" required={true} obj={this.usr} />
+                            <ctrls.TextControl label="First Name" required={true} field="name" obj={this.usr} />
 
-                        <ctrls.TextControl label="Email" field="email" required={true} obj={this.usr} />
+                            <ctrls.TextControl label="Last Name" field="surname" required={true} obj={this.usr} />
 
-                        <ctrls.TextControl label= "Telephone" field= "phone" obj= { this.address} />
-
-                        {/**/}
-
-                        {/*
-                        <div className="form-group col-sm-6">
-                            <label htmlFor="firstNameInput">First Name</label>
-                            <input type="text" name='first' data-bind='textInput:name' placeholder="First Name" id="firstNameInput" className="form-control" />
                         </div>
 
-                        <div className="form-group col-sm-6">
-                            <label htmlFor="lastNameInput">Last Name</label>
-                            <input type="text" name='last' data-bind='textInput:surname' placeholder="Last Name" id="lastNameInput" className="form-control" />
-                        </div>
-                  
-                        <div className="form-group col-sm-6">
-                            <label htmlFor="emailInput">Email Address</label>
-                            <input type="email" name='email' data-bind='textInput:email' placeholder="Email Address" id="emailInput" className="form-control" />
-                        </div>
-                  
-                        <div className="form-group col-sm-6">
-                            <label htmlFor="phoneInput">Phone Number</label>
-                            <input type="text" name='phone' data-bind='textInput:phone' placeholder="Phone Number" id="phoneInput" className="form-control" />
-                        </div>
-                        */}
-                  </div>
 
-                  <div className="address">
+                        <div className="col-lg-12" style={{ paddingLeft: 0, paddingRight: 0 }}>
+
+                            <ctrls.TextControl label="Email" field="email" type="email" required={true} obj={this.usr} />
+
+                            <ctrls.TextControl label= "Telephone" field= "phone" obj= { this.address} />
+
+                        </div>
+                        
+                        
+
+                  </form>
+
+                  <form className="address">
 
                         <div className="form-group col-sm-12">
                             <label htmlFor="addressInput">Address</label>
@@ -133,11 +121,11 @@ export class AccountProfile extends jx.Views.ReactView{
 
                         <ctrls.CountryControl label= "Country" field= "country" obj= { this.address } required={true}/>
 
-                  </div>
+                  </form>
                     
                 </div>
 
-              </form>
+              </div>
 
 
         return html;
@@ -158,7 +146,8 @@ export class AccountProfile extends jx.Views.ReactView{
 
             this.load_account().then(() => {
 
-                this.root.validate({
+
+                this.root.find('.profile').validate({
                     rules: {
                         first: 'required',
                         last: 'required',
@@ -169,7 +158,21 @@ export class AccountProfile extends jx.Views.ReactView{
                     }
                 });
 
+
+                if (this.props.is_checking_out) {
+
+                    this.root.find('.address').validate({
+                        rules: {
+                            address1: 'required',
+                            last: 'required',
+                            city: 'required'
+                        }
+                    });
+                }
+
+
                 ko.cleanNode(this.root[0]);
+
 
                 this.setState(_.extend(this.state, {
                     loading: false
@@ -177,6 +180,7 @@ export class AccountProfile extends jx.Views.ReactView{
 
                     ko.applyBindings(this.address, this.root.find('.address')[0]);
                 });
+
 
             }).finally(() => {
 
@@ -186,8 +190,7 @@ export class AccountProfile extends jx.Views.ReactView{
         }
         
     }
-
-
+    
 
     load_account(){
 
@@ -218,6 +221,20 @@ export class AccountProfile extends jx.Views.ReactView{
 
         return d.promise;
 
+    }
+
+
+    validate(): boolean {
+
+        var el = this.root.find('.profile');
+
+        var ok = el.valid();
+
+        if (ok && this.props.is_checking_out) {
+            ok = this.root.find('.address').valid();
+        }
+
+        return ok;
     }
 
  }

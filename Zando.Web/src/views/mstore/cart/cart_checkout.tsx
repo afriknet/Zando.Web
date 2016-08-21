@@ -13,6 +13,10 @@ import prof = require('../account/account_profile');
 import cart = require('./cart_itemlist');
 
 
+declare var Schema;
+
+
+
 export class CartCheckoutPage extends base.BasePage {
 
     get_pagecontent() {
@@ -25,6 +29,7 @@ export class CartCheckoutPage extends base.BasePage {
 
         super.componentDidMount();
 
+
         $.getScript('/mstore/js/mimity.js', () => {
 
             jx.carts.display_cart(false);
@@ -36,8 +41,21 @@ export class CartCheckoutPage extends base.BasePage {
 
 
 
-
 class InternalView extends jx.Views.ReactView {
+
+
+    get prof(): prof.AccountProfile {
+        return this.refs['prof'] as prof.AccountProfile
+    }
+
+
+    get cart(): CreditCardView {
+        return this.refs['cart'] as CreditCardView
+    }
+
+    get cart_list(): cart.CartItemsDatalist {
+        return this.refs['cart_list'] as cart.CartItemsDatalist
+    }
 
 
     render() {
@@ -52,15 +70,15 @@ class InternalView extends jx.Views.ReactView {
                 <span>Checkout</span>
               </div>
 
-              <prof.AccountProfile is_embedded={true} />
+              <prof.AccountProfile ref='prof' is_checking_out={true} />
 
               <br />
                
-              <CreditCardView />
+              <CreditCardView ref='cart' />
 
               <br />
 
-              <cart.CartItemsDatalist is_embedded={true} />
+              <cart.CartItemsDatalist ref='cart_list' owner={this} is_embedded={true} />
 
             </div>
 
@@ -71,9 +89,73 @@ class InternalView extends jx.Views.ReactView {
         
         return html
     }
+
+
+    pay_cart(): Q.Promise<any> {
+
+        var d = Q.defer();
+        
+        if (!this.prof.validate()) {
+            utils.jump_up();
+        }
+
+        utils.spin(this.root);
+
+        this.cart.create_cc_token().then(card_info => {
+
+            schema.call({
+                fn: 'post',
+                params: ['/orders', {
+                    cart_id: this.cart_list.cart['id'],
+                    billing: {
+                        card: card_info
+                    }
+                }]
+            }).then(res => {
+
+                jx.local.set('last-order', res);
+                jx.local.set('last-cart', this.cart_list.cart);
+
+                var that = this;
+
+                swal({
+                        title: "Transaction completed",
+                        text: "Now you can continue shopping",
+                        type: "success"
+                }, function () {
+
+                    d.resolve(res.response);
+
+                    that.app.router.navigate('/');
+                })
+
+                
+
+            }).fail(err => {
+
+                toastr.error(err);
+
+                d.reject(err);
+
+            }).finally(() => {
+
+                utils.unspin(this.root);
+            });
+        })
+
+        return d.promise;
+    }
 }
 
 
+
+interface PaymentInfo {
+    //cart_type: PaymentType,
+    card_number: string,
+    card_cvc: number,
+    exp_month: number,
+    exp_year: number
+}
 
 class CreditCardView extends jx.Views.ReactView{
 
@@ -84,7 +166,7 @@ class CreditCardView extends jx.Views.ReactView{
         <form role="form" className="form-horizontal">
             <fieldset>
               <legend>Payment</legend>
-              <div className="form-group">
+              <div className="form-group hidden">
                 <label htmlFor="card-holder-name" className="col-sm-3 control-label">Name on Card</label>
                 <div className="col-sm-9">
                   <input type="text" placeholder="Card Holder's Name" id="card-holder-name" name="card-holder-name" className="form-control" />
@@ -118,18 +200,19 @@ class CreditCardView extends jx.Views.ReactView{
                       </select>
                     </div>
                     <div className="col-xs-3">
-                      <select name="expiry-year" className="form-control">
-                        <option value={'13'}>2013</option>
-                        <option value={'14'}>2014</option>
-                        <option value={'15'}>2015</option>
-                        <option value={'16'}>2016</option>
-                        <option value={'17'}>2017</option>
-                        <option value={'18'}>2018</option>
-                        <option value={'19'}>2019</option>
-                        <option value={'20'}>2020</option>
-                        <option value={'21'}>2021</option>
-                        <option value={'22'}>2022</option>
-                        <option value={'23'}>2023</option>
+                      <select name="expiry-year" id="expiry-year" className="form-control">                        
+                        <option value={'2016'}>2016</option>
+                        <option value={'2017'}>2017</option>
+                        <option value={'2018'}>2018</option>
+                        <option value={'2019'}>2019</option>
+                        <option value={'2020'}>2020</option>
+                        <option value={'2021'}>2021</option>
+                        <option value={'2022'}>2022</option>
+                        <option value={'2023'}>2023</option>
+                        <option value={'2024'}>2020</option>
+                        <option value={'2025'}>2021</option>
+                        <option value={'2026'}>2022</option>
+                        <option value={'2027'}>2023</option>
                       </select>
                     </div>
                   </div>
@@ -150,6 +233,62 @@ class CreditCardView extends jx.Views.ReactView{
       </form>
 
         return html;
+    }
+
+
+    get cardholder_txt(): JQuery {
+        return this.jget('#card-holder-name');
+    }
+
+    get cardno_txt(): JQuery {
+        return this.jget('#card-number');
+    }
+
+    get cardcv_txt(): JQuery {
+        return this.jget('#cvv');
+    }
+
+    get cardexp_month_select(): JQuery {
+        return this.jget('#expiry-month');
+    }
+
+    get cardexp_year_select(): JQuery {
+        return this.jget('#expiry-year');
+    }
+
+
+    private string_to_int(sel: JQuery) {
+        return parseInt(sel.val());
+    }
+
+    create_cc_token(): Q.Promise<any> {
+
+        var info= {
+            number: this.cardno_txt.val(),
+            cvc: this.cardcv_txt.val(),
+            exp_month: this.string_to_int(this.cardexp_month_select),
+            exp_year: 2019//this.string_to_int(this.cardexp_year_select)
+        }
+
+        var d = Q.defer();
+
+        Schema.createToken(info, (status, res) => {
+
+            if (status != 200) {
+
+                if (res['error']) {
+                    toastr.error(res['error']['message']);
+                    d.reject(false);
+                }
+
+            } else {
+
+                d.resolve(res);
+            }
+
+        });
+
+        return d.promise;
     }
 
 }
