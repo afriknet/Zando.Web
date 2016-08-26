@@ -1,5 +1,7 @@
-﻿/// <reference path="cart_itemlist.tsx" />
+﻿/// <reference path="../../account/quick_loginsignup.tsx" />
+/// <reference path="cart_itemlist.tsx" />
 /// <reference path="../account/account_profile.tsx" />
+/// <reference path="../../../lib/controls.tsx" />
 // A '.tsx' file enables JSX support in the TypeScript compiler, 
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
@@ -11,6 +13,9 @@ import jx = require('../../../lib/jx');
 import base = require('../lib/app_page');
 import prof = require('../account/account_profile');
 import cart = require('./cart_itemlist');
+import { Modal, ModalProps } from '../../../lib/controls';
+import { QuickLoginSignUpView, QuickLoginSignUpViewProps, ViewMode} from '../../account/quick_loginsignup';
+
 
 
 declare var Schema;
@@ -57,6 +62,10 @@ class InternalView extends jx.Views.ReactView {
         return this.refs['cart_list'] as cart.CartItemsDatalist
     }
 
+    get modal(): Modal {
+        return this.refs['modal'] as Modal;
+    }
+
 
     render() {
 
@@ -70,24 +79,51 @@ class InternalView extends jx.Views.ReactView {
                 <span>Checkout</span>
               </div>
 
-              <prof.AccountProfile ref='prof' is_checking_out={true} />
-
-              <br />
-               
-              <CreditCardView ref='cart' />
-
-              <br />
-
-              <cart.CartItemsDatalist ref='cart_list' owner={this} is_embedded={true} />
-
+              {this.content() }
+              
             </div>
 
             <cart.NewArrivals />
+
+            <Modal ref='modal' owner={this} hide_footer={true} title="Creez un nouveau compte sur AfriknetMarket" onClosing={(saving: boolean) => { return Q.resolve(false) } } />
 
           </div>
 
         
         return html
+    }
+
+
+    componentDidMount() {
+
+        super.componentDidMount();
+
+        if (!this.app.user_is_verified()) {
+            this.modal.show(<QuickLoginSignUpView fullview={false} mode={ViewMode.signup} owner={this} />)
+        }
+    }
+
+
+    content() {
+
+        if (!this.app.user_is_verified()) {
+            return null;
+        }
+
+        var html =
+            <div>
+                <prof.AccountProfile ref='prof' is_checking_out={true} />
+
+                <br />
+
+                <CreditCardView ref='cart' />
+
+                <br />
+
+                <cart.CartItemsDatalist ref='cart_list' owner={this} is_embedded={true} />
+
+            </div>
+        return html;
     }
 
 

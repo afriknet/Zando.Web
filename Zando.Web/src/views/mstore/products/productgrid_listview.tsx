@@ -41,6 +41,12 @@ export class ProductGridListView extends jx.Views.ReactView{
 
         // by default we dont load data. We wait to be triggered by our parent which will also
         // pass in the active page by calling load_page
+
+        this.root.find('.items-onpage').on('change', () => {
+
+
+
+        })
     }
     
 
@@ -127,7 +133,7 @@ export class ProductGridListView extends jx.Views.ReactView{
                   </select>
                 </div>
                 <div>Show
-                  <select name="show" className="select2">
+                  <select name="show" className="select2 items-onpage">
                     <option value="">8</option>
                     <option value="">12</option>
                     <option value="">16</option>

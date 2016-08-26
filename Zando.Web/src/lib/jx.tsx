@@ -128,6 +128,9 @@ export module constants {
     export const pageheader: string = 'pageheader'
     export const middleheader: string = 'middleheader'
 
+    export module local {
+        export const guest_usr: string = 'guest_usr'
+    }
 }
 
 
@@ -1273,24 +1276,24 @@ export module carts {
     function create_guest_user(): Q.Promise<{ user: any, acc: any }> {
 
         var d = Q.defer<{user: any,acc: any}>();
-
-
+        
         var key = '{0}_{1}'.format(chance.word({ length: 5 }), chance.word({ length: 5 }));
-
-
+        
         __tmp_pws = 'guest_{0}'.format(key);
-
-
+        
         var _email = 'guest_{0}_@guest.com'.format(key);
 
-
-        __app.signup({
+        var guest = {
             email: _email,
             password: __tmp_pws,
             name: 'guest_name_{0}'.format(key),
             surname: 'guest_surname_{0}'.format(key),
             is_verified: 0
-        } as any).then(rst => {
+        }
+        
+        __app.signup(guest as any).then(rst => {
+
+            local.set('guest-usr', guest);
 
             d.resolve(rst);
             

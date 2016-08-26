@@ -24,7 +24,7 @@ export class HomePage extends base.BasePage {
 
         super.componentDidMount();
 
-        this.create_cc_token();
+        //this.create_cc_token();
 
         $.getScript('/mstore/js/owl.carousel.min.js', () => {
 

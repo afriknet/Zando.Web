@@ -342,6 +342,8 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
         
         this.root.closest('.modal').attr('id', 'signup');
 
+        this.root.closest('.modal').find('.modal-body').css('padding', '40px');
+
         this.init_validation();
     }
 
