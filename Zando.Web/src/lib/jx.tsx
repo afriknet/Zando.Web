@@ -130,6 +130,13 @@ export module constants {
 
     export module local {
         export const guest_usr: string = 'guest_usr'
+        export const current_usr: string = 'current-user';
+        export const current_acc: string = 'current-acc';
+        export const app_info: string = 'app_info';        
+    }
+
+    export module app_menus {
+        export const active_nav_menu: string = 'active-nav-menu';
     }
 }
 
@@ -691,7 +698,8 @@ export module application {
 
         store_user(usr)
         {
-            cookies.set('current-user', usr);            
+            cookies.set(constants.local.current_usr, usr);
+            local.set(constants.local.current_usr, usr);        
         }
 
 
@@ -705,18 +713,18 @@ export module application {
 
             var info = _.extend(old_info, app_info);
 
-            local.set('app_info', info);
+            local.set(constants.local.app_info, info);
         }
 
 
         get_appInfo(): Types.AppInfo {
-            return local.get('app_info');
+            return local.get(constants.local.app_info);
         }
 
 
         internal_store_account(acc: any) {
-
             cookies.set('account', acc);
+            local.set(constants.local.current_acc, acc);
         }
 
 
@@ -749,13 +757,13 @@ export module application {
         }
 
         
-        get_user(): any {            
-            return cookies.get('current-user');
+        get_user(): any {
+            return local.get(constants.local.current_usr);
         }
 
 
         get_account(): any {
-            return cookies.get('account');
+            return local.get(constants.local.current_acc);
         }
         
 
@@ -889,9 +897,9 @@ export module application {
                         user: data,
                         acc: acc.response
                     }
-                    
-                    cookies.set('account', rst.acc);
 
+                    local.set(constants.local.current_acc, rst.acc);
+                    
                     this.update_login_info();
 
                     d.resolve(rst);
@@ -1216,7 +1224,7 @@ export module carts {
 
     export function display_cart(animate: boolean) {
 
-        var account = cookies.get('account');
+        var account = local.get(constants.local.current_acc);// cookies.get('account');
 
         if (!account) {
             
@@ -1290,6 +1298,8 @@ export module carts {
             surname: 'guest_surname_{0}'.format(key),
             is_verified: 0
         }
+
+        local.set(constants.local.guest_usr, guest);
         
         __app.signup(guest as any).then(rst => {
 

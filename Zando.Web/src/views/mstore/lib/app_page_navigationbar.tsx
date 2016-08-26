@@ -65,7 +65,7 @@ export class PageNavigationBar extends jx.Views.ReactView {
 
     assign_active_menu() {
 
-        var active = jx.local.get('active-nav-menu');
+        var active = jx.local.get(jx.constants.app_menus.active_nav_menu);
 
         if (active) {
 
@@ -80,7 +80,7 @@ export class PageNavigationBar extends jx.Views.ReactView {
 
 
         if (active) {
-            jx.local.remove('active-nav-menu');
+            jx.local.remove(jx.constants.app_menus.active_nav_menu);
         }
     }
 
@@ -93,7 +93,7 @@ export class PageNavigationBar extends jx.Views.ReactView {
 
             var li = $(e.currentTarget);
 
-            jx.local.set('active-nav-menu', li.find('a').first().attr('href'));
+            jx.local.set(jx.constants.app_menus.active_nav_menu, li.find('a').first().attr('href'));
             
         });
 
