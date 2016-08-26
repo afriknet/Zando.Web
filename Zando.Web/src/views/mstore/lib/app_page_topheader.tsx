@@ -72,10 +72,9 @@ export class PageTopHeader extends jx.Views.ReactView {
                                         <span><i className="fa fa-user" /> My Account <i className="fa fa-caret-down" /></span>
                                     </a>
                                     <ul className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownAccount">
-                                        <li><a href="#">Orders</a></li>
-                                        <li><a href="#">Vouchers</a></li>
-                                        <li><a href="#">Points</a></li>
-                                        <li><a href="#">Logout</a></li>
+                                        <li><a href="/orders">Orders</a></li>
+                                        <li><a href="/profile">Profile</a></li>
+                                        <li><a href="javascript:void(0)" onClick={this.logout.bind(this)}>Logout</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -89,6 +88,12 @@ export class PageTopHeader extends jx.Views.ReactView {
 
         return html;
 
+    }
+
+
+    logout() {
+
+        this.app.logout();
     }
 
 

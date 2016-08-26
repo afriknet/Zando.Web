@@ -143,17 +143,18 @@ export class CartItemsDatalist extends jx.Views.ReactView {
                     <p><a href="#" style={{ textTransform: 'lowercase' }}>{prod['name']}</a></p>
                     <small>Size: M</small>
                 </td>
-
-
+                
                 <td className="input-qty text-center">
-                    <span>{count}</span>
-                    {/*<input type="text" className="input-qty form-control text-center" defaultValue={'{0}'.format(count) } name='' />*/}
+                    <span>{count}</span>                    
                 </td>
+
                 <td className="unit"><span data-field="price"></span></td>
                 <td className="sub"><span data-field="price_total"></span></td>
+
                 <td className="action text-center">
                     <button className="btn btn-default remove_cart" onClick={this.delete_cart_item.bind(this)} style={{ opacity: 0.6 }}><i className="fa fa-times" /></button> 
                 </td>
+
             </tr>
 
         return view;
@@ -177,7 +178,7 @@ export class CartItemsDatalist extends jx.Views.ReactView {
     componentDidUpdate() {
 
         if (this.state.loading) {
-
+            
             this.load_data().then(() => {
 
                 this.setState(_.extend(this.state, {

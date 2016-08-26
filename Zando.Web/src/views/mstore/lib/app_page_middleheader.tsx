@@ -276,24 +276,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
         })
 
     }
-
-
-    fetch_data_for_account(email: string) {
-
-        var d = Q.defer();
-
-        this.fetch_account(email, true).then(acc => {
-
-            this.fetch_items(acc).then(data => {
-
-                d.resolve(data);
-                
-            });
-        });
-
-        return d.promise;
-    }
-
+    
 
     private fetch_items(acc: any) {
 

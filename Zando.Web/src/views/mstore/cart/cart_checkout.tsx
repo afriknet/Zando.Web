@@ -21,7 +21,6 @@ import { QuickLoginSignUpView, QuickLoginSignUpViewProps, ViewMode} from '../../
 declare var Schema;
 
 
-
 export class CartCheckoutPage extends base.BasePage {
 
     get_pagecontent() {
@@ -85,7 +84,10 @@ class InternalView extends jx.Views.ReactView {
 
             <cart.NewArrivals />
 
-            <Modal ref='modal' owner={this} hide_footer={true} title="Creez un nouveau compte sur AfriknetMarket" onClosing={(saving: boolean) => { return Q.resolve(false) } } />
+            <Modal ref='modal' owner={this}
+                    hide_footer={true}
+                    title="Creez un nouveau compte sur AfriknetMarket"
+                    onClosing={(saving: boolean) => { return this.onModal_closing(saving) } } />
 
           </div>
 
@@ -94,12 +96,32 @@ class InternalView extends jx.Views.ReactView {
     }
 
 
+    onModal_closing(saving: boolean) {
+
+        if (!saving) {
+            this.app.router.navigate('/');
+        }
+
+        return Q.resolve(false)
+    }
+
+
     componentDidMount() {
 
         super.componentDidMount();
 
         if (!this.app.user_is_verified()) {
-            this.modal.show(<QuickLoginSignUpView fullview={false} mode={ViewMode.signup} owner={this} />)
+
+            var info = this.app.get_appInfo();
+            
+            this.app.store_appInfo({
+                fallback_url:'/checkout'
+            });
+
+            this.modal.show(<QuickLoginSignUpView
+                fullview={false}
+                container={this.modal }
+                mode={ViewMode.signup} owner={this} />)
         }
     }
 
@@ -109,6 +131,8 @@ class InternalView extends jx.Views.ReactView {
         if (!this.app.user_is_verified()) {
             return null;
         }
+
+        // subscribe to event cart item is empty from [cart.CartItemsDatalist]
 
         var html =
             <div>

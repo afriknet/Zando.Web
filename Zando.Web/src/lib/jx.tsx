@@ -801,6 +801,28 @@ export module application {
         }
 
 
+        logout() {
+
+            Backendless.UserService.logout(new Backendless.Async((data) => {
+
+                local.remove(constants.local.current_usr);
+                local.remove(constants.local.current_acc);
+
+                cookies.remove('current-user');
+                cookies.remove('account');
+
+                __app.router.navigate('/')
+
+            }, (err) => {
+
+                alert(err);
+
+            }));
+
+
+        }
+
+
         update_login_info() {
 
             this.display_loggedin_info();
@@ -929,6 +951,7 @@ export module application {
 
         }
 
+
         get_model(modelname: string): Q.Promise<Backendless.DataStore> {
         
             var d = Q.defer<Backendless.DataStore>();
@@ -964,7 +987,8 @@ export module application {
 
 
         get_guest_pssw() {
-            return __tmp_pws;
+            var acc = local.get(constants.local.guest_usr);
+            return acc['password'];
         }
 
         
@@ -973,10 +997,12 @@ export module application {
             __accessors[key] = view;
         }
 
+
         get_view(key: string): Views.ReactView {
 
             return __accessors[key];
         }
+
 
         remove_view(key: string) {
             delete __accessors[key];
@@ -1224,10 +1250,14 @@ export module carts {
 
     export function display_cart(animate: boolean) {
 
-        var account = local.get(constants.local.current_acc);// cookies.get('account');
+        var account = local.get(constants.local.current_acc);
 
         if (!account) {
-            
+
+            create_guest_user().then(obj => {
+
+            });
+
         } else {
 
             update_cart_ui(account['email'], animate)
@@ -1468,7 +1498,6 @@ export module carts {
     }
 
 }
-
 
 
 export module local {
