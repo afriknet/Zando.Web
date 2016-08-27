@@ -24,7 +24,7 @@ export class PageNavigationBar extends jx.Views.ReactView {
                                 <span className="icon-bar" />
                                 <span className="icon-bar" />
                             </button>
-                            <a href="cart.html" className="visible-xs btn-cart-xs pull-right">
+                            <a href="/" className="visible-xs btn-cart-xs pull-right">
                                 <button type="button" className="btn btn-default"><i className="fa fa-shopping-cart" /> Cart: 3 items</button>
                             </a>
                         </div>
@@ -34,22 +34,23 @@ export class PageNavigationBar extends jx.Views.ReactView {
                                 <li><a href="/products">Products</a></li>
                                 <li><a href="/cart">Shopping Cart</a></li>
                                 <li><a href="/checkout">Checkout</a></li>
-                                <li className="dropdown">
+                                <li className="li-profile hidden"><a href="/profile">Profile</a></li>
+                                <li className="dropdown hidden">
                                     <a href="/account" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         Pages <span className="caret" />
                                     </a>
                                     <ul className="dropdown-menu">
-                                        <li><a href="about.html">About Us</a></li>
-                                        <li><a href="blog.html">Blog</a></li>
-                                        <li><a href="blog-detail.html">Blog Detail</a></li>
-                                        <li><a href="compare.html">Compare</a></li>
-                                        <li><a href="contact.html">Contact Us</a></li>
-                                        <li><a href="index-2.html">Home v2</a></li>
-                                        <li><a href="login.html">Login</a></li>
-                                        <li><a href="detail.html">Product Detail</a></li>
-                                        <li><a href="register.html">Register</a></li>
-                                        <li><a href="typography.html">Typography</a></li>
-                                        <li><a href="wishlist.html">Wishlist</a></li>
+                                        <li><a href="/">About Us</a></li>
+                                        <li><a href="/">Blog</a></li>
+                                        <li><a href="/">Blog Detail</a></li>
+                                        <li><a href="/">Compare</a></li>
+                                        <li><a href="/">Contact Us</a></li>
+                                        <li><a href="/">Home v2</a></li>
+                                        <li><a href="/">Login</a></li>
+                                        <li><a href="/">Product Detail</a></li>
+                                        <li><a href="/">Register</a></li>
+                                        <li><a href="/">Typography</a></li>
+                                        <li><a href="/">Wishlist</a></li>
                                     </ul>
                                 </li>
                             </ul>

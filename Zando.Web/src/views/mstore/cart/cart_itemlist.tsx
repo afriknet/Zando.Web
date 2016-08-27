@@ -405,12 +405,24 @@ export class CartItemsDatalist extends jx.Views.ReactView {
 }
 
 
+
+export interface NewArrivalsProps extends jx.Views.ReactProps {
+    col?: string
+}
 export class NewArrivals extends jx.Views.ReactView {
-    
+
+    props: NewArrivalsProps;
+
     render() {
 
+        var col = this.props.col;
+
+        if (!col) {
+            col = 'col-md-2';
+        }
+
         var html =
-            <div className="col-md-2 hidden-sm hidden-xs">
+            <div className={"{0} hidden-sm hidden-xs".format(col)}>
                 <div className="title">
                     <a href="/"><span style={{ marginRight:10 }}>New Arrivals</span> <i className="fa fa-chevron-circle-right" /></a>
                 </div>

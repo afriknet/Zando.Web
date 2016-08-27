@@ -545,6 +545,7 @@
     <Folder Include="src\data\" />
     <Folder Include="src\lib\data\" />
     <Folder Include="src\mstore\" />
+    <Folder Include="src\views\mstore\profile\" />
     <Folder Include="typings\redux\" />
   </ItemGroup>
   <ItemGroup>
@@ -593,6 +594,7 @@
     <TypeScriptCompile Include="src\views\mstore\products\productgrid.tsx" />
     <TypeScriptCompile Include="src\views\mstore\products\productgrid_boxview.tsx" />
     <TypeScriptCompile Include="src\views\mstore\products\productgrid_listview.tsx" />
+    <TypeScriptCompile Include="src\views\mstore\account\profile_view.tsx" />
     <TypeScriptCompile Include="src\views\products\amazon_explore.tsx" />
     <TypeScriptCompile Include="src\views\products\product_single.tsx" />
     <TypeScriptCompile Include="src\views\products\product_modal.tsx" />

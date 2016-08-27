@@ -179,9 +179,9 @@ class InternalView extends jx.Views.ReactView {
                 var that = this;
 
                 swal({
-                        title: "Transaction completed",
-                        text: "Now you can continue shopping",
-                        type: "success"
+                    title: "Transaction completed",
+                    text: "Now you can continue shopping",
+                    type: "success"
                 }, function () {
 
                     d.resolve(res.response);
@@ -189,7 +189,7 @@ class InternalView extends jx.Views.ReactView {
                     that.app.router.navigate('/');
                 })
 
-                
+
 
             }).fail(err => {
 
@@ -201,6 +201,9 @@ class InternalView extends jx.Views.ReactView {
 
                 utils.unspin(this.root);
             });
+        }).finally(() => {
+
+            utils.unspin(this.root);
         })
 
         return d.promise;
