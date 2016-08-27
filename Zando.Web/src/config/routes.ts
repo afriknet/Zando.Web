@@ -44,6 +44,9 @@ export var routes: Types.RouteList = {
         url: 'mstore/home/signup'
     },
 
+    '/orders': {
+        url: 'mstore/account/account_orders'
+    },
 
     '/dashboard': {
         url: 'account/account_dashboard'

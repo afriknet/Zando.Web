@@ -35,6 +35,7 @@ export class PageNavigationBar extends jx.Views.ReactView {
                                 <li><a href="/cart">Shopping Cart</a></li>
                                 <li><a href="/checkout">Checkout</a></li>
                                 <li className="li-profile hidden"><a href="/profile">Profile</a></li>
+                                <li className="li-orders hidden"><a href="/orders">My orders</a></li>
                                 <li className="dropdown hidden">
                                     <a href="/account" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         Pages <span className="caret" />
