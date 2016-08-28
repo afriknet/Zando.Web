@@ -72,7 +72,7 @@ export class PageTopHeader extends jx.Views.ReactView {
                                         <span><i className="fa fa-user" /> My Account <i className="fa fa-caret-down" /></span>
                                     </a>
                                     <ul className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownAccount">
-                                        <li><a href="/orders">Orders</a></li>
+                                        <li><a href="/orders">My orders</a></li>
                                         <li><a href="/profile">Profile</a></li>
                                         <li><a href="javascript:void(0)" onClick={this.logout.bind(this)}>Logout</a></li>
                                     </ul>
