@@ -1541,3 +1541,20 @@ export module local {
 }
 
 
+export module data {
+
+    export function get_schema(model: string) {
+
+        return schema.call({
+            fn: 'get',
+            params: ['/:models/{0}'.format(model)]
+        }).then(data => {
+
+
+        });
+
+    }
+}
+
+
+

@@ -23,6 +23,8 @@ export class HomePage extends base.BasePage {
     componentDidMount() {
 
         super.componentDidMount();
+
+        //jx.data.get_schema('carts')
         
         $.getScript('/mstore/js/owl.carousel.min.js', () => {
 
