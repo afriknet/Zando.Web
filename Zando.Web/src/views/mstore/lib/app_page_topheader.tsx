@@ -30,18 +30,18 @@ export class PageTopHeader extends jx.Views.ReactView {
                             <div className="pull-left header-language">
                                 <div className="dropdown">
                                     <a href="#" className="dropdown-toggle" id="dropdownLanguage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <img alt="English" src="/mstore/images/en.jpg" />English <i className="fa fa-caret-down" />
+                                        <img alt="French" src="/mstore/images/fr.jpg" />Francais <i className="fa fa-caret-down" />
                                     </a>
                                     <ul className="dropdown-menu" aria-labelledby="dropdownLanguage">
-                                        <li><a href="#"><img alt="English" src="/mstore/images/en.jpg" />English</a></li>
-                                        <li><a href="#"><img alt="French" src="/mstore/images/fr.jpg" />French</a></li>
+                                        <li><a href="#"><img alt="English" src="/mstore/images/en.jpg" />Anglais</a></li>
+                                        <li><a href="#"><img alt="French" src="/mstore/images/fr.jpg" />Francais</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div className="pull-left">
                                 <div className="dropdown">
                                     <a href="#" className="dropdown-toggle" id="dropdownCurrency" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        USD <i className="fa fa-caret-down" />
+                                        Euro <i className="fa fa-caret-down" />
                                     </a>
                                     <ul className="dropdown-menu" aria-labelledby="dropdownCurrency">
                                         <li><a href="#">$ Dollar</a></li>
