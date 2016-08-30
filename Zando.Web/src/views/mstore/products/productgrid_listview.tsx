@@ -165,6 +165,8 @@ export class ProductGridListView extends jx.Views.ReactView{
 
                     this.jget('.paging')['pagination']('selectPage', page);
 
+                    jx.pubsub.publish(jx.constants.subpub.on_products_loaded, data);
+
                 } finally {
 
                     this.skip_pageclick = old_val;

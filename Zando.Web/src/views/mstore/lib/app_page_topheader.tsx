@@ -96,12 +96,12 @@ export class PageTopHeader extends jx.Views.ReactView {
 
         super.componentDidMount();
 
-        this.app.register_view(jx.constants.pageheader, this);
+        this.app.register_view(jx.constants.headers.pageheader, this);
     }
 
     componentWillUnmount() {
 
-        this.app.remove_view(jx.constants.pageheader);
+        this.app.remove_view(jx.constants.headers.pageheader);
     }
 
     is_connected(): boolean {

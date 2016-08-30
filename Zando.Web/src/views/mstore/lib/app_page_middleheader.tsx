@@ -109,7 +109,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
 
         super.componentDidMount();
 
-        this.app.register_view(jx.constants.middleheader, this);
+        this.app.register_view(jx.constants.headers.middleheader, this);
     }
 
 
@@ -140,7 +140,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
 
     componentWillUnmount() {
 
-        this.app.remove_view(jx.constants.middleheader);
+        this.app.remove_view(jx.constants.headers.middleheader);
     }
 
 

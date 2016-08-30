@@ -49,6 +49,7 @@ var __tmp_pws: any;
 declare var page;
 declare var Moltin;
 declare var Cookies;
+declare var PubSub;
 
 declare var chance;
 
@@ -125,9 +126,17 @@ export module Types {
 
 export module constants {
 
-    export const pageheader: string = 'pageheader'
-    export const middleheader: string = 'middleheader'
+    export module headers {
+        export const pageheader: string = 'pageheader'
+        export const middleheader: string = 'middleheader'
+    }
 
+    export module subpub {
+
+        export const on_products_loaded: string = 'on_products_loaded'
+    }
+
+    
 }
 
 
@@ -799,7 +808,7 @@ export module application {
 
         private display_loggedin_info() {
 
-            var view = this.get_view(constants.pageheader);
+            var view = this.get_view(constants.headers.pageheader);
 
             if (view) {
 
@@ -918,6 +927,7 @@ export module application {
 
         }
 
+
         get_model(modelname: string): Q.Promise<Backendless.DataStore> {
         
             var d = Q.defer<Backendless.DataStore>();
@@ -962,10 +972,12 @@ export module application {
             __accessors[key] = view;
         }
 
+
         get_view(key: string): Views.ReactView {
 
             return __accessors[key];
         }
+
 
         remove_view(key: string) {
             delete __accessors[key];
@@ -1167,7 +1179,7 @@ export module carts {
         
         var d = Q.defer<any>();
         
-        var view: mdl.PageMiddleHeader = __app.get_view(constants.middleheader) as any;
+        var view: mdl.PageMiddleHeader = __app.get_view(constants.headers.middleheader) as any;
 
         if (animate) {
             view.begin_updating_cart_ui();
@@ -1457,7 +1469,6 @@ export module carts {
 }
 
 
-
 export module local {
 
     var local:any = $['localStorage'];
@@ -1495,6 +1506,22 @@ export module local {
 
     export function remove(name: string) {
         return local.remove(name);
+    }
+}
+
+
+export module pubsub {
+
+    export function subscribe(topic: string, callback: (msg?: any, data?: any) => any): number {
+
+        return PubSub.subscribe(topic, callback);
+    }
+
+
+    export function publish(topic: string, data?: any) {
+
+        PubSub.publish(topic, data);
+
     }
 }
 
