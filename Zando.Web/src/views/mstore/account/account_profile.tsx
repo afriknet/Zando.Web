@@ -12,12 +12,14 @@ import ctrls = require('../../../lib/controls');
 
 
 export interface AccountProfileProps extends jx.Views.ReactProps{
-    is_checking_out:boolean
+    is_checking_out: boolean,
+    display_actions?: boolean
 }
 export class AccountProfile extends jx.Views.ReactView{
 
     account: any;
-    props:AccountProfileProps;
+    props: AccountProfileProps;
+    pssw: string;
 
     constructor(props:AccountProfileProps){
         super(props);
@@ -76,6 +78,8 @@ export class AccountProfile extends jx.Views.ReactView{
             return <div style={{ minHeight:200 }} ></div>
         }
 
+        var hide_actions = this.props.display_actions ? '' : 'hidden';
+
         var html =
               <div>
                 <div className="row">
@@ -122,7 +126,12 @@ export class AccountProfile extends jx.Views.ReactView{
                         <ctrls.CountryControl label= "Country" field= "country" obj= { this.address } required={true}/>
 
                   </form>
-                    
+
+                  <div className="col-lg-12 actions">
+                      <button className={"btn btn-sm {0}".format(hide_actions) } onClick={this.save.bind(this)}><i className="fa fa-check"></i> <span>Sauvergarder</span></button>
+                  </div>  
+                  
+
                 </div>
 
               </div>
@@ -136,17 +145,12 @@ export class AccountProfile extends jx.Views.ReactView{
     componentDidMount() {
 
 
-        this.jget('.btn-reset-pass').click(() => {
-            //(this.refs['modal'] as Modal).show(<ChangePassword owner={this} />);
-        });
-
         if (this.state.loading) {
 
             utils.spin(this.root);
 
             this.load_account().then(() => {
-
-
+                
                 this.root.find('.profile').validate({
                     rules: {
                         first: 'required',
@@ -235,6 +239,92 @@ export class AccountProfile extends jx.Views.ReactView{
         }
 
         return ok;
+    }
+
+
+    save() {
+
+        if (!this.validate()) {
+            return;
+        }
+
+        var usr: any = (ko as any).mapping.toJS(this.usr);
+
+        utils.spin(this.root);
+
+        this.state.loading = true;
+
+
+        Backendless.UserService.update(usr, new Backendless.Async(_usr => {
+
+            this.app.store_user(_usr);
+
+            var account: any = {
+                email: _usr['email'],
+                first_name: _usr['name'],
+                last_name: _usr['surname']
+            }
+
+            if (this.pssw) {
+                account.password = this.pssw;
+            }
+
+
+            this.update_account(account).then(() => {
+
+                this.app.store_account(account['email']).then(() => {
+
+                    toastr.info('Profile updated successfully');
+
+                    this.app.update_login_info();
+
+                    utils.unspin(this.root);
+
+                }).finally(() => {
+
+                    utils.unspin(this.root);
+                });
+
+
+            }).finally(() => {
+
+                utils.unspin(this.root);
+
+            });
+
+
+        }, (err: any) => {
+
+            toastr.error(err.message);
+
+            utils.unspin(this.root);
+
+        }));
+
+    }
+
+
+    update_account(acc: any): Q.Promise<any> {
+
+        var d = Q.defer();
+
+        schema.call({
+            fn: 'put',
+            params: ['/accounts/{0}'.format(this.app.get_account()['id']), acc]
+        }).then(res => {
+
+            d.resolve(res.response);
+
+        }).fail(err => {
+
+            toastr.error(err);
+
+            d.reject(err);
+
+        });
+
+        return d.promise;
+
     }
 
  }

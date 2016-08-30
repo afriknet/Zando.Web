@@ -225,7 +225,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
 
     display_cart() {
 
-        jx.local.set('active-nav-menu', '/cart');
+        jx.local.set(jx.constants.app_menus.active_nav_menu, '/cart');
 
         this.app.router.navigate('/cart');
     }
@@ -233,7 +233,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
 
     checkout_cart() {
 
-        jx.local.set('active-nav-menu', '/checkout');
+        jx.local.set(jx.constants.app_menus.active_nav_menu, '/checkout');
 
         this.app.router.navigate('/checkout');
     }
@@ -276,47 +276,7 @@ export class PageMiddleHeader extends jx.Views.ReactView {
         })
 
     }
-
-
-    //update_cart_ui(callback: () => Q.Promise<any>) {
-
-    //    this.setState(_.extend(this.state, {
-    //        spin: true
-    //    }), () => {
-
-    //        callback().then(data => {
-
-    //            this.cart = data['cart'];
-
-    //            this.setState({
-    //                data: data,
-    //                spin: false
-    //            })
-
-    //        });
-            
-    //    })
-
-    //}
-
-
-
-    fetch_data_for_account(email: string) {
-
-        var d = Q.defer();
-
-        this.fetch_account(email, true).then(acc => {
-
-            this.fetch_items(acc).then(data => {
-
-                d.resolve(data);
-                
-            });
-        });
-
-        return d.promise;
-    }
-
+    
 
     private fetch_items(acc: any) {
 

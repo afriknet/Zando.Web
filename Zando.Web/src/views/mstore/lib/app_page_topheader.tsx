@@ -30,18 +30,18 @@ export class PageTopHeader extends jx.Views.ReactView {
                             <div className="pull-left header-language">
                                 <div className="dropdown">
                                     <a href="#" className="dropdown-toggle" id="dropdownLanguage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <img alt="English" src="/mstore/images/en.jpg" />English <i className="fa fa-caret-down" />
+                                        <img alt="French" src="/mstore/images/fr.jpg" />Francais <i className="fa fa-caret-down" />
                                     </a>
                                     <ul className="dropdown-menu" aria-labelledby="dropdownLanguage">
-                                        <li><a href="#"><img alt="English" src="/mstore/images/en.jpg" />English</a></li>
-                                        <li><a href="#"><img alt="French" src="/mstore/images/fr.jpg" />French</a></li>
+                                        <li><a href="#"><img alt="English" src="/mstore/images/en.jpg" />Anglais</a></li>
+                                        <li><a href="#"><img alt="French" src="/mstore/images/fr.jpg" />Francais</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div className="pull-left">
                                 <div className="dropdown">
                                     <a href="#" className="dropdown-toggle" id="dropdownCurrency" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        USD <i className="fa fa-caret-down" />
+                                        Euro <i className="fa fa-caret-down" />
                                     </a>
                                     <ul className="dropdown-menu" aria-labelledby="dropdownCurrency">
                                         <li><a href="#">$ Dollar</a></li>
@@ -72,10 +72,9 @@ export class PageTopHeader extends jx.Views.ReactView {
                                         <span><i className="fa fa-user" /> My Account <i className="fa fa-caret-down" /></span>
                                     </a>
                                     <ul className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownAccount">
-                                        <li><a href="#">Orders</a></li>
-                                        <li><a href="#">Vouchers</a></li>
-                                        <li><a href="#">Points</a></li>
-                                        <li><a href="#">Logout</a></li>
+                                        <li><a href="/orders">My orders</a></li>
+                                        <li><a href="/profile">Profile</a></li>
+                                        <li><a href="javascript:void(0)" onClick={this.logout.bind(this)}>Logout</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -89,6 +88,12 @@ export class PageTopHeader extends jx.Views.ReactView {
 
         return html;
 
+    }
+
+
+    logout() {
+
+        this.app.logout();
     }
 
 

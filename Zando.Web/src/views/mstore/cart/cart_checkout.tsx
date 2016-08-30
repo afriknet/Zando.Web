@@ -1,5 +1,7 @@
-﻿/// <reference path="cart_itemlist.tsx" />
+﻿/// <reference path="../../account/quick_loginsignup.tsx" />
+/// <reference path="cart_itemlist.tsx" />
 /// <reference path="../account/account_profile.tsx" />
+/// <reference path="../../../lib/controls.tsx" />
 // A '.tsx' file enables JSX support in the TypeScript compiler, 
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
@@ -11,10 +13,12 @@ import jx = require('../../../lib/jx');
 import base = require('../lib/app_page');
 import prof = require('../account/account_profile');
 import cart = require('./cart_itemlist');
+import { Modal, ModalProps } from '../../../lib/controls';
+import { QuickLoginSignUpView, QuickLoginSignUpViewProps, ViewMode} from '../../account/quick_loginsignup';
+
 
 
 declare var Schema;
-
 
 
 export class CartCheckoutPage extends base.BasePage {
@@ -57,6 +61,10 @@ class InternalView extends jx.Views.ReactView {
         return this.refs['cart_list'] as cart.CartItemsDatalist
     }
 
+    get modal(): Modal {
+        return this.refs['modal'] as Modal;
+    }
+
 
     render() {
 
@@ -70,24 +78,76 @@ class InternalView extends jx.Views.ReactView {
                 <span>Checkout</span>
               </div>
 
-              <prof.AccountProfile ref='prof' is_checking_out={true} />
-
-              <br />
-               
-              <CreditCardView ref='cart' />
-
-              <br />
-
-              <cart.CartItemsDatalist ref='cart_list' owner={this} is_embedded={true} />
-
+              {this.content() }
+              
             </div>
 
             <cart.NewArrivals />
+
+            <Modal ref='modal' owner={this}
+                    hide_footer={true}
+                    title="Creez un nouveau compte sur AfriknetMarket"
+                    onClosing={(saving: boolean) => { return this.onModal_closing(saving) } } />
 
           </div>
 
         
         return html
+    }
+
+
+    onModal_closing(saving: boolean) {
+
+        if (!saving) {
+            this.app.router.navigate('/');
+        }
+
+        return Q.resolve(false)
+    }
+
+
+    componentDidMount() {
+
+        super.componentDidMount();
+
+        if (!this.app.user_is_verified()) {
+
+            var info = this.app.get_appInfo();
+            
+            this.app.store_appInfo({
+                fallback_url:'/checkout'
+            });
+
+            this.modal.show(<QuickLoginSignUpView
+                fullview={false}
+                container={this.modal }
+                mode={ViewMode.signup} owner={this} />)
+        }
+    }
+
+
+    content() {
+
+        if (!this.app.user_is_verified()) {
+            return null;
+        }
+
+        // subscribe to event cart item is empty from [cart.CartItemsDatalist]
+
+        var html =
+            <div>
+                <prof.AccountProfile ref='prof' is_checking_out={true} />
+
+                <br />
+
+                <CreditCardView ref='cart' />
+
+                <br />
+
+                <cart.CartItemsDatalist ref='cart_list' owner={this} is_embedded={true} />
+
+            </div>
+        return html;
     }
 
 
@@ -119,9 +179,9 @@ class InternalView extends jx.Views.ReactView {
                 var that = this;
 
                 swal({
-                        title: "Transaction completed",
-                        text: "Now you can continue shopping",
-                        type: "success"
+                    title: "Transaction completed",
+                    text: "Now you can continue shopping",
+                    type: "success"
                 }, function () {
 
                     d.resolve(res.response);
@@ -129,7 +189,7 @@ class InternalView extends jx.Views.ReactView {
                     that.app.router.navigate('/');
                 })
 
-                
+
 
             }).fail(err => {
 
@@ -141,6 +201,9 @@ class InternalView extends jx.Views.ReactView {
 
                 utils.unspin(this.root);
             });
+        }).finally(() => {
+
+            utils.unspin(this.root);
         })
 
         return d.promise;

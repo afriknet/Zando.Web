@@ -227,10 +227,16 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
 
             return this.update_guest_signup().then(() => {
 
-                if (this.props.container) {
-                    this.props.container.close();
-                }
+                toastr.success('Votre compte a ete cree avec succes');
 
+                var appinfo = this.app.get_appInfo();
+
+                if (appinfo && appinfo.fallback_url) {
+                    this.app.router.navigate(appinfo.fallback_url)
+                } else {
+                    this.app.router.navigate('/account/profile')
+                }
+                
                 return true;
 
             });
@@ -341,6 +347,8 @@ export class QuickLoginSignUpView extends jx.Views.ReactView {
         super.componentDidMount();
         
         this.root.closest('.modal').attr('id', 'signup');
+
+        this.root.closest('.modal').find('.modal-body').css('padding', '40px');
 
         this.init_validation();
     }

@@ -126,6 +126,15 @@ export module Types {
 
 export module constants {
 
+    export const pageheader: string = 'pageheader'
+    export const middleheader: string = 'middleheader'
+
+    export module local {
+        export const guest_usr: string = 'guest_usr'
+        export const current_usr: string = 'current-user';
+        export const current_acc: string = 'current-acc';
+        export const app_info: string = 'app_info';        
+    }
     export module headers {
         export const pageheader: string = 'pageheader'
         export const middleheader: string = 'middleheader'
@@ -137,6 +146,11 @@ export module constants {
     }
 
     
+}
+
+    export module app_menus {
+        export const active_nav_menu: string = 'active-nav-menu';
+    }
 }
 
 
@@ -697,7 +711,8 @@ export module application {
 
         store_user(usr)
         {
-            cookies.set('current-user', usr);            
+            cookies.set(constants.local.current_usr, usr);
+            local.set(constants.local.current_usr, usr);        
         }
 
 
@@ -711,18 +726,18 @@ export module application {
 
             var info = _.extend(old_info, app_info);
 
-            local.set('app_info', info);
+            local.set(constants.local.app_info, info);
         }
 
 
         get_appInfo(): Types.AppInfo {
-            return local.get('app_info');
+            return local.get(constants.local.app_info);
         }
 
 
         internal_store_account(acc: any) {
-
             cookies.set('account', acc);
+            local.set(constants.local.current_acc, acc);
         }
 
 
@@ -755,13 +770,13 @@ export module application {
         }
 
         
-        get_user(): any {            
-            return cookies.get('current-user');
+        get_user(): any {
+            return local.get(constants.local.current_usr);
         }
 
 
         get_account(): any {
-            return cookies.get('account');
+            return local.get(constants.local.current_acc);
         }
         
 
@@ -795,6 +810,28 @@ export module application {
 
 
             return d.promise;
+
+        }
+
+
+        logout() {
+
+            Backendless.UserService.logout(new Backendless.Async((data) => {
+
+                local.remove(constants.local.current_usr);
+                local.remove(constants.local.current_acc);
+
+                cookies.remove('current-user');
+                cookies.remove('account');
+
+                __app.router.navigate('/')
+
+            }, (err) => {
+
+                alert(err);
+
+            }));
+
 
         }
 
@@ -895,9 +932,9 @@ export module application {
                         user: data,
                         acc: acc.response
                     }
-                    
-                    cookies.set('account', rst.acc);
 
+                    local.set(constants.local.current_acc, rst.acc);
+                    
                     this.update_login_info();
 
                     d.resolve(rst);
@@ -963,7 +1000,8 @@ export module application {
 
 
         get_guest_pssw() {
-            return __tmp_pws;
+            var acc = local.get(constants.local.guest_usr);
+            return acc['password'];
         }
 
         
@@ -1225,10 +1263,14 @@ export module carts {
 
     export function display_cart(animate: boolean) {
 
-        var account = cookies.get('account');
+        var account = local.get(constants.local.current_acc);
 
         if (!account) {
-            
+
+            create_guest_user().then(obj => {
+
+            });
+
         } else {
 
             update_cart_ui(account['email'], animate)
@@ -1285,24 +1327,26 @@ export module carts {
     function create_guest_user(): Q.Promise<{ user: any, acc: any }> {
 
         var d = Q.defer<{user: any,acc: any}>();
-
-
+        
         var key = '{0}_{1}'.format(chance.word({ length: 5 }), chance.word({ length: 5 }));
-
-
+        
         __tmp_pws = 'guest_{0}'.format(key);
-
-
+        
         var _email = 'guest_{0}_@guest.com'.format(key);
 
-
-        __app.signup({
+        var guest = {
             email: _email,
             password: __tmp_pws,
             name: 'guest_name_{0}'.format(key),
             surname: 'guest_surname_{0}'.format(key),
             is_verified: 0
-        } as any).then(rst => {
+        }
+
+        local.set(constants.local.guest_usr, guest);
+        
+        __app.signup(guest as any).then(rst => {
+
+            local.set('guest-usr', guest);
 
             d.resolve(rst);
             
@@ -1506,6 +1550,22 @@ export module local {
 
     export function remove(name: string) {
         return local.remove(name);
+    }
+}
+
+
+export module data {
+
+    export function get_schema(model: string) {
+
+        return schema.call({
+            fn: 'get',
+            params: ['/:models/{0}'.format(model)]
+        }).then(data => {
+
+
+        });
+
     }
 }
 

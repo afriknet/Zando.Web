@@ -143,17 +143,18 @@ export class CartItemsDatalist extends jx.Views.ReactView {
                     <p><a href="#" style={{ textTransform: 'lowercase' }}>{prod['name']}</a></p>
                     <small>Size: M</small>
                 </td>
-
-
+                
                 <td className="input-qty text-center">
-                    <span>{count}</span>
-                    {/*<input type="text" className="input-qty form-control text-center" defaultValue={'{0}'.format(count) } name='' />*/}
+                    <span>{count}</span>                    
                 </td>
+
                 <td className="unit"><span data-field="price"></span></td>
                 <td className="sub"><span data-field="price_total"></span></td>
+
                 <td className="action text-center">
                     <button className="btn btn-default remove_cart" onClick={this.delete_cart_item.bind(this)} style={{ opacity: 0.6 }}><i className="fa fa-times" /></button> 
                 </td>
+
             </tr>
 
         return view;
@@ -177,7 +178,7 @@ export class CartItemsDatalist extends jx.Views.ReactView {
     componentDidUpdate() {
 
         if (this.state.loading) {
-
+            
             this.load_data().then(() => {
 
                 this.setState(_.extend(this.state, {
@@ -404,12 +405,24 @@ export class CartItemsDatalist extends jx.Views.ReactView {
 }
 
 
+
+export interface NewArrivalsProps extends jx.Views.ReactProps {
+    col?: string
+}
 export class NewArrivals extends jx.Views.ReactView {
-    
+
+    props: NewArrivalsProps;
+
     render() {
 
+        var col = this.props.col;
+
+        if (!col) {
+            col = 'col-md-2';
+        }
+
         var html =
-            <div className="col-md-2 hidden-sm hidden-xs">
+            <div className={"{0} hidden-sm hidden-xs".format(col)}>
                 <div className="title">
                     <a href="/"><span style={{ marginRight:10 }}>New Arrivals</span> <i className="fa fa-chevron-circle-right" /></a>
                 </div>

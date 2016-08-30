@@ -26,6 +26,12 @@ export var routes: Types.RouteList = {
         url: 'mstore/cart/cart_itemlist',
     },
 
+
+    '/profile': {
+        url: 'mstore/account/profile_view',
+    },
+
+
     '/checkout': {
         url: 'mstore/cart/cart_checkout'
     },
@@ -38,6 +44,9 @@ export var routes: Types.RouteList = {
         url: 'mstore/home/signup'
     },
 
+    '/orders': {
+        url: 'mstore/account/account_orders'
+    },
 
     '/dashboard': {
         url: 'account/account_dashboard'

@@ -276,7 +276,7 @@ export class AccountProfilePage extends jx.Views.ReactView {
 
 
 
-class ChangePassword extends jx.Views.ReactView {
+export class ChangePassword extends jx.Views.ReactView {
 
     constructor(props?: any) {
         super(props);
@@ -291,12 +291,12 @@ class ChangePassword extends jx.Views.ReactView {
                     <BigLabel label="Reset your password" />
 
                     <br />
-
+                    {/**/}
                     <form className="form-horizontal">
 
-                        <TextControl label="Old password" type="password" field='curr_psw' />
+                        <TextControl label="old password" type="password" field='curr_psw' />
                             
-                        <TextControl label="New password" type="password" field='new_psw'/>
+                        <TextControl label="new password" type="password" field='new_psw'/>
 
                     </form>
 

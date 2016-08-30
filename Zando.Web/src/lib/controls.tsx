@@ -597,8 +597,8 @@ export interface ModalProps extends jx.Views.ReactProps {
     bsSize?: string,
     action?: string,
     hide_footer?: boolean,
-    classlist?: string,        
-    onClosing?: () => Q.Promise<Boolean>,
+    classlist?: string,
+    onClosing?: (saving?: boolean) => Q.Promise<Boolean>,
     afterClosed?: () => Q.Promise<any>
 }
 
@@ -633,13 +633,13 @@ export class Modal extends jx.Views.ReactView {
     }
 
 
-    close() {
+    close(saving?: boolean) {
 
         var that = this;
 
         if (that.props.onClosing) {
 
-            that.props.onClosing().then(ok => {
+            that.props.onClosing(saving).then(ok => {
 
                 if (ok)
                 {
@@ -670,7 +670,7 @@ export class Modal extends jx.Views.ReactView {
         var props: any = {
             show: this.state.show,
             onHide: () => {
-                that.close();
+                that.close(false);
             }
         }
 
@@ -728,7 +728,7 @@ export class Modal extends jx.Views.ReactView {
 
 
     save() {
-        this.close();        
+        this.close(true);        
     }
 
 
