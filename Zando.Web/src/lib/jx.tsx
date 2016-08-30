@@ -126,9 +126,6 @@ export module Types {
 
 export module constants {
 
-    export const pageheader: string = 'pageheader'
-    export const middleheader: string = 'middleheader'
-
     export module local {
         export const guest_usr: string = 'guest_usr'
         export const current_usr: string = 'current-user';
@@ -142,11 +139,14 @@ export module constants {
 
     export module subpub {
 
-        export const on_products_loaded: string = 'on_products_loaded'
+        export module products_grid {
+            export const on_products_loaded: string = 'on_products_loaded'
+            export const on_filter_applied: string = 'on_filter_applied'
+            export const filter_price_range: string = 'price_range'
+        }
+        
     }
 
-    
-}
 
     export module app_menus {
         export const active_nav_menu: string = 'active-nav-menu';

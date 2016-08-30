@@ -21,13 +21,21 @@ interface ProductGridListViewState extends jx.Views.ReactState{
     activepage: number;
 }
 
+
+interface FilterValuesInfo {
+    type: string,
+    min?: number,
+    max?: number
+}
+
 export class ProductGridListView extends jx.Views.ReactView{
 
     props:ProductGridListViewProps;
     state:ProductGridListViewState;
     unfiltered_count: number;
     skip_pageclick: boolean;
-    
+
+    whereclause: any;
 
     constructor(props:ProductGridListViewProps){
 
@@ -35,30 +43,47 @@ export class ProductGridListView extends jx.Views.ReactView{
         
         this.state.loading = true;
         this.state.items_on_page = 8;
+        this.whereclause = {};
     }
 
     componentDidMount(){
+        
+        jx.pubsub.subscribe(jx.constants.subpub.products_grid.on_filter_applied, (msg, info: FilterValuesInfo) => {
+            this.apply_filter(info)
+        });        
+    }
 
-        // by default we dont load data. We wait to be triggered by our parent which will also
-        // pass in the active page by calling load_page
 
-        this.root.find('.items-onpage').on('change', () => {
+    apply_filter(filterinfo:any) {
 
+        switch (filterinfo.type) {
 
+            case jx.constants.subpub.products_grid.filter_price_range: {
 
-        })
+                //{size: {$gt: 2, $lt: 10}}
+
+                this.whereclause = _.extend(this.whereclause, {
+                    price: {
+                        $gte: filterinfo['min'],
+                        $lte: filterinfo['max']                         
+                    }
+                })
+                
+            } break;
+        }
+
+        this.load_page(this.state.activepage);
+
     }
     
 
     private query_count(): Q.Promise<number> {
-
+        
         var d = Q.defer<number>();
 
         schema.call({
             fn: 'get',
-            params: ['/products/:count', {
-                //active: true
-            }]
+            params: ['/products/:count', this.whereclause]
         }).then(res => {
             d.resolve(res.response as any);
         }).fail(err => {
@@ -73,17 +98,17 @@ export class ProductGridListView extends jx.Views.ReactView{
     private fetch_page(activepage: number) {
         
         var d = Q.defer();
-
+        
         this.query_count().then(count => {
 
             this.unfiltered_count = count;
             
             schema.call({
                 fn: 'get',
-                params: ['/products', {
+                params: ['/products', _.extend( {
                     limit: this.state.items_on_page,
                     page: activepage
-                }]
+                }, this.whereclause)]
             }).then((res) => {
                 
                 d.resolve(res.response.results);
@@ -171,7 +196,7 @@ export class ProductGridListView extends jx.Views.ReactView{
 
                     this.jget('.paging')['pagination']('selectPage', page);
 
-                    jx.pubsub.publish(jx.constants.subpub.on_products_loaded, data);
+                    jx.pubsub.publish(jx.constants.subpub.products_grid.on_products_loaded, data);
 
                 } finally {
 
@@ -185,9 +210,9 @@ export class ProductGridListView extends jx.Views.ReactView{
 
             utils.unspin(this.root);
 
-        });
-        
+        });        
     }
+    
 }
 
 
@@ -221,6 +246,17 @@ class GridPagination extends jx.Views.ReactView {
 
     componentDidMount() {
 
+        super.componentDidMount();
+
+
+        this.forceUpdate();
+    }
+
+
+    componentDidUpdate() {
+
+        super.componentDidUpdate();
+
         var that = this;
 
         this.root.find('.paging')['pagination']({
@@ -237,15 +273,14 @@ class GridPagination extends jx.Views.ReactView {
 
             onPageClick: (pagenumber, ev: Event) => {
 
-                if (ev)
-                {
+                if (ev) {
                     ev.preventDefault()
                 }
 
                 if (that.props.owner['skip_pageclick']) {
                     return;
                 }
-                
+
                 if (pagenumber === 1) {
                     this.app.router.update_url('/products');
                 } else {
@@ -255,12 +290,11 @@ class GridPagination extends jx.Views.ReactView {
                 utils.jump_up();
 
                 that.props.owner['load_page'](pagenumber);
-                
+
             }
         });
 
     }
-
 
 
 }

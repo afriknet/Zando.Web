@@ -72,6 +72,13 @@ export class ProductGridFilters extends jx.Views.ReactView {
         return html;
 
     }
+
+
+    componentDidMount() {
+
+        super.componentDidMount();
+        
+    }
     
 }
 
@@ -145,7 +152,7 @@ class CategoriesFilters extends BaseGridFilter {
 
         super.componentDidMount();
 
-        jx.pubsub.subscribe(jx.constants.subpub.on_products_loaded, (msg, data) => {
+        jx.pubsub.subscribe(jx.constants.subpub.products_grid.on_products_loaded, (msg, data) => {
 
             this.build_filters(data);
 
@@ -246,7 +253,7 @@ class BrandsFilter extends BaseGridFilter {
 
         super.componentDidMount();
 
-        jx.pubsub.subscribe(jx.constants.subpub.on_products_loaded, (msg, data) => {
+        jx.pubsub.subscribe(jx.constants.subpub.products_grid.on_products_loaded, (msg, data) => {
 
             this.build_filters(data);
 
@@ -291,6 +298,10 @@ class BrandsFilter extends BaseGridFilter {
 
 class PriceFilter extends BaseGridFilter {
 
+    min_val: number;
+    max_val: number;
+    is_binding: number;
+
     get_content() {
 
         var html: any =
@@ -311,25 +322,84 @@ class PriceFilter extends BaseGridFilter {
 
         super.componentDidMount();
 
-        var price:any = this.root.find('#price')[0];// document.getElementById('price');
-        noUiSlider.create(price, {
-            start: [20, 80],
-            connect: true,
-            range: {
-                'min': 0,
-                'max': 100
-            }
-        });
+        this.is_binding = 0
 
-        price.noUiSlider.on('update', function (values, handle) {
+        jx.pubsub.subscribe(jx.constants.subpub.products_grid.on_products_loaded, (msg, data) => {
+
+            this.initialize_slider(data);
+        });
+    }
+
+
+    initialize_slider(data: any[]) {
+
+        var el_price: any = this.root.find('#price')[0];
+        
+        var _max = data.length > 0 ? _.max(data, d => {
+            return d['price']
+        }) : { price : 500 }
+
+        _max = _max ? _max['price'] + 300 : 100;
+        
+        this.max_val = Math.round(_max);
+
+
+        if (el_price['noUiSlider']) {
+
+            el_price['noUiSlider']['updateOptions']({
+                behaviour: 'hover-snap',
+                range: {
+                    'min': 0,
+                    'max': _max
+                }
+            });
+
+        } else {
+
+            noUiSlider.create(el_price, {
+                start: [0, _max],
+                connect: true,
+                behaviour: 'hover-snap',
+                range: {
+                    'min': 0,
+                    'max': _max
+                }
+            });
+
+        }
+
+        
+        el_price.noUiSlider.off('update');
+        el_price.noUiSlider.on('update', (values, handle) => {
+            
             var value = values[handle];
+
             if (handle) {
                 $('#max-price').text(Math.round(value) + ' $');
-                $('input[name="max-price"]').text(Math.round(value));
+                $('input[name="max-price"]').text(Math.round(value));                
             } else {
                 $('#min-price').text(Math.round(value) + ' $');
-                $('input[name="min-price"]').text(Math.round(value));
+                $('input[name="min-price"]').text(Math.round(value));                
             }
+            
+        });
+
+
+        el_price.noUiSlider.off('change');
+        el_price.noUiSlider.on('change', (values, handle) => {
+
+            if (handle) {
+                this.max_val = Math.round(values[handle])
+            } else {
+                this.min_val = Math.round(values[handle])
+            }
+            
+
+            jx.pubsub.publish(jx.constants.subpub.products_grid.on_filter_applied, {
+                type: jx.constants.subpub.products_grid.filter_price_range,
+                min: 0,
+                max: this.max_val
+            });
         });
     }
 }

@@ -216,6 +216,7 @@
     <Content Include="mstore\js\non-minified\nouislider.js" />
     <Content Include="mstore\js\non-minified\owl.carousel.js" />
     <Content Include="mstore\js\non-minified\select2.js" />
+    <Content Include="mstore\js\nouislider.js" />
     <Content Include="mstore\js\nouislider.min.js" />
     <Content Include="mstore\js\owl.carousel.min.js" />
     <Content Include="mstore\js\select2.min.js" />
