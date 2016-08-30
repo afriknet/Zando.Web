@@ -25,7 +25,8 @@ interface ProductGridListViewState extends jx.Views.ReactState{
 interface FilterValuesInfo {
     type: string,
     min?: number,
-    max?: number
+    max?: number,
+    catids?: any[]
 }
 
 export class ProductGridListView extends jx.Views.ReactView{
@@ -34,6 +35,7 @@ export class ProductGridListView extends jx.Views.ReactView{
     state:ProductGridListViewState;
     unfiltered_count: number;
     skip_pageclick: boolean;
+    filters: any;
 
     whereclause: any;
 
@@ -44,6 +46,7 @@ export class ProductGridListView extends jx.Views.ReactView{
         this.state.loading = true;
         this.state.items_on_page = 8;
         this.whereclause = {};
+        this.filters = {};
     }
 
     componentDidMount(){
@@ -54,8 +57,8 @@ export class ProductGridListView extends jx.Views.ReactView{
     }
 
 
-    apply_filter(filterinfo:any) {
-
+    apply_filter(filterinfo: any) {
+        
         switch (filterinfo.type) {
 
             case jx.constants.subpub.products_grid.filter_price_range: {
@@ -71,7 +74,36 @@ export class ProductGridListView extends jx.Views.ReactView{
                 })
                 
             } break;
+
+
+            case jx.constants.subpub.products_grid.filter_categories: {
+
+
+
+            } break;
         }
+
+        var filters = [];
+
+        var that = this;
+        
+        _.each(Object.keys(this.whereclause), (key:any) => {
+            
+            var obj = {
+                ['{0}'.format(key)]: that.whereclause[key]
+            }
+
+            filters.push(obj);
+
+        });
+
+
+        this.filters = {
+            where: {
+                $and: filters
+            }
+        }
+
 
         this.load_page(1);
 
@@ -84,7 +116,7 @@ export class ProductGridListView extends jx.Views.ReactView{
         
         schema.call({
             fn: 'get',
-            params: ['/products/:count', { where: this.whereclause } ]
+            params: ['/products/:count', this.filters ]
         }).then(res => {
             d.resolve(res.response as any);
         }).fail(err => {
@@ -109,9 +141,7 @@ export class ProductGridListView extends jx.Views.ReactView{
             var _params = _.extend({
                 limit: this.state.items_on_page,
                 page: activepage
-            }, {
-                where: this.whereclause
-            });
+            }, this.filters);
 
 
             schema.call({
@@ -158,14 +188,14 @@ export class ProductGridListView extends jx.Views.ReactView{
             <div className="col-sm-9" style={{ minHeight:350 }}>
               <div className="title"><span>T-Shirts</span></div>
               <div className="product-sorting-bar">
-                <div>Sort By
+                  <div><span style={ { marginRight:10 } } >Sort By</span>
                   <select name="sortby" className="select2">
                     <option value="">Recomended</option>
                     <option value="">Low Price » High Price</option>
                     <option value="">High Price » High Price</option>
                   </select>
                 </div>
-                <div>Show
+                  <div><span style={ { marginRight: 10 } }>Show</span>
                   <select name="show" className="select2 items-onpage">
                     <option value="">8</option>
                     <option value="">12</option>

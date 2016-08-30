@@ -143,6 +143,7 @@ export module constants {
             export const on_products_loaded: string = 'on_products_loaded'
             export const on_filter_applied: string = 'on_filter_applied'
             export const filter_price_range: string = 'price_range'
+            export const filter_categories: string = 'filter_categories'
         }
         
     }

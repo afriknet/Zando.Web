@@ -204,12 +204,12 @@ class CategoriesFilters extends BaseGridFilter {
 
         var html: any = _.map(this.state.categories, cat => {
 
-            var _id = 'cb-{0}'.format(utils.guid());
+            var _id = '{0}'.format(cat['BrowseNodeId']);
 
             var view =
-                <li>
-                    <div className="checkbox" key={utils.guid()} style={pl20}><input type="checkbox" id={_id }
-                        defaultValue="checked" />
+                <li data-catid={_id}>
+                    <div className="checkbox" key={utils.guid() } style={pl20}>
+                        <input type="checkbox" id={_id } onClick={this.onchecked.bind(this)}  defaultValue="checked" />
                         <label htmlFor={_id}>{cat.Name}</label>
                     </div>
                 </li>
@@ -219,6 +219,31 @@ class CategoriesFilters extends BaseGridFilter {
 
 
         return <ul>{html}</ul>;
+    }
+
+
+    onchecked(e: Event) {
+
+        var li = $(e.currentTarget).closest('li')
+
+        li.toggleClass('checked');
+
+        var list = $(e.currentTarget).closest('ul').find('li.checked');
+
+        var ids = _.map(list, li => {
+
+            return $(li).attr('data-catid');
+
+        });
+
+        
+        jx.pubsub.publish(jx.constants.subpub.products_grid.on_filter_applied, {
+            type: jx.constants.subpub.products_grid.filter_categories,
+            catids: ids
+        });
+
+        
+
     }
 
 
