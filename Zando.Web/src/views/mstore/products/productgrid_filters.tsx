@@ -91,7 +91,6 @@ interface BaseGridFilterProps extends jx.Views.ReactProps {
 
 interface BaseGridFilterState extends jx.Views.ReactState {    
 }
-
 class BaseGridFilter extends jx.Views.ReactView {
 
     props: BaseGridFilterProps;
@@ -116,6 +115,81 @@ class BaseGridFilter extends jx.Views.ReactView {
 
 }
 
+
+interface BrandsFilterState extends BaseGridFilterState {
+    brands: any[]
+}
+class BrandsFilter extends BaseGridFilter {
+
+    state: BrandsFilterState;
+
+
+    get_content() {
+
+        var html: any = _.map(this.state.brands, brand => {
+
+            var _id = 'cb-{0}'.format(utils.guid());
+
+            var view =
+                <li>
+                    <div className="checkbox" key={utils.guid() } style={pl20}><input type="checkbox" id={_id }
+                        defaultValue="checked" />
+                        <label htmlFor={_id}>{brand}</label>
+                    </div>
+                </li>
+
+            return view;
+        });
+
+
+        return <ul>{html}</ul>;
+    }
+
+
+    componentDidMount() {
+
+        super.componentDidMount();
+
+        jx.pubsub.subscribe(jx.constants.subpub.products_grid.on_products_loaded, (msg, data) => {
+
+            this.build_filters(data);
+
+        });
+    }
+
+
+    build_nodes_tree(nodes: any[], child: BrowseNode, tree: any[]) {
+
+        _.each(nodes, node => {
+
+            if (node['Brand']) {
+
+                tree.push(node['Brand'][0]);
+            }
+
+        });
+    }
+
+
+    build_filters(input_data: any[]) {
+
+        var _data: any[] = [];
+
+        _.each(input_data, d => {
+            this.build_nodes_tree(d['ItemAttributes'], null, _data);
+        });
+
+        _data = _.uniq(_data, false, (d, key) => {
+            return d
+        });
+
+        this.setState(_.extend(this.state, {
+            brands: _data
+        }));
+
+    }
+
+}
 
 
 interface CategoriesFiltersState extends BaseGridFilterState {
@@ -218,89 +292,11 @@ class CategoriesFilters extends BaseGridFilter {
 }
 
 
-
-interface BrandsFilterState extends BaseGridFilterState {
-    brands: any[]
-}
-class BrandsFilter extends BaseGridFilter {
-
-    state: BrandsFilterState;
-
-
-    get_content() {
-
-        var html: any = _.map(this.state.brands, brand => {
-
-            var _id = 'cb-{0}'.format(utils.guid());
-
-            var view =
-                <li>
-                    <div className="checkbox" key={utils.guid() } style={pl20}><input type="checkbox" id={_id }
-                        defaultValue="checked" />
-                        <label htmlFor={_id}>{brand}</label>
-                    </div>
-                </li>
-
-            return view;
-        });
-
-
-        return <ul>{html}</ul>;
-    }
-
-
-    componentDidMount() {
-
-        super.componentDidMount();
-
-        jx.pubsub.subscribe(jx.constants.subpub.products_grid.on_products_loaded, (msg, data) => {
-
-            this.build_filters(data);
-
-        });
-    }
-
-
-    build_nodes_tree(nodes: any[], child: BrowseNode, tree: any[]) {
-
-        _.each(nodes, node => {
-
-            if (node['Brand']) {
-
-                tree.push(node['Brand'][0]);
-            }
-            
-        });
-    }
-
-
-    build_filters(input_data: any[]) {
-
-        var _data: any[] = [];
-
-        _.each(input_data, d => {
-            this.build_nodes_tree(d['ItemAttributes'], null, _data);
-        });
-
-        _data = _.uniq(_data, false, (d, key) => {
-            return d
-        });
-
-        this.setState(_.extend(this.state, {
-            brands: _data
-        }));
-
-    }
-
-}
-
-
-
 class PriceFilter extends BaseGridFilter {
 
     min_val: number;
     max_val: number;
-    is_binding: number;
+    initialized: boolean;
 
     get_content() {
 
@@ -322,26 +318,55 @@ class PriceFilter extends BaseGridFilter {
 
         super.componentDidMount();
 
-        this.is_binding = 0
+        this.initialized = false;
 
         jx.pubsub.subscribe(jx.constants.subpub.products_grid.on_products_loaded, (msg, data) => {
 
-            this.initialize_slider(data);
+            if (!this.initialized) {
+
+                this.initialized = true;
+
+                this.initialize_slider(data);
+
+            }
+            
         });
     }
 
 
     initialize_slider(data: any[]) {
 
+        var base = 50;
+        var _min = 10;
+
         var el_price: any = this.root.find('#price')[0];
         
         var _max = data.length > 0 ? _.max(data, d => {
             return d['price']
-        }) : { price : 500 }
+        }) : { price: base }
 
-        _max = _max ? _max['price'] + 300 : 100;
+        _max = _max ? _max['price'] : 100;
         
-        this.max_val = Math.round(_max);
+        _max = Math.round(_max);
+
+        if (_max < base) {
+            _max = base;
+        } else {
+
+            var new_max = Math.floor(_max / base) * base;
+
+            var decimal_part = _max % base;
+
+            _max = new_max;
+
+            if (decimal_part > 0)
+            {
+                _max += base;
+            }            
+        }
+
+        this.min_val = _min;
+        this.max_val = _max;
 
 
         if (el_price['noUiSlider']) {
@@ -357,7 +382,7 @@ class PriceFilter extends BaseGridFilter {
         } else {
 
             noUiSlider.create(el_price, {
-                start: [0, _max],
+                start: [_min, _max],
                 connect: true,
                 behaviour: 'hover-snap',
                 range: {
@@ -397,8 +422,8 @@ class PriceFilter extends BaseGridFilter {
 
             jx.pubsub.publish(jx.constants.subpub.products_grid.on_filter_applied, {
                 type: jx.constants.subpub.products_grid.filter_price_range,
-                min: 0,
-                max: this.max_val
+                min: Math.round(values[0]),
+                max: Math.round(values[1])
             });
         });
     }

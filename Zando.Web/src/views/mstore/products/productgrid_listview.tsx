@@ -60,19 +60,20 @@ export class ProductGridListView extends jx.Views.ReactView{
 
             case jx.constants.subpub.products_grid.filter_price_range: {
 
-                //{size: {$gt: 2, $lt: 10}}
+                var min = filterinfo['min'];
+                var max = filterinfo['max']
 
                 this.whereclause = _.extend(this.whereclause, {
                     price: {
-                        $gte: filterinfo['min'],
-                        $lte: filterinfo['max']                         
+                        $gte: min,
+                        $lte: max                         
                     }
                 })
                 
             } break;
         }
 
-        this.load_page(this.state.activepage);
+        this.load_page(1);
 
     }
     
@@ -80,14 +81,14 @@ export class ProductGridListView extends jx.Views.ReactView{
     private query_count(): Q.Promise<number> {
         
         var d = Q.defer<number>();
-
+        
         schema.call({
             fn: 'get',
-            params: ['/products/:count', this.whereclause]
+            params: ['/products/:count', { where: this.whereclause } ]
         }).then(res => {
             d.resolve(res.response as any);
         }).fail(err => {
-
+            d.reject(err);
         });
 
         return d.promise;
@@ -101,14 +102,21 @@ export class ProductGridListView extends jx.Views.ReactView{
         
         this.query_count().then(count => {
 
+
             this.unfiltered_count = count;
-            
+
+
+            var _params = _.extend({
+                limit: this.state.items_on_page,
+                page: activepage
+            }, {
+                where: this.whereclause
+            });
+
+
             schema.call({
                 fn: 'get',
-                params: ['/products', _.extend( {
-                    limit: this.state.items_on_page,
-                    page: activepage
-                }, this.whereclause)]
+                params: ['/products', _params]
             }).then((res) => {
                 
                 d.resolve(res.response.results);

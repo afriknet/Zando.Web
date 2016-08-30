@@ -93,6 +93,14 @@ export class ProductGridBoxView extends jx.Views.ReactView {
 
     componentDidMount() {
 
+        this.forceUpdate();
+    }
+
+
+    componentDidUpdate() {
+
+        super.componentDidUpdate();
+
         this.root.find('.product-title')['ellipsis']({
             lines: 2,
             responsive: true
@@ -104,5 +112,4 @@ export class ProductGridBoxView extends jx.Views.ReactView {
             $(el)['autoNumeric']('set', $(el).attr('data-price'));
         });
     }
-
 }
